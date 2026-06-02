@@ -28,16 +28,37 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 
 ## Stack / Arquitetura
 
-- **Next.js** (App Router).
-- **Tailwind CSS v4** — config CSS-first via `@theme` no `globals.css`. Cada token vira
-  ao mesmo tempo uma CSS variable e uma utility do Tailwind.
-- **Fonte: Arboria** (comercial, self-hosted). Pesos usados: Book = 400, Bold = 700.
-- **Deploy: Netlify**, conectado a um repositório Git (build e deploy automáticos a cada push).
-  Configurar o Git desde o início — nada de deploy manual por drag-and-drop.
+- **Next.js 15** (App Router) + React 19 + TypeScript. Projeto já scaffoldado (setup manual,
+  sem `create-next-app`, pra não brigar com os arquivos que já existiam).
+- **Tailwind CSS v4** — config CSS-first via `@theme`. ⚠️ O `globals.css` agora vive em
+  **`app/globals.css`** (não mais na raiz). PostCSS via `@tailwindcss/postcss`.
+- **Fonte: Arboria** (self-hosted) carregada via **`next/font/local`** em `app/layout.tsx`,
+  lendo os `.ttf` de **`/font`** (Book 400, Medium 500, Bold 700). Expõe `--font-arboria`,
+  consumida por `--font-sans`. ⚠️ Os arquivos atuais são versão **"Demo for Personal Use"
+  (ifonts.xyz)** — NÃO é a licença comercial; trocar antes de produção.
+- **Animações: Framer Motion** (`framer-motion`). Variantes em `lib/anim.ts`
+  (`stagger`, `floatUp`, `drift`). Estética "gravidade zero": spring de baixa rigidez
+  (stiffness 42 / damping 16 / mass 1.1) + blur→nítido + bob (`drift`) contínuo.
+  `MotionConfig reducedMotion="user"` em `components/MotionProvider.tsx` respeita
+  "reduzir movimento" do SO.
+- **Ícones: `lucide-react`** (+ glyph WhatsApp inline no Header, que o lucide não tem).
+- **Deploy: Netlify** — `netlify.toml` configurado (plugin `@netlify/plugin-nextjs`).
+  Git **já inicializado** (branch `main`, primeiro commit feito). Falta conectar o repo
+  remoto (GitHub) e linkar na Netlify.
+
+## Estrutura de arquivos
+
+- `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, metadata.
+- `app/page.tsx` — monta `<Header/>` + `<Hero/>`.
+- `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.hero-bg`.
+- `components/` — `Header.tsx`, `Hero.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+- `content/site.ts` — **toda a copy** (nav, hero, features). Editar texto só aqui.
+- `lib/anim.ts` — variantes de animação.
+- `font/` — `.ttf` da Arboria.
 
 ## Design System
 
-> **Fonte de verdade dos tokens: `globals.css`.** Não hardcode valores de cor, tamanho de
+> **Fonte de verdade dos tokens: `app/globals.css`.** Não hardcode valores de cor, tamanho de
 > fonte, raio ou espaçamento — sempre use os tokens/utilities. Se precisar de um valor que
 > não existe, adicione como token no `@theme` e registre aqui.
 
@@ -90,18 +111,39 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
 - **Gaps = 24 / 24 / 16**, escolha consciente:
   - desktop e tablet iguais (24) — proposital, não é esquecimento;
   - mobile 16 (poderia ser 12; ficou 16 para manter o grid de 8px).
+- **(2026-06-02) Hero + Header construídos** a partir do screenshot da referência.
+  - Headline `text-h2 md:text-h1` com `max-w-[32ch]` + `text-balance` pra forçar as 2 linhas
+    do original ("Smartphones seminovos e / lacrados com 1 ano de garantia").
+  - Subtítulo em `text-body2` (15), não `text-body` — é o menor da escala, bate com a referência.
+  - Glow do fundo = `.hero-bg` (dois radial-gradients de azul-capri subindo da base sobre preto).
+  - Cards de feature num painel `rounded-medium` + `border-white-8`, divididos por `gap-px`.
+    Ícones em `lucide-react` tintados de `azul-capri` (o original tinha ícones coloridos variados —
+    escolha de unificar na marca; revisitar se quiserem os ícones originais).
+  - Logo "STAR TECH" é placeholder textual (Arboria bold itálico) — trocar pelo lettering/SVG real.
+- **`next/font/local` em vez de `@font-face` manual** (decisão da pendência) — evita FOUT, mais limpo.
 
 ## Hurdles & Correções (log)
 
 > Registrar aqui todo obstáculo encontrado e como foi resolvido — vira histórico pra não
 > repetir erro. Formato sugerido: data · problema · causa · correção.
 
-- _(vazio — preencher conforme aparecerem)_
+- **(2026-06-02) Screenshot headless não captura Framer Motion.** · Problema: ao printar
+  via Edge `--headless` + `--virtual-time-budget`, todo elemento animado saía em `opacity: 0`
+  (página "vazia"). · Causa: o Framer Motion acelera opacity/transform via **WAAPI**, cuja
+  timeline não avança com o virtual-time-budget do Chromium. Roda normal em navegador real. ·
+  Correção/validação: pra conferir layout, desligar a animação temporariamente (em `lib/anim.ts`,
+  `floatUp.hidden` = estado final) e religar depois. Não é bug do site.
 
 ## Pendências
 
-- [ ] **Confirmar versão do Tailwind.** Este projeto assume **v4** (sintaxe `@theme`). Se for v3,
-      os tokens migram para `theme.extend` no `tailwind.config.js`.
-- [ ] **Arboria:** hospedar os arquivos da fonte e decidir entre `@font-face` manual (já no
-      `globals.css`) ou `next/font/local` (caminho mais limpo no Next, evita FOUT). Verificar a licença.
+- [x] **~~Confirmar versão do Tailwind.~~** Confirmado **v4** (`@theme`), instalado `tailwindcss@^4`.
+- [x] **~~Arboria: hospedar + escolher carregamento.~~** Feito via `next/font/local` lendo `/font/*.ttf`.
+      ⚠️ MAS a licença atual é **demo/personal (ifonts.xyz)** — ver pendência de licença abaixo.
+- [ ] **Licença da Arboria:** comprar a licença comercial real (Dada Studio) antes de produção —
+      os `.ttf` atuais são "Demo for Personal Use", impróprios para site comercial.
 - [ ] **Ajustar dimensões reais dos botões** (padding/font-size hoje são inferidos).
+- [ ] **Logo real:** substituir o placeholder textual "STAR TECH" pelo lettering/SVG oficial.
+- [ ] **Menu mobile:** o botão hambúrguer do Header existe mas ainda não abre nada.
+- [ ] **Validar contra o Figma:** o Hero foi feito a partir do screenshot; conferir medidas/cores
+      exatas quando o frame do Figma estiver à mão.
+- [ ] **Conectar Git remoto + Netlify** (repo GitHub e link de deploy automático).
