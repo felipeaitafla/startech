@@ -1,0 +1,179 @@
+/* ============================================================
+   DESIGN SYSTEM — TOKENS
+   Tailwind CSS v4 (config CSS-first via @theme)
+
+   Cada token abaixo vira ao mesmo tempo:
+     • uma CSS variable  -> var(--color-azul-capri)
+     • uma utility       -> bg-azul-capri, text-h1, rounded-big...
+
+   A fonte Arboria é carregada via next/font/local (app/layout.tsx),
+   que expõe a CSS var --font-arboria. Por isso --font-sans abaixo
+   aponta para ela (sem @font-face manual aqui).
+   ============================================================ */
+
+@import "tailwindcss";
+
+@theme {
+  /* ---------------- CORES ---------------- */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-azul-capri: #39b6ff;     /* azul de marca / primário */
+  --color-realme-yellow: #f9dd60;
+
+  /* neutros translúcidos (overlays, bordas, estados) */
+  --color-white-32: rgb(255 255 255 / 0.32);
+  --color-white-16: rgb(255 255 255 / 0.16);
+  --color-white-8:  rgb(255 255 255 / 0.08);
+  --color-black-32: rgb(0 0 0 / 0.32);
+  --color-black-16: rgb(0 0 0 / 0.16);
+  --color-black-8:  rgb(0 0 0 / 0.08);
+
+  /* ---------------- FAMÍLIA ---------------- */
+  --font-sans: var(--font-arboria), ui-sans-serif, system-ui, sans-serif;
+
+  /* ---------------- ESCALA TIPOGRÁFICA ----------------
+     Cada --text-* gera UMA utility que aplica de uma vez
+     tamanho + line-height + letter-spacing + peso.
+     Ex.: <h1 class="text-h1">  já vem com tudo.
+     Letter spacing -3% => -0.03em (em todos os estilos).        */
+
+  --text-h1: 64px;
+  --text-h1--line-height: 60px;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h1--font-weight: 700;          /* Arboria Bold */
+
+  --text-h2: 48px;
+  --text-h2--line-height: 50px;
+  --text-h2--letter-spacing: -0.03em;
+  --text-h2--font-weight: 400;          /* Arboria Book */
+
+  --text-h3: 28px;
+  --text-h3--line-height: 34px;
+  --text-h3--letter-spacing: -0.03em;
+  --text-h3--font-weight: 400;
+
+  --text-body: 24px;
+  --text-body--line-height: 32px;
+  --text-body--letter-spacing: -0.03em;
+  --text-body--font-weight: 400;
+
+  --text-body2: 15px;
+  --text-body2--line-height: 20px;
+  --text-body2--letter-spacing: -0.03em;
+  --text-body2--font-weight: 400;
+
+  --text-footer: 14px;
+  --text-footer--line-height: 14px;
+  --text-footer--letter-spacing: -0.03em;
+  --text-footer--font-weight: 400;
+
+  --text-header: 12px;
+  --text-header--line-height: 12px;
+  --text-header--letter-spacing: -0.03em;
+  --text-header--font-weight: 700;      /* Arboria Bold */
+
+  /* ---------------- CORNER RADIUS ----------------
+     -> rounded-small / rounded-medium / rounded-big            */
+  --radius-small: 16px;
+  --radius-medium: 24px;
+  --radius-big: 32px;
+}
+
+/* ------------------------------------------------------------
+   TOKENS DE LAYOUT RESPONSIVOS
+   Margin, Vertical Padding e Gaps mudam por breakpoint
+   (Mobile → Tablet → Desktop).
+   ------------------------------------------------------------ */
+:root {                       /* Mobile  */
+  --layout-margin:    24px;
+  --layout-padding-y: 64px;
+  --layout-gap:       16px;   /* off-grid proposital (não é múltiplo de 8) */
+}
+@media (min-width: 768px) {   /* Tablet  */
+  :root {
+    --layout-margin:    32px;
+    --layout-padding-y: 96px;
+    --layout-gap:       24px;
+  }
+}
+@media (min-width: 1024px) {  /* Desktop */
+  :root {
+    --layout-margin:    64px;
+    --layout-padding-y: 128px;
+    --layout-gap:       24px;   /* igual ao tablet, decisão consciente */
+  }
+}
+
+/* ------------------------------------------------------------
+   BASE
+   ------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-black);
+    color: var(--color-white);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* ------------------------------------------------------------
+   BOTÕES  (componentes montados a partir dos tokens acima)
+   Raio "pill" (totalmente arredondado) conforme os prints.
+   ⚠️ Padding e font-size dos botões ainda são inferidos.
+   ------------------------------------------------------------ */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;                 /* pill */
+    background: var(--color-azul-capri);
+    color: var(--color-white);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    padding: 1rem 1.75rem;
+    font-size: 18px;                       /* inferido */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+
+  /* variante menor */
+  .btn-sm {
+    padding: 0.5rem 1.25rem;
+    font-size: 14px;
+  }
+
+  /* link de ação — "Comprar ↗" */
+  .btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--color-azul-capri);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+}
+
+/* ------------------------------------------------------------
+   HERO — fundo preto com glow azul-capri subindo de baixo.
+   Camadas: glow inferior amplo + pool mais intenso na base + preto.
+   ------------------------------------------------------------ */
+@layer components {
+  .hero-bg {
+    background:
+      radial-gradient(120% 90% at 50% 118%,
+        rgb(57 182 255 / 0.55) 0%,
+        rgb(57 182 255 / 0.22) 26%,
+        rgb(57 182 255 / 0.04) 48%,
+        transparent 62%),
+      radial-gradient(80% 60% at 72% 120%,
+        rgb(57 182 255 / 0.30) 0%,
+        transparent 55%),
+      var(--color-black);
+  }
+}
