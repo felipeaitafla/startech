@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import {
-  BatteryCharging,
+  ShieldCheck,
   Smartphone,
   CreditCard,
   Wrench,
@@ -13,7 +13,7 @@ import { stagger, floatUp, drift } from "@/lib/anim";
 import type { FeatureIcon } from "@/content/site";
 
 const featureIcons: Record<FeatureIcon, LucideIcon> = {
-  battery: BatteryCharging,
+  warranty: ShieldCheck,
   loan: Smartphone,
   installments: CreditCard,
   support: Wrench,

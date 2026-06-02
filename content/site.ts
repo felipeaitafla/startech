@@ -3,7 +3,7 @@
    Editar aqui não toca em estilo nem em estrutura.
    ============================================================ */
 
-export type FeatureIcon = "battery" | "loan" | "installments" | "support";
+export type FeatureIcon = "warranty" | "loan" | "installments" | "support";
 
 export const nav = {
   links: [
@@ -22,18 +22,18 @@ export const nav = {
 } as const;
 
 export const hero = {
-  title: "Smartphones seminovos e lacrados com 1 ano de garantia",
+  title: "iPhones seminovos e lacrados, com até 2 anos de garantia",
   subtitle:
-    "Somos uma loja referência em Chapecó e região na venda de smartphones, acessórios e assistência técnica especializada.",
-  cta: { label: "Saiba mais", href: "#" },
+    "Loja referência em Chapecó e região: iPhones direto do canal oficial Apple, com acessórios e assistência técnica especializada.",
+  cta: { label: "Falar com consultor", href: "#" },
   features: [
     {
-      icon: "battery" as FeatureIcon,
-      text: "Somos a única loja do Brasil a oferecer garantia de saúde para a sua bateria",
+      icon: "warranty" as FeatureIcon,
+      text: "Até 2 anos de garantia em todos os iPhones seminovos",
     },
     {
       icon: "loan" as FeatureIcon,
-      text: "Emprestamos outro aparelho para você se o seu estiver na garantia",
+      text: "Emprestamos outro aparelho enquanto o seu está na garantia",
     },
     {
       icon: "installments" as FeatureIcon,
