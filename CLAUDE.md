@@ -148,6 +148,11 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
   timeline não avança com o virtual-time-budget do Chromium. Roda normal em navegador real. ·
   Correção/validação: pra conferir layout, desligar a animação temporariamente (em `lib/anim.ts`,
   `floatUp.hidden` = estado final) e religar depois. Não é bug do site.
+- **(2026-06-02) Build quebrou com `Cannot find module './611.js'`.** · Problema: `next build`/
+  `next start` falhava buscando um chunk inexistente. · Causa: cache `.next` corrompido —
+  rodar `dev` e `build`/`start` se atropelando e matar processos no meio da escrita deixa
+  chunks órfãos. · Correção: parar todos os servers, **apagar `.next`** (`Remove-Item -Recurse
+  -Force .next`) e buildar de novo. Evitar rodar `dev` e `build` ao mesmo tempo.
 
 ## Pendências
 
