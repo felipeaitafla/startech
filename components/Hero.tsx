@@ -21,13 +21,13 @@ const featureIcons: Record<FeatureIcon, LucideIcon> = {
 
 export function Hero() {
   return (
-    <section className="hero-bg relative flex min-h-screen flex-col overflow-hidden px-[var(--layout-margin)]">
+    <section className="hero-bg relative flex h-screen flex-col overflow-hidden px-[var(--layout-margin)]">
       {/* conteúdo central */}
       <motion.div
         initial="hidden"
         animate="show"
         variants={stagger}
-        className="flex flex-1 flex-col items-center justify-center pt-32 text-center"
+        className="flex flex-1 flex-col items-center justify-center pt-24 text-center"
       >
         <motion.h1
           variants={floatUp}
@@ -50,29 +50,28 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* cards de features na base */}
+      {/* features na base — sem caixa, ícone grande à esquerda,
+          texto sempre em 2 linhas (largura controla a quebra). */}
       <motion.ul
         initial="hidden"
         animate="show"
         variants={stagger}
-        className="relative z-10 mb-[var(--layout-padding-y)] grid grid-cols-1 gap-px overflow-hidden rounded-medium border border-white-8 bg-white-8 backdrop-blur-sm sm:grid-cols-2 lg:grid-cols-4"
+        className="relative z-10 grid grid-cols-1 gap-x-[var(--layout-gap)] gap-y-8 pb-12 sm:grid-cols-2 lg:grid-cols-4"
       >
         {hero.features.map((feature, i) => {
           const Icon = featureIcons[feature.icon];
           return (
-            <motion.li
-              key={feature.text}
-              variants={floatUp}
-              className="bg-black/20 px-5 py-6"
-            >
+            <motion.li key={feature.text} variants={floatUp}>
               <motion.div
                 animate={drift(i * 0.6)}
-                className="flex items-start gap-3"
+                className="flex items-center gap-4"
               >
                 <span className="shrink-0 text-azul-capri">
-                  <Icon className="size-5" strokeWidth={1.75} />
+                  <Icon className="size-9" strokeWidth={1.75} />
                 </span>
-                <p className="text-body2 text-white/70">{feature.text}</p>
+                <p className="text-feature max-w-[252px] text-white/80">
+                  {feature.text}
+                </p>
               </motion.div>
             </motion.li>
           );

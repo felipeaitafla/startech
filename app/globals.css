@@ -62,6 +62,13 @@
   --text-body2--letter-spacing: -0.03em;
   --text-body2--font-weight: 400;
 
+  /* feature: tamanho derivado p/ os destaques do hero — escolhido pra
+     caber os 4 textos em exatamente 2 linhas dentro da coluna (~252px). */
+  --text-feature: 17px;
+  --text-feature--line-height: 22px;
+  --text-feature--letter-spacing: -0.03em;
+  --text-feature--font-weight: 400;
+
   --text-footer: 14px;
   --text-footer--line-height: 14px;
   --text-footer--letter-spacing: -0.03em;

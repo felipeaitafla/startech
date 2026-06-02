@@ -77,6 +77,7 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 | `text-h3` | 28 | 34 | Book |
 | `text-body` | 24 | 32 | Book |
 | `text-body2` | 15 | 20 | Book |
+| `text-feature` | 17 | 22 | Book | *(derivado — destaques do hero; ver Decisões)* |
 | `text-footer` | 14 | 14 | Book |
 | `text-header` | 12 | 12 | Bold (700) |
 
@@ -124,6 +125,17 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
     escolha de unificar na marca; revisitar se quiserem os ícones originais).
   - Logo "STAR TECH" é placeholder textual (Arboria bold itálico) — trocar pelo lettering/SVG real.
 - **`next/font/local` em vez de `@font-face` manual** (decisão da pendência) — evita FOUT, mais limpo.
+- **(2026-06-02) Hero refeito: tela cheia + features sem caixa.**
+  - Section virou **`h-screen`** (ocupa exatamente o viewport, sem sobra/scroll); conteúdo
+    central em `flex-1` centralizado e as features fixadas na base (`pb-12`).
+  - Features: removida a caixa/painel; **ícone grande à esquerda** (`size-9`, azul-capri) +
+    texto maior, sem `<br>`. Grade `1 / 2 / 4` colunas.
+  - **Token novo `text-feature` (17px).** Exigência do cliente: os 4 textos **sempre em 2 linhas**,
+    a quebra controlada só pela largura. O desafio: numa coluna de 4 (~310px) o ícone+gap deixam
+    só ~258px pro texto, e os textos variam de 33 a 58 chars. Medi as larguras reais da Arboria
+    (GDI/MeasureString) e achei a janela: com **17px + caixa de texto ~252px** (`max-w-[252px]`)
+    os 4 caem em 2 linhas (janela válida ~244–264px). ⚠️ É calibrado pro desktop (~1440); em
+    larguras de coluna bem menores pode quebrar diferente — revisitar responsivo se necessário.
 
 ## Hurdles & Correções (log)
 
