@@ -23,7 +23,7 @@ export function Header() {
       initial="hidden"
       animate="show"
       variants={stagger}
-      className="absolute inset-x-0 top-0 z-30"
+      className="fixed inset-x-0 top-0 z-30 border-b border-white-8 bg-black/30 backdrop-blur-lg"
     >
       <nav className="relative mx-auto flex items-center justify-between px-[var(--layout-margin)] py-6">
         {/* esquerda — navegação (desktop) */}

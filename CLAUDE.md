@@ -52,6 +52,9 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 - `app/page.tsx` — monta `<Header/>` + `<Hero/>`.
 - `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.hero-bg`.
 - `components/` — `Header.tsx`, `Hero.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+  - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
+  - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
+    via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
 - `content/site.ts` — **toda a copy** (nav, hero, features). Editar texto só aqui.
 - `lib/anim.ts` — variantes de animação.
 - `font/` — `.ttf` da Arboria.
@@ -142,7 +145,8 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
 - [ ] **Licença da Arboria:** comprar a licença comercial real (Dada Studio) antes de produção —
       os `.ttf` atuais são "Demo for Personal Use", impróprios para site comercial.
 - [ ] **Ajustar dimensões reais dos botões** (padding/font-size hoje são inferidos).
-- [ ] **Logo real:** substituir o placeholder textual "STAR TECH" pelo lettering/SVG oficial.
+- [x] **~~Logo real.~~** Usando `public/startech-logo.png` (oficial) via `next/image`.
+      (Opcional futuro: versão SVG pra nitidez perfeita em qualquer tamanho.)
 - [ ] **Menu mobile:** o botão hambúrguer do Header existe mas ainda não abre nada.
 - [ ] **Validar contra o Figma:** o Hero foi feito a partir do screenshot; conferir medidas/cores
       exatas quando o frame do Figma estiver à mão.

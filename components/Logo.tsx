@@ -1,13 +1,15 @@
-/* Logo textual STAR / TECH — aproximação em Arboria Bold itálico.
-   TODO: substituir pelo SVG/lettering oficial quando disponível. */
+import Image from "next/image";
+import logo from "@/public/startech-logo.png";
+
+/* Logo oficial Star Tech (PNG branco, fundo transparente).
+   Arquivo: /public/startech-logo.png — usar este daqui pra frente. */
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <span
-      className={`select-none text-center font-bold uppercase italic leading-[0.82] tracking-[-0.04em] text-white ${className}`}
-      aria-label="Star Tech"
-    >
-      <span className="block text-[20px] md:text-[22px]">Star</span>
-      <span className="block text-[20px] md:text-[22px]">Tech</span>
-    </span>
+    <Image
+      src={logo}
+      alt="Star Tech"
+      priority
+      className={`h-9 w-auto select-none md:h-10 ${className}`}
+    />
   );
 }
