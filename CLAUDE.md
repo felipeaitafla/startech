@@ -56,9 +56,9 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
   - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
   - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
     via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
-  - `FanCards` é a seção logo **abaixo da Hero**: leque 3D de imagens em **carrossel
-    arrastável** (drag-to-scroll, sem auto-play) com hover expand. **Client component**
-    (drag via pointer events); leque/hover em **CSS Module** (`FanCards.module.css`) — ver Decisões.
+  - `FanCards` é a seção logo **abaixo da Hero**: leque 3D de imagens **parado** com hover expand
+    (no mobile o `:hover` dispara no toque → tap pra expandir). **Server component** (zero JS),
+    **CSS Module** (`FanCards.module.css`) em vez de Tailwind, porque é animação 3D pesada — ver Decisões.
   - `Categories` é a seção logo **abaixo do FanCards**: 2 painéis lado a lado
     (Seminovos | iPhones novos) dentro do **grid central de 1200px** (`--layout-max`).
     Server component, Tailwind. Painéis `bg-azul-capri/15` + `rounded-big` + `border-white-8`;
@@ -161,25 +161,25 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
     (GDI/MeasureString) e achei a janela: com **17px + caixa de texto ~252px** (`max-w-[252px]`)
     os 4 caem em 2 linhas (janela válida ~244–264px). ⚠️ É calibrado pro desktop (~1440); em
     larguras de coluna bem menores pode quebrar diferente — revisitar responsivo se necessário.
-- **(2026-06-04) `FanCards` — leque 3D em carrossel arrastável abaixo da Hero.** Fotos dos aparelhos
-  como um baralho inclinado que **só rola quando o usuário arrasta** (sem auto-play); no hover o card
-  endireita e amplia.
-  - Leque/hover em **CSS Module** (`FanCards.module.css`), não Tailwind: efeito 3D com muitos estados
-    encadeados (perspectiva, `transform-origin`, seletores de irmãos) que ficaria ilegível em utilities.
-    **Client component** (`"use client"`) — o arraste precisa de JS (pointer events).
-  - Mecânica do leque: **perspectiva no pai `.fan`** (`perspective: 2000px`); cards com
-    `transform-origin: left center` + `rotateY` (repouso) que abrem como leque; **sobreposição via
-    `margin-right` negativo**; os cards à direita do hovered deslocam com `.card:hover ~ .card
-    { translateX }` pra abrir espaço. Transição `cubic-bezier(0.25, 0.46, 0.45, 0.94)`.
-  - **Drag-to-scroll (sem auto-play):** o `.track` translada via **pointer events** (mouse + touch);
-    `pos`/estado do arraste em `useRef` (sem re-render por movimento), `transform` setado direto no DOM.
-    **Loop sem emenda:** lista **duplicada no JSX** (2ª cópia `aria-hidden`) + `translateX` "embrulhado"
-    no comprimento de uma cópia → arrasta infinito nos dois sentidos. `cursor: grab/grabbing`,
-    `touch-action: pan-y` (deixa o scroll vertical da página passar), `user-select`/`draggable=false`
-    (sem fantasma de imagem). Como os cards são netos, `.track` tem `transform-style: preserve-3d`.
-    ⚠️ Sem inércia/momentum (para ao soltar) — adicionar depois se quiserem deslize.
-  - **Decisão (2026-06-04):** começou como **marquee auto-infinito** (`fan-scroll` keyframes), mas o
-    cliente pediu **só ao arrastar** — animação CSS removida, virou client component com drag.
+- **(2026-06-04) `FanCards` — leque 3D parado com hover expand, abaixo da Hero.** Fotos dos aparelhos
+  como um baralho inclinado **fixo**; no hover o card endireita e amplia (no mobile, `:hover` dispara
+  no toque → tap pra expandir).
+  - **CSS puro (sem libs), em CSS Module** (`FanCards.module.css`), não Tailwind: efeito 3D com muitos
+    estados encadeados (perspectiva, `transform-origin`, seletores de irmãos) ilegível em utilities.
+    **Server component** — zero JS, tudo `:hover`.
+  - Mecânica: **perspectiva no pai `.fan`** (`perspective: 2000px`); cards com `transform-origin: left
+    center` + `rotateY` (repouso) que abrem como leque; **sobreposição via `margin-right` negativo`**;
+    os cards à direita do hovered deslocam com `.card:hover ~ .card { translateX }` pra abrir espaço.
+    Transição `cubic-bezier(0.25, 0.46, 0.45, 0.94)`. Respeita `prefers-reduced-motion`.
+  - **Valores calibrados com o cliente (desktop):** card `290px`, `margin-right: -95px` (leque aberto),
+    repouso `rotateY(28deg)`, hover `scale(1.30)` + `translateZ(90px)`. Breakpoints reduzem largura
+    (tablet 230 / mobile 180); leque centralizado (`justify-content: center`), `overflow-x: clip`.
+  - **Peek na Hero:** `margin-top` negativo (−154 desktop / −142 tablet / **0 mobile**) pra a ponta dos
+    cards "espiar" no rodapé da Hero e convidar o scroll.
+  - Imagens **hardcoded** no `.tsx` (12 `.webp` de `public/images`). ⚠️ Se mudar a pasta, atualizar array.
+  - **Histórico de tentativas (descartadas):** virou **marquee auto-infinito** e depois **drag-to-scroll**
+    (client component, pointer events, lista duplicada), mas o cliente preferiu **voltar ao leque parado
+    só com hover** — o drag deixava o expand "clicável" (o `setPointerCapture` atrapalhava o `:hover`).
   - **Valores calibrados com o cliente (desktop):** card `290px`, `margin-right: -95px` (leque aberto),
     repouso `rotateY(28deg)` (bem virado pra frente), hover `scale(1.30)` + `translateZ(90px)`.
     Breakpoints reduzem largura/deslocamento (tablet 230 / mobile 180); hover mantém `scale(1.30)`.

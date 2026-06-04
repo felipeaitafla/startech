@@ -46,7 +46,7 @@ export function Support() {
         </header>
 
         {/* carrossel: [seta] [viewport] [seta] */}
-        <div className="mt-16 flex items-center gap-2 md:gap-4">
+        <div className="mt-8 flex items-center gap-2 md:gap-4">
           <button
             type="button"
             onClick={() => go(-1)}
