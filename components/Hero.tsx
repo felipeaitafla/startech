@@ -21,7 +21,7 @@ const featureIcons: Record<FeatureIcon, LucideIcon> = {
 
 export function Hero() {
   return (
-    <section className="hero-bg relative flex h-screen flex-col items-center justify-center overflow-hidden px-[var(--layout-margin)] pt-24">
+    <section className="relative flex h-screen flex-col items-center justify-center overflow-hidden px-[var(--layout-margin)] pt-24">
       <motion.div
         initial="hidden"
         animate="show"

@@ -1,0 +1,122 @@
+/* ------------------------------------------------------------
+   FanCards — leque 3D de imagens com hover expand.
+   CSS puro (sem libs de animação).
+   • Perspectiva 3D fica no container pai (.fan).
+   • transform-origin dos cards = left center.
+   • Sobreposição via margin-right negativo.
+   • Transição com cubic-bezier(0.25, 0.46, 0.45, 0.94).
+   ------------------------------------------------------------ */
+
+.fan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* perspectiva no PAI — é o que dá profundidade aos rotateY dos filhos */
+  perspective: 2000px;
+  padding: 96px var(--layout-margin);
+  /* o leque é largo; garante que não estoure horizontalmente
+     (clip no X mantém o Y visível -> a ponta dos cards pode "espiar" pra cima) */
+  overflow-x: clip;
+  /* fill transparente: deixa o fundo global (.site-bg) aparecer através */
+  background: transparent;
+  /* Puxa a seção pra cima pra ~15% dos cards invadirem a Hero (h-screen) e
+     sinalizarem que tem mais conteúdo abaixo. Valor = padding-top (96) + ~15%
+     da altura do card (290 * 4/3 ≈ 387 -> ~58). Recalculado por breakpoint. */
+  margin-top: -154px;
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 290px;
+  aspect-ratio: 3 / 4;
+  /* sobreposição: cada card "entra" por cima do anterior
+     (menos negativo = leque mais aberto) */
+  margin-right: -95px;
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+  border: 1px solid var(--color-white-8);
+  background: #0d0d0d;
+  cursor: pointer;
+  /* eixo de rotação na borda esquerda -> abre como leque pra direita
+     (ângulo menor = cards mais virados pra frente) */
+  transform-origin: left center;
+  transform: rotateY(28deg);
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
+  transition:
+    transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.card:last-child {
+  margin-right: 0;
+}
+
+.card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* fina dessaturação no estado de repouso, volta no hover */
+  filter: saturate(0.85) brightness(0.9);
+  transition: filter 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* card sob o mouse: endireita (rotateY 0), vem pra frente e amplia */
+.card:hover {
+  transform: rotateY(0deg) translateZ(90px) scale(1.24);
+  z-index: 10;
+  box-shadow: 0 30px 80px rgb(57 182 255 / 0.35);
+}
+
+.card:hover img {
+  filter: saturate(1.05) brightness(1.02);
+}
+
+/* cards À DIREITA do hovered deslocam pra abrir espaço */
+.card:hover ~ .card {
+  transform: rotateY(28deg) translateX(160px);
+}
+
+/* ---------------- responsivo ---------------- */
+@media (max-width: 1023px) {
+  .fan {
+    /* padding-top 96 + ~15% de (230 * 4/3 ≈ 307) ≈ 46 */
+    margin-top: -142px;
+  }
+  .card {
+    width: 230px;
+    margin-right: -85px;
+  }
+  .card:hover ~ .card {
+    transform: rotateY(28deg) translateX(130px);
+  }
+}
+
+@media (max-width: 767px) {
+  .fan {
+    padding: 64px var(--layout-margin);
+    /* padding-top 64 + ~15% de (180 * 4/3 = 240) ≈ 36 */
+    margin-top: -100px;
+  }
+  .card {
+    width: 180px;
+    margin-right: -72px;
+  }
+  .card:hover {
+    transform: rotateY(0deg) translateZ(60px) scale(1.24);
+  }
+  .card:hover ~ .card {
+    transform: rotateY(28deg) translateX(100px);
+  }
+}
+
+/* respeita "reduzir movimento" do SO */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition-duration: 0.01ms;
+  }
+}

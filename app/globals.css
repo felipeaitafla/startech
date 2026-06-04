@@ -17,6 +17,7 @@
   /* ---------------- CORES ---------------- */
   --color-white: #ffffff;
   --color-black: #000000;
+  --color-bg: #030b0f;             /* fundo base do site (preto levemente azulado) */
   --color-azul-capri: #39b6ff;     /* azul de marca / primário */
   --color-realme-yellow: #f9dd60;
 
@@ -95,6 +96,7 @@
   --layout-margin:    24px;
   --layout-padding-y: 64px;
   --layout-gap:       16px;   /* off-grid proposital (não é múltiplo de 8) */
+  --layout-max:       1200px; /* largura máx. do grid central (página inteira) */
 }
 @media (min-width: 768px) {   /* Tablet  */
   :root {
@@ -119,7 +121,7 @@
     scroll-behavior: smooth;
   }
   body {
-    background: var(--color-black);
+    background: var(--color-bg);
     color: var(--color-white);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -167,20 +169,27 @@
 }
 
 /* ------------------------------------------------------------
-   HERO — fundo preto com glow azul-capri subindo de baixo.
-   Camadas: glow inferior amplo + pool mais intenso na base + preto.
+   FUNDO GLOBAL — uma única camada FIXA atrás de absolutamente tudo,
+   com o glow azul-capri subindo de baixo sobre preto.
+   As seções (Hero, FanCards...) ficam com fill transparente e deixam
+   este fundo aparecer — assim nenhuma seção "corta" o gradiente
+   (era o que criava a linha dura na junção).
    ------------------------------------------------------------ */
 @layer components {
-  .hero-bg {
+  .site-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
     background:
-      radial-gradient(120% 90% at 50% 118%,
+      radial-gradient(160% 130% at 50% 122%,
         rgb(57 182 255 / 0.55) 0%,
-        rgb(57 182 255 / 0.22) 26%,
-        rgb(57 182 255 / 0.04) 48%,
-        transparent 62%),
-      radial-gradient(80% 60% at 72% 120%,
-        rgb(57 182 255 / 0.30) 0%,
-        transparent 55%),
-      var(--color-black);
+        rgb(57 182 255 / 0.26) 30%,
+        rgb(57 182 255 / 0.08) 55%,
+        transparent 78%),
+      radial-gradient(110% 90% at 72% 125%,
+        rgb(57 182 255 / 0.32) 0%,
+        transparent 70%),
+      var(--color-bg);
   }
 }

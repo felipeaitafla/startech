@@ -49,15 +49,26 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 ## Estrutura de arquivos
 
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, metadata.
-- `app/page.tsx` — monta `<Header/>` + `<Hero/>`.
-- `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.hero-bg`.
-- `components/` — `Header.tsx`, `Hero.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+  Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>`.
+- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>`.
+- `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.site-bg` (fundo global).
+- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
   - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
   - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
     via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
-- `content/site.ts` — **toda a copy** (nav, hero, features). Editar texto só aqui.
+  - `FanCards` é a seção logo **abaixo da Hero**: leque 3D de imagens com hover expand.
+    É **server component** (todo o efeito é CSS, sem JS) e usa **CSS Module**
+    (`FanCards.module.css`) em vez de Tailwind, porque é animação 3D pesada — ver Decisões.
+  - `Categories` é a seção logo **abaixo do FanCards**: 2 painéis lado a lado
+    (Seminovos | iPhones novos) dentro do **grid central de 1200px** (`--layout-max`).
+    Server component, Tailwind. Painéis `bg-azul-capri/15` + `rounded-big` + `border-white-8`;
+    texto centralizado no topo, imagem (`/public/*.webp`, `object-contain`, `h-[400px]`) na base.
+- `content/site.ts` — **toda a copy** (nav, hero, features, categories). Editar texto só aqui.
 - `lib/anim.ts` — variantes de animação.
 - `font/` — `.ttf` da Arboria.
+- `public/images/` — fotos dos aparelhos (12 `.webp`), consumidas pelo `FanCards`
+  (lista **hardcoded** no componente, em ordem crescente de nome).
+- `public/` (raiz) — `seminovos.webp` e `novos.webp` (PNG/transparente), usadas pela `Categories`.
 
 ## Design System
 
@@ -65,8 +76,9 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 > fonte, raio ou espaçamento — sempre use os tokens/utilities. Se precisar de um valor que
 > não existe, adicione como token no `@theme` e registre aqui.
 
-**Cores:** `white` #ffffff · `black` #000000 · `azul-capri` #39B6FF (primária) ·
-`realme-yellow` #F9DD60 · neutros translúcidos `white-32/16/8` e `black-32/16/8`.
+**Cores:** `white` #ffffff · `black` #000000 · `bg` #030B0F (fundo base do site, preto
+levemente azulado) · `azul-capri` #39B6FF (primária) · `realme-yellow` #F9DD60 ·
+neutros translúcidos `white-32/16/8` e `black-32/16/8`.
 
 **Tipografia** (Arboria, `letter-spacing: -0.03em` em todos — já embutido nos tokens `text-*`):
 
@@ -90,6 +102,10 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 | `--layout-margin` | 24 | 32 | 64 |
 | `--layout-padding-y` | 64 | 96 | 128 |
 | `--layout-gap` | 16 | 24 | 24 |
+
+**Grid central:** `--layout-max` = **1200px** (não muda por breakpoint) — largura máxima do
+conteúdo, pra alinhar as seções na mesma grade na página inteira. Uso: container interno
+`mx-auto w-full max-w-[var(--layout-max)]`. (Hoje só a `Categories` usa; aplicar nas demais.)
 
 Uso: `px-[var(--layout-margin)] py-[var(--layout-padding-y)]` no container da seção;
 `gap-[var(--layout-gap)]` no grid/flex interno.
@@ -136,6 +152,45 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
     (GDI/MeasureString) e achei a janela: com **17px + caixa de texto ~252px** (`max-w-[252px]`)
     os 4 caem em 2 linhas (janela válida ~244–264px). ⚠️ É calibrado pro desktop (~1440); em
     larguras de coluna bem menores pode quebrar diferente — revisitar responsivo se necessário.
+- **(2026-06-04) `FanCards` — leque 3D abaixo da Hero.** Seção que mostra as fotos dos aparelhos
+  como um baralho inclinado; no hover o card se endireita e amplia.
+  - **CSS puro (sem Framer Motion), em CSS Module** (`FanCards.module.css`), não Tailwind:
+    é um efeito 3D com muitos estados encadeados (perspectiva, `transform-origin`, seletores de
+    irmãos) que ficaria ilegível em utilities. **Server component** — todo o efeito é `:hover`, zero JS.
+  - Mecânica: **perspectiva no pai** (`perspective: 2000px`); cards com `transform-origin: left center`
+    + `rotateY` (repouso) que abrem como leque; **sobreposição via `margin-right` negativo**;
+    os cards à direita do hovered deslocam com `.card:hover ~ .card { translateX }` pra abrir espaço.
+    Transição com `cubic-bezier(0.25, 0.46, 0.45, 0.94)`. Respeita `prefers-reduced-motion`.
+  - **Valores calibrados com o cliente (desktop):** card `290px`, `margin-right: -95px` (leque aberto),
+    repouso `rotateY(28deg)` (bem virado pra frente), hover `scale(1.24)` + `translateZ(90px)`.
+    Breakpoints reduzem largura/deslocamento (tablet 230 / mobile 180); hover mantém `scale(1.24)`.
+  - **Peek na Hero:** a seção é puxada pra cima com `margin-top` negativo (−154 / −142 / −100 por
+    breakpoint = padding-top + ~15% da altura do card) pra a ponta dos cards "espiar" no rodapé da
+    Hero (`h-screen`) e convidar o scroll. `overflow-x: clip` (não `hidden`) mantém o eixo Y visível.
+  - Imagens **hardcoded** no `.tsx` (12 `.webp` de `public/images`), `<img>` puro com `object-fit: cover`
+    + leve dessaturação que volta no hover. ⚠️ Se adicionar/renomear arquivos na pasta, atualizar o array.
+- **(2026-06-04) `Categories` — 2 painéis (Seminovos | iPhones novos) abaixo do FanCards.**
+  - Primeira seção a usar o **grid central de 1200px** (`--layout-max`): a `<section>` cuida do
+    padding (margin lateral + `padding-y`), e um container interno `mx-auto max-w-[var(--layout-max)]`
+    segura o grid `1 → 2 colunas` com **gap fixo de 24px** (`gap-6`). Token criado pra valer na
+    página inteira — aplicar nas outras seções depois.
+  - Painéis: `bg-azul-capri/15` + `rounded-big` + `border-white-8`. **Texto centralizado** no topo
+    (título `text-h3 md:text-h2`, descrição `text-body2`, `.btn-link` "Comprar ↗"); imagem na base
+    centralizada, **`object-contain` `h-[400px]`** (sem crop, sem radius), com `pb` espelhando o `pt`.
+    Imagens `seminovos.webp`/`novos.webp` na **raiz de `public/`** (transparentes).
+  - Server component, Tailwind (layout simples, sem JS). Copy em `content/site.ts` (`categories`).
+- **(2026-06-04) Glow virou fundo GLOBAL fixo (`.site-bg`), não mais por-seção.**
+  - Antes o glow morava no `.hero-bg` (na `<section>` da Hero). Como cada seção pintava o próprio
+    fundo, a borda entre Hero e FanCards **cortava o gradiente** = linha dura/preta na junção.
+    Tentativa de "continuar" o glow no topo do FanCards não resolveu bem.
+  - Solução: **um único fundo `position: fixed; inset: 0; z-index: -10`** (`.site-bg`, montado no
+    `layout.tsx` como 1º filho do `<body>`, `pointer-events: none`). Hero e FanCards ficam com
+    **fill transparente** e deixam esse fundo aparecer — nenhuma seção corta mais o gradiente.
+  - ⚠️ Por ser `fixed`, o glow fica **ancorado na base da viewport** (acompanha o scroll), não na
+    base da Hero. Se um dia quiser que ele role embora, trocar pra `absolute` + wrapper `relative`.
+  - Glow **aumentado** (elipses ~160%/110%, stops empurrados pra 78%/70%) pra ocupar mais área.
+  - **Token novo `--color-bg` (#030B0F)** — preto levemente azulado; substituiu `black` puro como
+    base do `.site-bg` e do `body`.
 
 ## Hurdles & Correções (log)
 

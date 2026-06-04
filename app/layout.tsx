@@ -28,6 +28,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={arboria.variable}>
       <body>
+        {/* fundo global fixo (glow azul-capri) atrás de absolutamente tudo */}
+        <div className="site-bg" aria-hidden />
         <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
