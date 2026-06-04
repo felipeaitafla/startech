@@ -30,18 +30,22 @@ export const hero = {
     {
       icon: "warranty" as FeatureIcon,
       text: "Até 2 anos de garantia em todos os iPhones seminovos",
+      textWidth: 220, // px — ajustar para forçar quebra de linha desejada
     },
     {
       icon: "loan" as FeatureIcon,
       text: "Emprestamos outro aparelho enquanto o seu está na garantia",
+      textWidth: 252,
     },
     {
       icon: "installments" as FeatureIcon,
       text: "Parcelamento em até 12x sem juros",
+      textWidth: 150,
     },
     {
       icon: "support" as FeatureIcon,
       text: "Assistência técnica com especialistas",
+      textWidth: 150,
     },
   ],
 } as const;

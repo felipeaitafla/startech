@@ -38,7 +38,7 @@ export function Hero() {
 
         <motion.p
           variants={floatUp}
-          className="text-body2 mt-6 max-w-[46ch] text-balance text-white/65"
+          className="text-body2 mt-6 max-w-[64ch] text-white/65"
         >
           {hero.subtitle}
         </motion.p>
@@ -69,7 +69,10 @@ export function Hero() {
                 <span className="shrink-0 text-azul-capri">
                   <Icon className="size-9" strokeWidth={1.75} />
                 </span>
-                <p className="text-feature max-w-[252px] text-white/80">
+                <p
+                  className="text-feature text-white/80"
+                  style={{ maxWidth: feature.textWidth }}
+                >
                   {feature.text}
                 </p>
               </motion.div>
