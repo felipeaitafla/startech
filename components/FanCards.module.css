@@ -28,18 +28,14 @@
   align-items: center;
   /* mantém os cards (netos) no espaço 3D da perspectiva do .fan */
   transform-style: preserve-3d;
-  /* rolagem infinita; -50% = exatamente uma cópia (cards duplicados no JSX) */
-  animation: fan-scroll 45s linear infinite;
+  /* só rola ao arrastar (JS controla o translateX); cursor "agarrável" */
+  cursor: grab;
+  touch-action: pan-y;        /* deixa o scroll vertical da página passar */
+  user-select: none;
 }
 
-/* pausa a rolagem quando o mouse está sobre o carrossel */
-.track:hover {
-  animation-play-state: paused;
-}
-
-@keyframes fan-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+.track:active {
+  cursor: grabbing;
 }
 
 .card {
@@ -70,6 +66,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* não deixa o navegador "fantasmar" a imagem ao arrastar */
+  user-select: none;
+  -webkit-user-drag: none;
   /* fina dessaturação no estado de repouso, volta no hover */
   filter: saturate(0.85) brightness(0.9);
   transition: filter 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -123,11 +122,8 @@
   }
 }
 
-/* respeita "reduzir movimento" do SO: para a rolagem e encurta transições */
+/* respeita "reduzir movimento" do SO */
 @media (prefers-reduced-motion: reduce) {
-  .track {
-    animation: none;
-  }
   .card {
     transition-duration: 0.01ms;
   }
