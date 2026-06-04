@@ -21,7 +21,7 @@ const featureIcons: Record<FeatureIcon, LucideIcon> = {
 
 export function Hero() {
   return (
-    <section className="relative flex h-screen flex-col items-center justify-center overflow-hidden px-[var(--layout-margin)] pt-24">
+    <section className="relative flex min-h-screen flex-col items-center justify-center px-[var(--layout-margin)] pt-28 pb-16 md:h-screen md:pt-24 md:pb-0">
       <motion.div
         initial="hidden"
         animate="show"
@@ -30,7 +30,7 @@ export function Hero() {
       >
         <motion.h1
           variants={floatUp}
-          className="text-h2 md:text-h1 max-w-[20ch] text-balance text-white md:max-w-[32ch]"
+          className="text-h2 md:text-h1 max-w-[20ch] text-balance font-bold leading-tight text-white md:max-w-[32ch] md:leading-none"
         >
           {hero.title}
         </motion.h1>
@@ -50,18 +50,19 @@ export function Hero() {
 
         <motion.ul
           variants={stagger}
-          className="relative z-10 mt-32 flex flex-wrap justify-center gap-6"
+          className="relative z-10 mt-16 flex flex-col items-center justify-center gap-6 md:mt-32 md:flex-row md:flex-wrap"
         >
         {hero.features.flatMap((feature, i) => {
           const Icon = featureIcons[feature.icon];
           const item = (
             <motion.li key={feature.text} variants={floatUp}>
-              <div className="flex items-center gap-4">
+              {/* mobile: ícone em cima + texto centralizado · desktop: ícone à esquerda */}
+              <div className="flex flex-col items-center gap-2 text-center md:flex-row md:gap-4 md:text-left">
                 <span className="shrink-0 text-azul-capri">
                   <Icon className="size-6" strokeWidth={1.75} />
                 </span>
                 <p
-                  className="text-body2 font-light text-left text-white/80"
+                  className="text-body2 font-light text-white/80"
                   style={{ maxWidth: feature.textWidth }}
                 >
                   {feature.text}
@@ -71,8 +72,9 @@ export function Hero() {
           );
           if (i === 0) return [item];
           return [
-            <motion.li key={`div-${i}`} variants={floatUp} className="flex items-center">
-              <div className="h-8 w-px bg-white/20" />
+            // separador: horizontal (embaixo) no mobile · vertical no desktop
+            <motion.li key={`div-${i}`} variants={floatUp} className="flex items-center justify-center">
+              <div className="h-px w-16 bg-white/20 md:h-8 md:w-px" />
             </motion.li>,
             item,
           ];

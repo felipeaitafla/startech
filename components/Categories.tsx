@@ -13,7 +13,7 @@ export function Categories() {
         >
           {/* texto — parte superior, centralizado */}
           <div className="flex flex-col items-center px-8 pt-10 text-center md:px-10 md:pt-12">
-            <h2 className="text-h3 md:text-h2 text-white">{panel.title}</h2>
+            <h2 className="text-h3 md:text-h2 font-bold text-white">{panel.title}</h2>
             <p className="text-body2 mt-4 max-w-[42ch] text-white/70">
               {panel.description}
             </p>

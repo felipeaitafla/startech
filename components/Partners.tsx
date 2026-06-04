@@ -6,7 +6,7 @@ export function Partners() {
     <section className="px-[var(--layout-margin)] pb-[var(--layout-padding-y)]">
       {/* 128px de respiro acima, abaixo dos cards */}
       <div className="mx-auto w-full max-w-[var(--layout-max)] pt-[128px]">
-        <h2 className="text-body2 text-center text-white">
+        <h2 className="text-body2 text-center font-bold text-white">
           {partners.title}
         </h2>
 

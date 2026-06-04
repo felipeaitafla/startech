@@ -41,7 +41,7 @@ export function Support() {
       <div className="mx-auto w-full max-w-[var(--layout-max)]">
         {/* cabeçalho */}
         <header className="text-center">
-          <h2 className="text-h3 md:text-h2 text-white">{support.title}</h2>
+          <h2 className="text-h3 md:text-h2 font-bold text-white">{support.title}</h2>
           <p className="text-body2 mt-4 text-white/70">{support.subtitle}</p>
         </header>
 
@@ -68,7 +68,7 @@ export function Support() {
                   style={{ width: `${100 / perView}%` }}
                 >
                   <article className="flex h-full flex-col items-center pt-10 pb-8 text-center">
-                    <h3 className="text-body flex min-h-[64px] items-center font-bold text-white">
+                    <h3 className="text-body flex min-h-[64px] items-center font-medium text-white">
                       {service.title}
                     </h3>
                     <p className="text-body2 mt-3 max-w-[28ch] text-white/65">
