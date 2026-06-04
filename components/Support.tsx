@@ -68,7 +68,7 @@ export function Support() {
                   style={{ width: `${100 / perView}%` }}
                 >
                   <article className="flex h-full flex-col items-center pt-10 pb-8 text-center">
-                    <h3 className="text-body flex min-h-[64px] items-center font-medium text-white">
+                    <h3 className="text-body flex min-h-[64px] items-center font-normal text-white">
                       {service.title}
                     </h3>
                     <p className="text-body2 mt-3 max-w-[28ch] text-white/65">

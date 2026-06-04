@@ -17,15 +17,28 @@ const images = [
   "/images/IMG_7507.webp",
 ];
 
+/* duplicado: a 2ª cópia (aria-hidden) permite o loop infinito sem emenda
+   (a animação translateX(-50%) recai exatamente sobre a 1ª cópia). */
+const loop = [...images, ...images];
+
 export function FanCards() {
   return (
     <section className={styles.fan}>
-      {images.map((src, i) => (
-        <article key={src} className={styles.card}>
-          {/* <img> puro: object-fit + filter controlados no CSS module */}
-          <img src={src} alt={`Smartphone seminovo ${i + 1}`} loading="lazy" />
-        </article>
-      ))}
+      <div className={styles.track}>
+        {loop.map((src, i) => {
+          const isClone = i >= images.length;
+          return (
+            <article key={i} className={styles.card} aria-hidden={isClone}>
+              {/* <img> puro: object-fit + filter controlados no CSS module */}
+              <img
+                src={src}
+                alt={isClone ? "" : `Smartphone seminovo ${i + 1}`}
+                loading="lazy"
+              />
+            </article>
+          );
+        })}
+      </div>
     </section>
   );
 }

@@ -50,25 +50,34 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, metadata.
   Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>`.
-- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>`.
+- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>` + `<Partners/>` + `<Support/>`.
 - `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.site-bg` (fundo global).
-- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
   - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
   - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
     via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
-  - `FanCards` é a seção logo **abaixo da Hero**: leque 3D de imagens com hover expand.
-    É **server component** (todo o efeito é CSS, sem JS) e usa **CSS Module**
+  - `FanCards` é a seção logo **abaixo da Hero**: leque 3D de imagens em **carrossel
+    infinito** (marquee) com hover expand. **Server component**, **CSS Module**
     (`FanCards.module.css`) em vez de Tailwind, porque é animação 3D pesada — ver Decisões.
   - `Categories` é a seção logo **abaixo do FanCards**: 2 painéis lado a lado
     (Seminovos | iPhones novos) dentro do **grid central de 1200px** (`--layout-max`).
     Server component, Tailwind. Painéis `bg-azul-capri/15` + `rounded-big` + `border-white-8`;
     texto centralizado no topo, imagem (`/public/*.webp`, `object-contain`, `h-[400px]`) na base.
-- `content/site.ts` — **toda a copy** (nav, hero, features, categories). Editar texto só aqui.
+  - `Partners` é a seção **abaixo da Categories**: faixa "Trabalhamos com as melhores marcas".
+    Server component, dentro do grid 1200px. **Logos ainda placeholder** (logo Startech repetida
+    4x). Título em `text-body2` (15px) bold. ⚠️ Trocar pelos logos reais das marcas.
+  - `Support` é a seção **abaixo da Partners**: "Assistência Técnica" com **carrossel de
+    serviços**. **Client component** (`"use client"`, tem estado/navegação) — único carrossel
+    com JS. Mostra 1/2/4 cards por view (mobile/tablet/desktop) via `matchMedia`; setas laterais
+    + bolinhas, navegação por página com wrap-around. CTA `.btn` "Entrar em contato" no fim.
+- `content/site.ts` — **toda a copy** (nav, hero, features, categories, partners, support).
+  Editar texto só aqui.
 - `lib/anim.ts` — variantes de animação.
 - `font/` — `.ttf` da Arboria.
 - `public/images/` — fotos dos aparelhos (12 `.webp`), consumidas pelo `FanCards`
   (lista **hardcoded** no componente, em ordem crescente de nome).
-- `public/` (raiz) — `seminovos.webp` e `novos.webp` (PNG/transparente), usadas pela `Categories`.
+- `public/` (raiz) — `seminovos.webp`/`novos.webp` (transparentes) p/ `Categories`;
+  `broken.webp` (placeholder dos 4 serviços) p/ `Support`. ⚠️ Trocar pelas imagens reais.
 
 ## Design System
 
@@ -152,21 +161,26 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
     (GDI/MeasureString) e achei a janela: com **17px + caixa de texto ~252px** (`max-w-[252px]`)
     os 4 caem em 2 linhas (janela válida ~244–264px). ⚠️ É calibrado pro desktop (~1440); em
     larguras de coluna bem menores pode quebrar diferente — revisitar responsivo se necessário.
-- **(2026-06-04) `FanCards` — leque 3D abaixo da Hero.** Seção que mostra as fotos dos aparelhos
-  como um baralho inclinado; no hover o card se endireita e amplia.
+- **(2026-06-04) `FanCards` — leque 3D em carrossel infinito abaixo da Hero.** Fotos dos aparelhos
+  como um baralho inclinado que **rola sozinho em loop** (marquee); no hover o card endireita e amplia.
   - **CSS puro (sem Framer Motion), em CSS Module** (`FanCards.module.css`), não Tailwind:
     é um efeito 3D com muitos estados encadeados (perspectiva, `transform-origin`, seletores de
-    irmãos) que ficaria ilegível em utilities. **Server component** — todo o efeito é `:hover`, zero JS.
-  - Mecânica: **perspectiva no pai** (`perspective: 2000px`); cards com `transform-origin: left center`
-    + `rotateY` (repouso) que abrem como leque; **sobreposição via `margin-right` negativo**;
-    os cards à direita do hovered deslocam com `.card:hover ~ .card { translateX }` pra abrir espaço.
-    Transição com `cubic-bezier(0.25, 0.46, 0.45, 0.94)`. Respeita `prefers-reduced-motion`.
+    irmãos) que ficaria ilegível em utilities. **Server component** — animação e hover são 100% CSS.
+  - Mecânica do leque: **perspectiva no pai `.fan`** (`perspective: 2000px`); cards com
+    `transform-origin: left center` + `rotateY` (repouso) que abrem como leque; **sobreposição via
+    `margin-right` negativo**; os cards à direita do hovered deslocam com `.card:hover ~ .card
+    { translateX }` pra abrir espaço. Transição `cubic-bezier(0.25, 0.46, 0.45, 0.94)`.
+  - **Carrossel infinito (marquee):** cards vivem num `.track` que anima `translateX(0 → -50%)`
+    (`fan-scroll 45s linear infinite`). A lista é **duplicada no JSX** (2ª cópia `aria-hidden`), então
+    −50% recai sobre a 1ª cópia = loop **sem emenda**. `.track:hover` → `animation-play-state: paused`.
+    Como os cards viram netos, o `.track` precisa de `transform-style: preserve-3d` pra manter o 3D.
+    `prefers-reduced-motion` para a rolagem (`animation: none`).
   - **Valores calibrados com o cliente (desktop):** card `290px`, `margin-right: -95px` (leque aberto),
-    repouso `rotateY(28deg)` (bem virado pra frente), hover `scale(1.24)` + `translateZ(90px)`.
-    Breakpoints reduzem largura/deslocamento (tablet 230 / mobile 180); hover mantém `scale(1.24)`.
-  - **Peek na Hero:** a seção é puxada pra cima com `margin-top` negativo (−154 / −142 / −100 por
-    breakpoint = padding-top + ~15% da altura do card) pra a ponta dos cards "espiar" no rodapé da
-    Hero (`h-screen`) e convidar o scroll. `overflow-x: clip` (não `hidden`) mantém o eixo Y visível.
+    repouso `rotateY(28deg)` (bem virado pra frente), hover `scale(1.30)` + `translateZ(90px)`.
+    Breakpoints reduzem largura/deslocamento (tablet 230 / mobile 180); hover mantém `scale(1.30)`.
+  - **Peek na Hero:** a seção é puxada pra cima com `margin-top` negativo (−154 desktop / −142 tablet /
+    **0 no mobile** — sem peek) pra a ponta dos cards "espiar" no rodapé da Hero e convidar o scroll.
+    `overflow-x: clip` (não `hidden`) mantém o eixo Y visível (hover/peek não cortam).
   - Imagens **hardcoded** no `.tsx` (12 `.webp` de `public/images`), `<img>` puro com `object-fit: cover`
     + leve dessaturação que volta no hover. ⚠️ Se adicionar/renomear arquivos na pasta, atualizar o array.
 - **(2026-06-04) `Categories` — 2 painéis (Seminovos | iPhones novos) abaixo do FanCards.**
@@ -179,6 +193,28 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
     centralizada, **`object-contain` `h-[400px]`** (sem crop, sem radius), com `pb` espelhando o `pt`.
     Imagens `seminovos.webp`/`novos.webp` na **raiz de `public/`** (transparentes).
   - Server component, Tailwind (layout simples, sem JS). Copy em `content/site.ts` (`categories`).
+- **(2026-06-04) `Partners` — faixa de marcas + `Support` — carrossel de assistência.**
+  - `Partners`: título `text-body2` bold centralizado + **logos placeholder** (logo Startech
+    repetida 4x, `count` no `content/site.ts`). Dentro do grid 1200px. ⚠️ Espaçamento: a Partners
+    tem `pt-[128px]` próprio **e** a Categories já tem `padding-bottom` (128 desktop) → no desktop
+    o respiro somado é ~256px (decisão de não mexer na Categories; revisitar se incomodar).
+  - `Support`: **client component** (estado de página + `matchMedia`), único carrossel com JS.
+    1/2/4 cards por view (mobile/tablet/desktop); track `translateX(-página*100%)` com transição
+    `cubic-bezier(...)`; **setas** fora da área dos cards (layout `[seta][viewport][seta]`) com
+    wrap-around; **bolinhas** (ativa em `azul-capri`); CTA `.btn` no fim. Card: título reserva
+    **2 linhas** (`min-h-[64px]`) pra alinhar descrição/imagem entre cards; imagem `object-contain
+    h-[180px]`; sem fundo/borda no card (texto até a borda). ⚠️ Com 4 serviços e 4-por-view, o
+    desktop tem **1 página só** (setas/bolinhas sem destino) — consequência de 4×4.
+- **(2026-06-04) Títulos de seção em Bold.** Arboria **não tem Semibold (600)** — pesos: Thin/Light/
+  Book(400)/Medium(500)/Bold(700)/Black. Pedido era semibold; como não existe, o cliente optou por
+  **Bold**. Aplicado em Categories/Support/Partners (`font-bold`). ⚠️ **Não há classe/componente
+  compartilhado de "título de seção"** — cada seção repete os tokens no JSX (dá pra criar
+  `<SectionTitle>` se virar dor). Título de card do Support ficou **Book (400)** (regular).
+- **(2026-06-04) Ajustes Hero mobile.** Título estava fino (mobile usa `text-h2` = peso 400) e
+  **cortando no topo** (`h-screen` + `overflow-hidden` clipava conteúdo alto). Correções: `font-bold`
+  + `leading-[0.95]` no título; **`min-h-screen md:h-screen`** (cresce em vez de cortar, sem
+  `overflow-hidden`); features com **ícone em cima + texto centralizado** no mobile
+  (`flex-col`→`md:flex-row`); **separadores horizontais** entre itens no mobile (verticais no desktop).
 - **(2026-06-04) Glow virou fundo GLOBAL fixo (`.site-bg`), não mais por-seção.**
   - Antes o glow morava no `.hero-bg` (na `<section>` da Hero). Como cada seção pintava o próprio
     fundo, a borda entre Hero e FanCards **cortava o gradiente** = linha dura/preta na junção.

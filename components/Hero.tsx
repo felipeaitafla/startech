@@ -30,7 +30,7 @@ export function Hero() {
       >
         <motion.h1
           variants={floatUp}
-          className="text-h2 md:text-h1 max-w-[20ch] text-balance font-bold leading-tight text-white md:max-w-[32ch] md:leading-none"
+          className="text-h2 md:text-h1 max-w-[20ch] text-balance font-bold leading-[0.95] text-white md:max-w-[32ch]"
         >
           {hero.title}
         </motion.h1>
