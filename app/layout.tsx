@@ -7,6 +7,7 @@ import { MotionProvider } from "@/components/MotionProvider";
    consumida por --font-sans no globals.css). */
 const arboria = localFont({
   src: [
+    { path: "../font/arboria-light.ttf", weight: "300", style: "normal" },
     { path: "../font/arboria-book.ttf", weight: "400", style: "normal" },
     { path: "../font/arboria-medium.ttf", weight: "500", style: "normal" },
     { path: "../font/arboria-bold.ttf", weight: "700", style: "normal" },

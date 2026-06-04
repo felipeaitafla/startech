@@ -9,7 +9,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { hero } from "@/content/site";
-import { stagger, floatUp, drift } from "@/lib/anim";
+import { stagger, floatUp } from "@/lib/anim";
 import type { FeatureIcon } from "@/content/site";
 
 const featureIcons: Record<FeatureIcon, LucideIcon> = {
@@ -21,13 +21,12 @@ const featureIcons: Record<FeatureIcon, LucideIcon> = {
 
 export function Hero() {
   return (
-    <section className="hero-bg relative flex h-screen flex-col overflow-hidden px-[var(--layout-margin)]">
-      {/* conteúdo central */}
+    <section className="hero-bg relative flex h-screen flex-col items-center justify-center overflow-hidden px-[var(--layout-margin)] pt-24">
       <motion.div
         initial="hidden"
         animate="show"
         variants={stagger}
-        className="flex flex-1 flex-col items-center justify-center pt-24 text-center"
+        className="flex flex-col items-center text-center"
       >
         <motion.h1
           variants={floatUp}
@@ -48,38 +47,38 @@ export function Hero() {
             {hero.cta.label}
           </a>
         </motion.div>
-      </motion.div>
 
-      {/* features na base — sem caixa, ícone grande à esquerda,
-          texto sempre em 2 linhas (largura controla a quebra). */}
-      <motion.ul
-        initial="hidden"
-        animate="show"
-        variants={stagger}
-        className="relative z-10 grid grid-cols-1 gap-x-[var(--layout-gap)] gap-y-8 pb-12 sm:grid-cols-2 lg:grid-cols-4"
-      >
-        {hero.features.map((feature, i) => {
+        <motion.ul
+          variants={stagger}
+          className="relative z-10 mt-32 flex flex-wrap justify-center gap-6"
+        >
+        {hero.features.flatMap((feature, i) => {
           const Icon = featureIcons[feature.icon];
-          return (
+          const item = (
             <motion.li key={feature.text} variants={floatUp}>
-              <motion.div
-                animate={drift(i * 0.6)}
-                className="flex items-center gap-4"
-              >
+              <div className="flex items-center gap-4">
                 <span className="shrink-0 text-azul-capri">
-                  <Icon className="size-9" strokeWidth={1.75} />
+                  <Icon className="size-6" strokeWidth={1.75} />
                 </span>
                 <p
-                  className="text-feature text-white/80"
+                  className="text-body2 font-light text-left text-white/80"
                   style={{ maxWidth: feature.textWidth }}
                 >
                   {feature.text}
                 </p>
-              </motion.div>
+              </div>
             </motion.li>
           );
+          if (i === 0) return [item];
+          return [
+            <motion.li key={`div-${i}`} variants={floatUp} className="flex items-center">
+              <div className="h-8 w-px bg-white/20" />
+            </motion.li>,
+            item,
+          ];
         })}
-      </motion.ul>
+        </motion.ul>
+      </motion.div>
     </section>
   );
 }
