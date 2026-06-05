@@ -147,6 +147,39 @@
 }
 
 /* ------------------------------------------------------------
+   LENIS — smooth scroll (perfil "gravidade da lua" em SmoothScroll.tsx).
+   Quando o Lenis está ativo ele adiciona a classe .lenis-smooth e controla o
+   scroll por JS; aqui desligamos o `scroll-behavior: smooth` nativo p/ não
+   brigar. Sem o Lenis (ex.: "reduzir movimento") o smooth nativo acima vale.
+   ------------------------------------------------------------ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   CURSOR GLOW — esconde o cursor nativo quando o CursorGlow está ativo
+   (classe adicionada via JS só em mouse/sem reduced-motion → touch e
+   "reduzir movimento" mantêm o cursor nativo). A luz laranja vira o cursor.
+   ------------------------------------------------------------ */
+html.cursor-glow-active,
+html.cursor-glow-active * {
+  cursor: none !important;
+}
+
+/* ------------------------------------------------------------
    BOTÕES  (componentes montados a partir dos tokens acima)
    Raio "pill" (totalmente arredondado) conforme os prints.
    ⚠️ Padding e font-size dos botões ainda são inferidos.
@@ -166,8 +199,8 @@
     /* esq. maior p/ afastar o texto do ícone (gap ~2rem); dir. menor */
     padding: 1rem 2.5rem 1rem 4.75rem;
     font-size: 18px;                       /* inferido */
-    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      background-color 0.35s ease, box-shadow 0.35s ease;
+    transition: transform 0.35s ease-in-out,
+      background-color 0.35s ease-in-out, box-shadow 0.35s ease-in-out;
   }
   /* hover suave: cresce a partir do centro + clareia p/ azul-capri + glow leve.
      Texto/ícone seguem brancos 100% (sem mudar opacidade). */
@@ -200,8 +233,11 @@
     border-radius: 9999px;
     background: var(--color-white);
     color: var(--color-azul-capri-dark);   /* tinge o glyph (currentColor) */
+    transition: color 0.35s ease-in-out;
   }
   .btn-icon svg { width: 1.3rem; height: 1.3rem; }
+  /* no hover do botão, o glyph acompanha o azul mais claro do fundo */
+  .btn:hover .btn-icon { color: var(--color-azul-capri); }
 
   .btn-sm .btn-icon {
     left: 0.25rem;
@@ -218,6 +254,44 @@
     color: var(--color-azul-capri);
     font-weight: 700;
     letter-spacing: -0.01em;
+  }
+}
+
+/* ------------------------------------------------------------
+   CARD DO STARSHIELD — fundo em gradiente azul-capri: luz vinda de
+   baixo-direita (mais claro) subindo p/ o topo-esquerdo (mais escuro).
+   As cores são custom props registradas via @property (<color>) p/ poderem
+   ser INTERPOLADAS no hover -> efeito "reluzente" (0.4/0.2 -> 0.6/0.4).
+   ------------------------------------------------------------ */
+@property --ss-c1 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgb(57 182 255 / 0.4);
+}
+@property --ss-c2 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgb(57 182 255 / 0.2);
+}
+
+@layer components {
+  .ss-card {
+    --ss-c1: rgb(57 182 255 / 0.4); /* canto inf-direito (luz) */
+    --ss-c2: rgb(57 182 255 / 0.2); /* topo-esquerdo (sombra) */
+    background-image: linear-gradient(to top left, var(--ss-c1), var(--ss-c2));
+    /* transição própria (scale + as cores do gradiente) — por isso os cards
+       não usam mais a utility `transition duration-500` do Tailwind.
+       ⚠️ Tailwind v4: `scale-[1.03]` usa a propriedade `scale` (NÃO `transform`),
+       então a transição precisa mirar `scale`. Lento (cresce devagar no hover). */
+    transition:
+      scale 0.5s ease-in-out,
+      --ss-c1 0.5s ease-in-out,
+      --ss-c2 0.5s ease-in-out;
+  }
+  /* hover: gradiente mais forte (reluzente) */
+  .ss-card:hover {
+    --ss-c1: rgb(57 182 255 / 0.6);
+    --ss-c2: rgb(57 182 255 / 0.33);
   }
 }
 

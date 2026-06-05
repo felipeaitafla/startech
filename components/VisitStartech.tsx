@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Star, MapPin, type LucideIcon } from "lucide-react";
 import { visit } from "@/content/site";
+import { LojaCarousel } from "./LojaCarousel";
 
 const itemIcons: Record<"star" | "location", LucideIcon> = {
   star: Star,
@@ -12,7 +12,7 @@ const itemIcons: Record<"star" | "location", LucideIcon> = {
    esquerda = título + lista (ícone + texto); direita = foto.
    Server component, dentro do grid 1200px. */
 export function VisitStartech() {
-  const { title, items, image } = visit;
+  const { title, items, images } = visit;
 
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
@@ -38,17 +38,9 @@ export function VisitStartech() {
             </ul>
           </div>
 
-          {/* coluna direita — foto (placeholder) */}
+          {/* coluna direita — carrossel automático da loja (sem setas) */}
           <div className="p-4">
-            <div className="relative h-full min-h-[280px] overflow-hidden rounded-medium md:min-h-[420px]">
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </div>
+            <LojaCarousel slides={images} />
           </div>
         </div>
       </div>

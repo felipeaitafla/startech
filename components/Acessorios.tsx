@@ -31,7 +31,7 @@ export function Acessorios() {
         </header>
 
         {/* bento grid */}
-        <div className="mt-10 grid grid-cols-[35fr_65fr] grid-rows-[200px_200px] gap-3 sm:grid-rows-[270px_270px] lg:grid-rows-[340px_340px]">
+        <div className="mt-10 grid grid-cols-[35fr_65fr] grid-rows-[260px_140px] gap-3 sm:grid-rows-[351px_189px] lg:grid-rows-[442px_238px]">
           {/* card 1 — grande, coluna esquerda, ocupa as 2 linhas */}
           <div className="relative col-start-1 row-span-2 overflow-hidden rounded-big">
             <Image

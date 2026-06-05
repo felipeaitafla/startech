@@ -8,11 +8,12 @@ import type { Variants, Transition } from "framer-motion";
    ============================================================ */
 
 // Spring frouxo = sensação de flutuar / inércia.
+// Ligeiramente mais rápido (mais rígido + menos massa) sem perder a flutuação.
 const floatSpring: Transition = {
   type: "spring",
-  stiffness: 42,
-  damping: 16,
-  mass: 1.1,
+  stiffness: 58,
+  damping: 17,
+  mass: 0.9,
 };
 
 // Container: orquestra a entrada dos filhos em cascata.

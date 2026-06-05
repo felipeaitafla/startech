@@ -29,7 +29,7 @@ function usePerView() {
 export function Support() {
   const perView = usePerView();
   const services = support.services;
-  const n = services.length;
+  const n: number = services.length; // number (não o literal do `as const`) p/ o setState
 
   // lista triplicada -> loop infinito de verdade (clones nas pontas).
   // começa no bloco do meio para poder ir pros dois lados sem ponta visível.
@@ -77,7 +77,7 @@ export function Support() {
             type="button"
             onClick={() => go(-1)}
             aria-label="Anterior"
-            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white"
+            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition ease-in-out hover:bg-white/5 hover:text-white"
           >
             <ChevronLeft className="size-5" />
           </button>
@@ -125,7 +125,7 @@ export function Support() {
             type="button"
             onClick={() => go(1)}
             aria-label="Próximo"
-            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white"
+            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition ease-in-out hover:bg-white/5 hover:text-white"
           >
             <ChevronRight className="size-5" />
           </button>

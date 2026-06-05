@@ -70,7 +70,7 @@ export const categories = {
         message:
           "Olá, Startech! Venho do site e desejo saber mais sobre iPhones seminovos.",
       },
-      image: { src: "/seminovos.webp", alt: "iPhone seminovo Startech" },
+      image: { src: "/iphones/seminovos.webp", alt: "iPhone seminovo Startech" },
     },
     {
       title: "iPhones novos",
@@ -81,7 +81,7 @@ export const categories = {
         message:
           "Olá, Startech! Venho do site e desejo saber mais sobre iPhones novos.",
       },
-      image: { src: "/novos.webp", alt: "iPhone novo lacrado" },
+      image: { src: "/iphones/novos.webp", alt: "iPhone novo lacrado" },
     },
   ],
 } as const;
@@ -94,7 +94,7 @@ export const partners = {
 } as const;
 
 /* Seção "Assistência Técnica" — carrossel de serviços.
-   Imagens placeholder (broken.webp) até termos as reais de cada serviço. */
+   Imagens reais em /public/assistencia (nome casa com cada serviço). */
 export const support = {
   title: "Assistência Técnica",
   subtitle:
@@ -107,65 +107,64 @@ export const support = {
     {
       title: "Troca de Tela",
       description: "Simples, rápido e seguro, como deve ser.",
-      image: { src: "/broken.webp", alt: "Tela trincada" },
+      image: { src: "/assistencia/tela.webp", alt: "Tela trincada" },
     },
     {
       title: "Reparo em placa",
       description:
         "Nossos especialistas técnicos estão aptos a resolver o seu problema.",
-      image: { src: "/broken.webp", alt: "Placa-mãe" },
+      image: { src: "/assistencia/placa.webp", alt: "Placa-mãe" },
     },
     {
       title: "Troca de Bateria",
       description: "Garantimos a troca segura da sua bateria.",
-      image: { src: "/broken.webp", alt: "Bateria" },
+      image: { src: "/assistencia/bateria.webp", alt: "Bateria" },
     },
     {
       title: "Transferência de Dados",
       description: "Tudo feito de forma segura e transparente.",
-      image: { src: "/broken.webp", alt: "iPhone com ícone de transferência" },
+      image: { src: "/assistencia/transfere.webp", alt: "iPhone com ícone de transferência" },
     },
     {
       title: "Assistência para PC",
       description: "Notebook ou desktop, estará em boas mãos.",
-      image: { src: "/broken.webp", alt: "Computador" },
+      image: { src: "/assistencia/pc.webp", alt: "Computador" },
     },
   ],
 } as const;
 
-/* Seção "StarShield" — linha de proteções (tema claro).
-   Imagens placeholder (IMG_7475.webp) e descrições provisórias de Basic/Lens/Matte
-   até virem as definitivas. */
-const SS_IMG = "/images/IMG_7475.webp";
-
+/* Seção "StarShield" — linha de proteções.
+   Imagens reais em /public/starshield (nome casa com cada card). Descrições
+   de Basic/Lens/Matte ainda provisórias até virem as definitivas. */
 export const starshield = {
   hero: {
-    title: "Proteja o seu aparelho com StarShield",
+    title: "Proteja o seu aparelho com",
+    logo: { src: "/starshield-logo.webp", alt: "StarShield", width: 4321, height: 514 },
     cta: { label: "Saiba mais", href: "#" },
-    image: { src: SS_IMG, alt: "StarShield" },
+    image: { src: "/starshield/intro.webp", alt: "StarShield", width: 1089, height: 598 },
   },
   duo: [
     {
       title: "Basic",
       description: "Proteção essencial para o dia a dia.",
-      image: { src: SS_IMG, alt: "StarShield Basic" },
+      image: { src: "/starshield/pelicula.webp", alt: "StarShield Basic (película)", width: 810, height: 600 },
     },
     {
       title: "Lens",
       description: "Proteção extra para a câmera do seu iPhone.",
-      image: { src: SS_IMG, alt: "StarShield Lens" },
+      image: { src: "/starshield/lens.webp", alt: "StarShield Lens", width: 810, height: 600 },
     },
   ],
   wide: [
     {
       title: "Matte",
       description: "Acabamento fosco, antirreflexo e antimarcas.",
-      image: { src: SS_IMG, alt: "StarShield Matte" },
+      image: { src: "/starshield/matte.webp", alt: "StarShield Matte", width: 789, height: 600 },
     },
     {
       title: "Limpa telas",
       description: "A tela do seu celular sempre limpa",
-      image: { src: SS_IMG, alt: "Limpa telas StarShield" },
+      image: { src: "/starshield/limpa-telas.webp", alt: "Limpa telas StarShield", width: 1067, height: 600 },
     },
   ],
   cta: {
@@ -204,15 +203,28 @@ export const acessorios = {
   },
   // ordem: [grande (esq), topo dir, inferior dir esq, inferior dir dir]
   images: [
-    { src: "/images/IMG_7495.webp", alt: "Acessório Startech 1" },
-    { src: "/images/IMG_7421.webp", alt: "Acessório Startech 2" },
-    { src: "/images/IMG_7437.webp", alt: "Acessório Startech 3" },
-    { src: "/images/IMG_7501.webp", alt: "Acessório Startech 4" },
+    { src: "/acessorios/1-capinha.webp", alt: "Capinha de iPhone" },
+    { src: "/acessorios/2-capinha-kit.webp", alt: "Kit de capinhas" },
+    { src: "/acessorios/3-carregador.webp", alt: "Carregador" },
+    { src: "/acessorios/4-fone.webp", alt: "Fone de ouvido" },
   ],
 } as const;
 
-/* Seção "Vem conhecer" — card 2 colunas (texto + foto) antes da CTA final.
-   ⚠️ Imagem placeholder até termos a foto real da loja. */
+/* Seção "Instagram" — chamada (esquerda) + grade de posts (direita).
+   ⚠️ Só a COPY mora aqui; os POSTS ficam hardcoded no componente
+   (`instagramPosts`), destinados à futura integração com a API (Behold). */
+export const instagram = {
+  handle: "@startechcelulares",
+  title: "Confira nosso Instagram",
+  profileUrl: "https://instagram.com/startechcelulares",
+  // duas linhas de pills/tags (sem clique)
+  tags: [
+    ["Dicas", "Ofertas", "Orientações"],
+    ["Bastidores", "Humor", "Novidades"],
+  ],
+} as const;
+
+/* Seção "Vem conhecer" — card 2 colunas (texto + carrossel automático) antes da CTA. */
 export const visit = {
   title: "Vem conhecer a Startech.",
   items: [
@@ -222,7 +234,12 @@ export const visit = {
       text: "Av. Fernando Machado, 30e — Centro, Chapecó – SC",
     },
   ],
-  image: { src: "/images/IMG_7475.webp", alt: "Loja Startech em Chapecó" },
+  // carrossel automático (troca a cada 2.3s, sem setas)
+  images: [
+    { src: "/loja/loja.webp", alt: "Loja Startech em Chapecó" },
+    { src: "/loja/close-up.webp", alt: "Atendimento na Startech" },
+    { src: "/loja/fotos-clientes.webp", alt: "Clientes da Startech" },
+  ],
 } as const;
 
 /* CTA final — título grande centralizado + botão, com bastante respiro. */

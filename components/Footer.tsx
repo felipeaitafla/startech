@@ -51,7 +51,7 @@ export function Footer() {
                     {"href" in item ? (
                       <a
                         href={item.href}
-                        className="flex items-center gap-3 transition-colors hover:text-white"
+                        className="flex items-center gap-3 transition-colors ease-in-out hover:text-white"
                       >
                         {inner}
                       </a>
@@ -74,7 +74,7 @@ export function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={s.label}
-                      className="text-white/80 transition-colors hover:text-white"
+                      className="text-white/80 transition-colors ease-in-out hover:text-white"
                     >
                       <WhatsAppGlyph className="size-6" />
                     </a>
@@ -83,7 +83,7 @@ export function Footer() {
                       key={s.label}
                       href={s.href}
                       aria-label={s.label}
-                      className="opacity-80 transition-opacity hover:opacity-100"
+                      className="opacity-80 transition-opacity ease-in-out hover:opacity-100"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img

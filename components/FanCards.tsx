@@ -17,15 +17,30 @@ const images = [
   "/images/IMG_7507.webp",
 ];
 
+/* lista duplicada -> esteira (marquee) com loop perfeito: a animação desloca
+   exatamente metade da largura (= 1 cópia), então 0 e -50% mostram o mesmo. */
+const loop = [...images, ...images];
+
 export function FanCards() {
   return (
     <section className={styles.fan}>
-      {images.map((src, i) => (
-        <article key={src} className={styles.card}>
-          {/* <img> puro: object-fit + filter controlados no CSS module */}
-          <img src={src} alt={`Smartphone seminovo ${i + 1}`} loading="lazy" />
-        </article>
-      ))}
+      {/* .track é a esteira animada; cada card tem a perspectiva embutida no transform */}
+      <div className={styles.track}>
+        {loop.map((src, i) => (
+          <article
+            key={`${src}-${i}`}
+            className={styles.card}
+            aria-hidden={i >= images.length ? true : undefined}
+          >
+            {/* <img> puro: object-fit + filter controlados no CSS module */}
+            <img
+              src={src}
+              alt={`Smartphone seminovo ${(i % images.length) + 1}`}
+              loading="lazy"
+            />
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

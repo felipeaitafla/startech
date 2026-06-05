@@ -9,7 +9,7 @@ export function Logo({ className = "" }: { className?: string }) {
       src={logo}
       alt="Star Tech"
       priority
-      className={`h-9 w-auto select-none md:h-10 ${className}`}
+      className={`h-10 w-auto select-none md:h-12 ${className}`}
     />
   );
 }

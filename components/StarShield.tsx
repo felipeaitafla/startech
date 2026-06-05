@@ -1,47 +1,74 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { starshield } from "@/content/site";
 import { WhatsAppButton } from "./WhatsAppButton";
+import { stagger, floatUp } from "@/lib/anim";
 
-/* Seção StarShield — grade vertical de cards de tema CLARO (fundo branco/cinza,
-   texto escuro = token `bg`), sobre o site escuro. Server component, sem JS.
-   Imagens com next/image `fill` + object-cover -> preenchem todo o painel. */
+/* Seção StarShield — grade vertical de cards (fundo em gradiente azul-capri `.ss-card`,
+   texto branco), sobre o site escuro. Client component p/ a entrada em CASCATA: o
+   container interno é um `stagger` (whileInView) e cada card é um item `floatUp` —
+   mesma estética da Hero, só que disparada ao chegar no scroll. A linha "duo" é um
+   stagger aninhado (os 2 cards entram em sequência). Imagens via next/image em
+   **proporção original** (w-full h-auto, sem crop), com inset p-4.
+   ⚠️ Self-reveal: NÃO envolver em <Reveal> no page.tsx (animaria 2×). */
 export function StarShield() {
   const { hero, duo, wide, cta } = starshield;
 
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
-      <div className="mx-auto flex w-full max-w-[var(--layout-max)] flex-col gap-6">
+      <motion.div
+        className="mx-auto flex w-full max-w-[var(--layout-max)] flex-col gap-6"
+        variants={stagger}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
+      >
         {/* ---------- Card hero (full width, 2 lados, altura menor) ---------- */}
-        <div className="group relative grid grid-cols-1 overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15 md:grid-cols-2">
+        <motion.div
+          variants={floatUp}
+          className="group relative grid grid-cols-1 overflow-hidden rounded-big border border-white-8 ss-card hover:z-10 hover:scale-[1.02] md:grid-cols-2"
+        >
           <div className="flex flex-col justify-center gap-4 p-8 md:p-12">
             <h3 className="text-h3 md:text-h2 max-w-[16ch] font-medium text-white">
               {hero.title}
             </h3>
+            <Image
+              src={hero.logo.src}
+              alt={hero.logo.alt}
+              width={hero.logo.width}
+              height={hero.logo.height}
+              className="h-7 w-auto self-start md:h-9"
+            />
             <a href={hero.cta.href} className="btn-link">
               {hero.cta.label}
               <ArrowUpRight className="size-4" strokeWidth={2.25} />
             </a>
           </div>
-          <div className="p-4">
-            <div className="relative h-full min-h-[220px] overflow-hidden rounded-medium">
-              <Image
-                src={hero.image.src}
-                alt={hero.image.alt}
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </div>
+          <div className="flex items-center p-4">
+            <Image
+              src={hero.image.src}
+              alt={hero.image.alt}
+              width={hero.image.width}
+              height={hero.image.height}
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="h-auto w-full rounded-medium"
+            />
           </div>
-        </div>
+        </motion.div>
 
-        {/* ---------- Segunda linha: 2 cards lado a lado ---------- */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {/* ---------- Segunda linha: 2 cards lado a lado (stagger aninhado) ---------- */}
+        <motion.div
+          variants={stagger}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2"
+        >
           {duo.map((card) => (
-            <article
+            <motion.article
               key={card.title}
-              className="relative flex h-[420px] flex-col overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15"
+              variants={floatUp}
+              className="relative flex flex-col overflow-hidden rounded-big border border-white-8 ss-card hover:z-10 hover:scale-[1.02]"
             >
               <div className="p-8">
                 <h3 className="text-h3 font-medium text-white">{card.title}</h3>
@@ -49,27 +76,27 @@ export function StarShield() {
                   {card.description}
                 </p>
               </div>
-              {/* imagem preenche toda a área inferior do card (com inset p-4) */}
-              <div className="mt-auto w-full flex-1 px-4 pb-4">
-                <div className="relative h-full overflow-hidden rounded-medium">
-                  <Image
-                    src={card.image.src}
-                    alt={card.image.alt}
-                    fill
-                    sizes="(min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
-                  />
-                </div>
+              {/* imagem na base, na proporção original (sem crop) */}
+              <div className="mt-auto px-4 pb-4">
+                <Image
+                  src={card.image.src}
+                  alt={card.image.alt}
+                  width={card.image.width}
+                  height={card.image.height}
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  className="h-auto w-full rounded-medium"
+                />
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
 
         {/* ---------- Cards largos (Matte, Limpa telas) ---------- */}
         {wide.map((card) => (
-          <div
+          <motion.div
             key={card.title}
-            className="relative grid grid-cols-1 overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15 md:grid-cols-2"
+            variants={floatUp}
+            className="relative grid grid-cols-1 overflow-hidden rounded-big border border-white-8 ss-card hover:z-10 hover:scale-[1.02] md:grid-cols-2"
           >
             <div className="flex flex-col justify-center gap-2 p-8 md:p-12">
               <h3 className="text-h3 font-medium text-white">{card.title}</h3>
@@ -77,25 +104,24 @@ export function StarShield() {
                 {card.description}
               </p>
             </div>
-            <div className="p-4">
-              <div className="relative h-full min-h-[240px] overflow-hidden rounded-medium">
-                <Image
-                  src={card.image.src}
-                  alt={card.image.alt}
-                  fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
+            <div className="flex items-center p-4">
+              <Image
+                src={card.image.src}
+                alt={card.image.alt}
+                width={card.image.width}
+                height={card.image.height}
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="h-auto w-full rounded-medium"
+              />
             </div>
-          </div>
+          </motion.div>
         ))}
 
         {/* ---------- CTA ---------- */}
-        <div className="mt-10 flex justify-center">
+        <motion.div variants={floatUp} className="mt-10 flex justify-center">
           <WhatsAppButton message={cta.message} label={cta.label} />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

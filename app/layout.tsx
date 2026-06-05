@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { CursorGlow } from "@/components/CursorGlow";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
 /* Arboria — self-hosted via next/font/local (expõe --font-arboria,
@@ -31,8 +33,12 @@ export default function RootLayout({
       <body>
         {/* fundo global fixo (glow azul-capri) atrás de absolutamente tudo */}
         <div className="site-bg" aria-hidden />
+        {/* smooth scroll global (gravidade da lua) — não renderiza nada */}
+        <SmoothScroll />
         <MotionProvider>{children}</MotionProvider>
         <WhatsAppFloat />
+        {/* cursor de luz laranja (rastro) — canvas fixo, acima de tudo, sem clique */}
+        <CursorGlow />
       </body>
     </html>
   );

@@ -12,7 +12,7 @@ export function Categories() {
           href={whatsappLink(panel.cta.message)}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex flex-col overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15"
+          className="group relative flex flex-col overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 ease-in-out hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15"
         >
           {/* texto — parte superior, centralizado */}
           <div className="flex flex-col items-center px-8 pt-10 text-center md:px-10 md:pt-12">
