@@ -49,10 +49,15 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 ## Estrutura de arquivos
 
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, metadata.
-  Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>`.
+  Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>` e o
+  `<WhatsAppFloat/>` (botão flutuante de WhatsApp, fixo no canto inf. direito) como último filho.
 - `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>` + `<Partners/>` + `<Support/>` + `<StarShield/>` + `<StarcareLoyalty/>`.
 - `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.site-bg` (fundo global).
-- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `StarShield.tsx`, `StarcareLoyalty.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `StarShield.tsx`, `StarcareLoyalty.tsx`, `WhatsAppFloat.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+  - `WhatsAppFloat` é o **botão flutuante de WhatsApp** (server component): `<a>` fixo
+    `bottom-6 right-6 z-50`, círculo `size-14` verde `#25D366`, glyph WhatsApp inline (mesmo do
+    Header — ⚠️ glyph **duplicado** nos dois; extrair p/ ícone compartilhado se mexer de novo),
+    `hover:scale-110`. Mensagem fixa "Olá, Startech!". Montado no `layout.tsx`.
   - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
   - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
     via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
@@ -100,8 +105,11 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 - `content/site.ts` — **toda a copy** (nav, hero, features, categories, partners, support,
   starshield, starcare). Editar texto só aqui. Exporta também o **WhatsApp de contato**
   (`whatsapp.number` = `5549998353002` / +55 49 99835-3002) e o helper `whatsappLink(message)`
-  que monta o link `wa.me` com a mensagem já codificada. Cada painel da `Categories` tem sua
-  `cta.message` pré-definida.
+  que monta o link `wa.me` com a mensagem já codificada. **CTAs que abrem WhatsApp** (cada um com
+  sua `cta.message`, link via `whatsappLink` + `target="_blank"`): Header (`nav.cta` "Olá, Startech!"),
+  Hero (`hero.cta` "Olá, Startech!"), cards da Categories (novos/seminovos), StarShield
+  ("...proteger meu celular com Starshield."), Starcare ("...saber mais sobre o Startech Care") e o
+  botão flutuante `WhatsAppFloat` ("Olá, Startech!"). ⚠️ `support.cta` **ainda aponta pra `#`**.
 - `lib/anim.ts` — variantes de animação.
 - `font/` — `.ttf` da Arboria.
 - `public/images/` — fotos dos aparelhos (12 `.webp`), consumidas pelo `FanCards`

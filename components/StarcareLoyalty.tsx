@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ArrowUpRight, Recycle, Headset, type LucideIcon } from "lucide-react";
-import { starcare } from "@/content/site";
+import { starcare, whatsappLink } from "@/content/site";
 
 const benefitIcons: Record<"recycle" | "support", LucideIcon> = {
   recycle: Recycle,
@@ -26,7 +26,12 @@ export function StarcareLoyalty() {
           />
           <div className="flex flex-col items-center gap-2 text-center sm:items-end sm:text-right">
             <p className="text-h3 font-medium text-white">{title}</p>
-            <a href={cta.href} className="btn-link">
+            <a
+              href={whatsappLink(cta.message)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-link"
+            >
               {cta.label}
               <ArrowUpRight className="size-4" strokeWidth={2.25} />
             </a>

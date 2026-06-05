@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Instagram, Youtube, Menu } from "lucide-react";
-import { nav } from "@/content/site";
+import { nav, whatsappLink } from "@/content/site";
 import { Logo } from "./Logo";
 import { stagger, floatUp } from "@/lib/anim";
 
@@ -74,7 +74,12 @@ export function Header() {
               );
             })}
           </div>
-          <a href={nav.cta.href} className="btn btn-sm">
+          <a
+            href={whatsappLink(nav.cta.message)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-sm"
+          >
             <WhatsApp className="size-4" />
             <span className="hidden sm:inline">{nav.cta.label}</span>
           </a>

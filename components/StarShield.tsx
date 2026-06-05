@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { starshield } from "@/content/site";
+import { starshield, whatsappLink } from "@/content/site";
 
 /* Seção StarShield — grade vertical de cards de tema CLARO (fundo branco/cinza,
    texto escuro = token `bg`), sobre o site escuro. Server component, sem JS.
@@ -86,7 +86,12 @@ export function StarShield() {
 
         {/* ---------- CTA ---------- */}
         <div className="mt-10 flex justify-center">
-          <a href={cta.href} className="btn">
+          <a
+            href={whatsappLink(cta.message)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn"
+          >
             {cta.label}
           </a>
         </div>

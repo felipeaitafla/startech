@@ -8,7 +8,7 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import { hero } from "@/content/site";
+import { hero, whatsappLink } from "@/content/site";
 import { stagger, floatUp } from "@/lib/anim";
 import type { FeatureIcon } from "@/content/site";
 
@@ -43,7 +43,12 @@ export function Hero() {
         </motion.p>
 
         <motion.div variants={floatUp} className="mt-8">
-          <a href={hero.cta.href} className="btn">
+          <a
+            href={whatsappLink(hero.cta.message)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn"
+          >
             {hero.cta.label}
           </a>
         </motion.div>

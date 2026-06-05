@@ -28,14 +28,14 @@ export const nav = {
     { label: "Instagram", href: "#", icon: "instagram" as const },
     { label: "YouTube", href: "#", icon: "youtube" as const },
   ],
-  cta: { label: "Entrar em contato", href: "#" },
+  cta: { label: "Entrar em contato", message: "Olá, Startech!" },
 } as const;
 
 export const hero = {
   title: "iPhones seminovos e lacrados, com até 2 anos de garantia",
   subtitle:
     "Loja referência em Chapecó e região: iPhones direto do canal oficial Apple, com acessórios e assistência técnica especializada.",
-  cta: { label: "Falar com consultor", href: "#" },
+  cta: { label: "Falar com consultor", message: "Olá, Startech!" },
   features: [
     {
       icon: "warranty" as FeatureIcon,
@@ -167,14 +167,20 @@ export const starshield = {
       image: { src: SS_IMG, alt: "Limpa telas StarShield" },
     },
   ],
-  cta: { label: "Proteger meu iPhone", href: "#" },
+  cta: {
+    label: "Proteger meu iPhone",
+    message: "Olá! Quero proteger meu celular com Starshield.",
+  },
 } as const;
 
 /* Seção "Startech Care" — programa de fidelidade (card central). */
 export const starcare = {
   logo: { src: "/startech-care.webp", alt: "Startech Care" },
   title: "Programa de Fidelidade",
-  cta: { label: "Fazer parte", href: "#" },
+  cta: {
+    label: "Fazer parte",
+    message: "Olá! Quero saber mais sobre o Startech Care.",
+  },
   benefits: [
     {
       icon: "recycle" as const,

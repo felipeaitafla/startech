@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { MotionProvider } from "@/components/MotionProvider";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
 /* Arboria — self-hosted via next/font/local (expõe --font-arboria,
    consumida por --font-sans no globals.css). */
@@ -31,6 +32,7 @@ export default function RootLayout({
         {/* fundo global fixo (glow azul-capri) atrás de absolutamente tudo */}
         <div className="site-bg" aria-hidden />
         <MotionProvider>{children}</MotionProvider>
+        <WhatsAppFloat />
       </body>
     </html>
   );
