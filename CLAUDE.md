@@ -51,9 +51,20 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, metadata.
   Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>` e o
   `<WhatsAppFloat/>` (botão flutuante de WhatsApp, fixo no canto inf. direito) como último filho.
-- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>` + `<Partners/>` + `<Support/>` + `<StarShield/>` + `<StarcareLoyalty/>`.
+- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>` + `<Partners/>` + `<Support/>` + `<StarShield/>` + `<StarcareLoyalty/>` + `<Acessorios/>` + `<Footer/>`.
 - `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.site-bg` (fundo global).
-- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `StarShield.tsx`, `StarcareLoyalty.tsx`, `WhatsAppFloat.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `StarShield.tsx`, `StarcareLoyalty.tsx`, `Acessorios.tsx`, `Footer.tsx`, `WhatsAppFloat.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+  - `Footer` é a seção **final**: um **card**
+    (`rounded-big` + `border-white-8` + `bg-azul-escuro/40` — fundo levemente diferente da página +
+    padding `p-8 md:p-12`). Dentro, 3 colunas alinhadas ao centro vertical (`md:flex-row md:items-center
+    md:justify-between`), que **empilham e centralizam no mobile** (`flex-col items-center`): **(1)** logo
+    (`/startech-logo.png`, `h-12 md:h-14`); **(2)** contato — 3 itens com ícone `lucide`
+    (`MapPin`/`Mail`/`Phone`, tint `azul-capri`) + texto `text-footer` `text-white/60` (email/telefone
+    são links `mailto:`/`tel:`); **(3)** redes (WhatsApp glyph inline + Instagram/YouTube via `<img>`
+    dos SVGs brancos, `size-6`) + copyright em 2 linhas `text-footer text-white/50`. Server component.
+    ⚠️ O cliente pediu "4 colunas" mas só descreveu 3 — implementado com **3 colunas**.
+    ⚠️ O glyph WhatsApp inline agora está **duplicado em 3 lugares** (Header/WhatsAppFloat/Footer) —
+    forte candidato a extrair p/ um componente compartilhado.
   - `WhatsAppFloat` é o **botão flutuante de WhatsApp** (server component): `<a>` fixo
     `bottom-6 right-6 z-50`, círculo `size-14` verde `#25D366`, glyph WhatsApp inline (mesmo do
     Header — ⚠️ glyph **duplicado** nos dois; extrair p/ ícone compartilhado se mexer de novo),
@@ -98,6 +109,15 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     cima + imagem preenchendo a base) → cards **wide** (Matte, Limpa telas: texto à esquerda +
     imagem à direita) → CTA `.btn` centralizado. Imagens via `next/image` `fill` + `object-cover`.
     ⚠️ **Tudo placeholder:** imagens todas em `/images/IMG_7475.webp` e copy provisória.
+  - `Acessorios` é a seção **abaixo da StarcareLoyalty** (última): **bento grid** de 4 imagens
+    (só imagens, sem texto/overlay/badge). Cabeçalho **centralizado** (título `text-h3 md:text-h2
+    font-bold` + CTA `.btn-link` "Comprar ↗" — mesmo botão dos cards Categories; link WhatsApp).
+    Grade no grid 1200px: colunas **35% / 65%**
+    (`grid-cols-[35fr_65fr]`) + rows de altura fixa (`grid-rows-[200px_200px]` → `sm:270` → `lg:340`),
+    `gap-3` uniforme.
+    **card 1** (esq) `row-span-2` = mais alto; **card 2** (dir, topo) 1 row largura total; **cards 3 e 4**
+    num sub-grid `grid-cols-2` no row inferior direito. Imagens `next/image` `fill` + `object-cover`,
+    `rounded-big`, `overflow-hidden`. Server component. ⚠️ Imagens **placeholder** de `/public/images`.
   - `StarcareLoyalty` é a seção **abaixo do StarShield**: programa de fidelidade "Startech Care"
     num **card central de largura média** (`max-w-[840px]`, não full-width) — fundo
     **`bg-azul-escuro/40`** (escurecido, recua), `rounded-big` + `border-white-8`. Server
@@ -108,7 +128,7 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     mapeados por chave `recycle`/`support` no `.tsx`. ⚠️ Logo `public/startech-care.webp`
     (intrínseco 320×120 — ampliado além do nativo no desktop; trocar por maior se borrar).
 - `content/site.ts` — **toda a copy** (nav, hero, features, categories, partners, support,
-  starshield, starcare). Editar texto só aqui. Exporta também o **WhatsApp de contato**
+  starshield, starcare, acessorios, footer). Editar texto só aqui. Exporta também o **WhatsApp de contato**
   (`whatsapp.number` = `5549998353002` / +55 49 99835-3002) e o helper `whatsappLink(message)`
   que monta o link `wa.me` com a mensagem já codificada. **CTAs que abrem WhatsApp** (cada um com
   sua `cta.message`, link via `whatsappLink` + `target="_blank"`): Header (`nav.cta` "Olá, Startech!"),
@@ -362,6 +382,8 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
 - [ ] **Conectar Netlify** (link de deploy automático) — **será feito na entrega do projeto.**
 - [ ] **StarShield/Starcare — conteúdo definitivo:** copy provisória e todas as imagens são
       placeholder (`images/IMG_7475.webp` no StarShield; `startech-care.webp` no Starcare).
+- [ ] **Acessórios — imagens definitivas:** o bento grid usa 4 fotos placeholder de `/public/images`
+      (IMG_7495/7421/7437/7501). Trocar pelas fotos reais dos acessórios.
 - [ ] **Padronizar título de seção:** StarShield/Starcare usam Medium (500); as demais, Bold (700).
       Definir o padrão e uniformizar (possível `<SectionTitle>`).
 - [ ] **Hover do StarShield — imagem escala junto:** no hero/wide o card inteiro (texto + imagem

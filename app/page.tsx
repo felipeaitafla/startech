@@ -6,6 +6,8 @@ import { Partners } from "@/components/Partners";
 import { Support } from "@/components/Support";
 import { StarShield } from "@/components/StarShield";
 import { StarcareLoyalty } from "@/components/StarcareLoyalty";
+import { Acessorios } from "@/components/Acessorios";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -18,6 +20,8 @@ export default function Home() {
       <Support />
       <StarShield />
       <StarcareLoyalty />
+      <Acessorios />
+      <Footer />
     </main>
   );
 }

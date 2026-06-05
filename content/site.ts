@@ -184,3 +184,50 @@ export const starcare = {
     },
   ],
 } as const;
+
+/* Seção "Acessórios" — bento grid de 4 imagens (sem texto sobre elas).
+   ⚠️ Imagens placeholder de /public/images até termos as reais dos acessórios. */
+export const acessorios = {
+  title: "Acessórios incríveis para o seu dia a dia",
+  cta: {
+    label: "Comprar",
+    message: "Olá, Startech! Gostaria de saber mais sobre os acessórios.",
+  },
+  // ordem: [grande (esq), topo dir, inferior dir esq, inferior dir dir]
+  images: [
+    { src: "/images/IMG_7495.webp", alt: "Acessório Startech 1" },
+    { src: "/images/IMG_7421.webp", alt: "Acessório Startech 2" },
+    { src: "/images/IMG_7437.webp", alt: "Acessório Startech 3" },
+    { src: "/images/IMG_7501.webp", alt: "Acessório Startech 4" },
+  ],
+} as const;
+
+/* Rodapé — contato, redes sociais e copyright. */
+export const footer = {
+  contact: [
+    {
+      icon: "location" as const,
+      text: "Av. Fernando Machado, 30e — Centro, Chapecó – SC",
+    },
+    {
+      icon: "email" as const,
+      text: "atendimento@startechcelulares.com",
+      href: "mailto:atendimento@startechcelulares.com",
+    },
+    {
+      icon: "phone" as const,
+      text: "49 9 9835 3002",
+      href: "tel:+5549998353002",
+    },
+  ],
+  // redes: whatsapp usa wa.me; insta/youtube usam os SVGs brancos de /public
+  social: [
+    { label: "WhatsApp", icon: "whatsapp" as const, message: "Olá, Startech!" },
+    { label: "Instagram", icon: "instagram" as const, href: "#" },
+    { label: "YouTube", icon: "youtube" as const, href: "#" },
+  ],
+  copyright: [
+    "© 2024 StarTech. Todos os direitos reservados.",
+    "CNPJ 33.137.998/0001-20",
+  ],
+} as const;
