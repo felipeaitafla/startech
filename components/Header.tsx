@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Instagram, Youtube, Menu } from "lucide-react";
 import { nav, whatsappLink } from "@/content/site";
 import { Logo } from "./Logo";
 import { stagger, floatUp } from "@/lib/anim";
@@ -15,7 +14,11 @@ function WhatsApp({ className = "" }: { className?: string }) {
   );
 }
 
-const socialIcons = { instagram: Instagram, youtube: Youtube };
+/* ícones brancos vindos de /public (svg já em branco) */
+const socialIcons: Record<string, string> = {
+  instagram: "/insta.svg",
+  youtube: "/youtueb.svg",
+};
 
 export function Header() {
   return (
@@ -26,28 +29,20 @@ export function Header() {
       className="fixed inset-x-0 top-0 z-30 border-b border-white-8 bg-black/30 backdrop-blur-lg"
     >
       <nav className="relative mx-auto flex items-center justify-between px-[var(--layout-margin)] py-6">
-        {/* esquerda — navegação (desktop) */}
-        <motion.ul variants={floatUp} className="hidden items-center gap-7 lg:flex">
-          {nav.links.map((link) => (
-            <li key={link.label}>
-              <a
-                href={link.href}
-                className="text-footer font-bold text-white/90 transition-colors hover:text-white"
-              >
-                {link.label}
-              </a>
-            </li>
+        {/* esquerda — redes sociais */}
+        <motion.div variants={floatUp} className="flex items-center gap-4">
+          {nav.social.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              aria-label={s.label}
+              className="opacity-80 transition-opacity hover:opacity-100"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={socialIcons[s.icon]} alt={s.label} className="h-5 w-auto" />
+            </a>
           ))}
-        </motion.ul>
-
-        {/* esquerda — menu (mobile) */}
-        <motion.button
-          variants={floatUp}
-          aria-label="Abrir menu"
-          className="text-white/90 transition-colors hover:text-white lg:hidden"
-        >
-          <Menu className="size-6" />
-        </motion.button>
+        </motion.div>
 
         {/* centro — logo */}
         <motion.div
@@ -57,23 +52,8 @@ export function Header() {
           <Logo className="pointer-events-auto" />
         </motion.div>
 
-        {/* direita — social + CTA */}
-        <motion.div variants={floatUp} className="flex items-center gap-3 md:gap-4">
-          <div className="hidden items-center gap-3 sm:flex">
-            {nav.social.map((s) => {
-              const Icon = socialIcons[s.icon];
-              return (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  className="text-white/80 transition-colors hover:text-white"
-                >
-                  <Icon className="size-5" />
-                </a>
-              );
-            })}
-          </div>
+        {/* direita — CTA (continua no mesmo lugar) */}
+        <motion.div variants={floatUp} className="flex items-center">
           <a
             href={whatsappLink(nav.cta.message)}
             target="_blank"

@@ -59,6 +59,11 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     Header — ⚠️ glyph **duplicado** nos dois; extrair p/ ícone compartilhado se mexer de novo),
     `hover:scale-110`. Mensagem fixa "Olá, Startech!". Montado no `layout.tsx`.
   - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
+    Layout: **redes sociais à esquerda** (Instagram + YouTube via `<img>` dos SVGs `/insta.svg` e
+    `/youtueb.svg`, **já em branco** — insta com `fill` branco, youtube branco com o "play" vazado
+    por `fill-rule="evenodd"`), **logo no centro** (absoluto), **botão WhatsApp à direita**. ⚠️ O
+    **menu de navegação** (links iPhone/Android/... ) e o **hambúrguer mobile foram removidos** — os
+    `nav.links` em `content/site.ts` ficaram **sem uso** (mantidos p/ quando voltar o menu).
   - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
     via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
   - `FanCards` é a seção logo **abaixo da Hero**: leque 3D de imagens **parado** com hover expand
@@ -349,7 +354,9 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
 - [ ] **Ajustar dimensões reais dos botões** (padding/font-size hoje são inferidos).
 - [x] **~~Logo real.~~** Usando `public/startech-logo.png` (oficial) via `next/image`.
       (Opcional futuro: versão SVG pra nitidez perfeita em qualquer tamanho.)
-- [ ] **Menu mobile:** o botão hambúrguer do Header existe mas ainda não abre nada.
+- [ ] **Menu de navegação:** o hambúrguer e os links de nav foram **removidos** do Header
+      (2026-06-05) — sobrou só social + logo + botão. Os `nav.links` continuam em `content/site.ts`
+      sem uso. Decidir se/como o menu volta (desktop e mobile) e religar.
 - [ ] **Validar contra o Figma:** o Hero foi feito a partir do screenshot; conferir medidas/cores
       exatas quando o frame do Figma estiver à mão.
 - [x] **~~Conectar Git remoto.~~** Repo no GitHub: `felipeaitafla/startech` (`origin`, branch `main`).
