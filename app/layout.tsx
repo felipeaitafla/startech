@@ -19,10 +19,35 @@ const arboria = localFont({
   display: "swap",
 });
 
+const SITE_TITLE = "StarTech | iPhones Seminovos e Novos em Chapecó – SC";
+const SITE_DESCRIPTION =
+  "iPhones seminovos e lacrados com até 2 anos de garantia, direto do canal oficial Apple. Assistência técnica especializada em Chapecó – SC. Parcele em até 12x sem juros.";
+
 export const metadata: Metadata = {
-  title: "Star Tech — Smartphones seminovos e lacrados com 1 ano de garantia",
-  description:
-    "Loja referência em Chapecó e região na venda de smartphones, acessórios e assistência técnica especializada.",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  applicationName: "StarTech",
+  keywords: [
+    "iPhone seminovo",
+    "iPhone novo",
+    "iPhone lacrado",
+    "Chapecó",
+    "assistência técnica iPhone",
+    "StarTech",
+    "celulares Chapecó",
+  ],
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    siteName: "StarTech",
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({
