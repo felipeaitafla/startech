@@ -19,6 +19,7 @@
   --color-black: #000000;
   --color-bg: #030b0f;             /* fundo base do site (preto levemente azulado) */
   --color-azul-capri: #39b6ff;     /* azul de marca / primário */
+  --color-azul-capri-dark: #008ee0; /* mesma matiz (hue 202°), + escuro -> fundo de botão c/ + contraste */
   --color-azul-escuro: #0a2540;    /* azul escuro (painéis claros / StarShield) */
   --color-realme-yellow: #f9dd60;
 
@@ -40,7 +41,7 @@
      Cada --text-* gera UMA utility que aplica de uma vez
      tamanho + line-height + letter-spacing + peso.
      Ex.: <h1 class="text-h1">  já vem com tudo.
-     Letter spacing -3% => -0.03em (em todos os estilos).        */
+     Letter spacing = -0.01em (uniforme em todos os estilos).    */
 
   --text-h1: 64px;
   --text-h1--line-height: 60px;
@@ -59,29 +60,41 @@
 
   --text-body: 24px;
   --text-body--line-height: 32px;
-  --text-body--letter-spacing: -0.03em;
+  --text-body--letter-spacing: -0.01em;
   --text-body--font-weight: 400;
 
   --text-body2: 15px;
   --text-body2--line-height: 20px;
-  --text-body2--letter-spacing: -0.03em;
+  --text-body2--letter-spacing: -0.01em;
   --text-body2--font-weight: 400;
+
+  /* body3: menor da família body — bullets/features da Hero. */
+  --text-body3: 13px;
+  --text-body3--line-height: 18px;
+  --text-body3--letter-spacing: -0.01em;
+  --text-body3--font-weight: 400;
+
+  /* lead: parágrafo de destaque (subtítulo da Hero, descrições do StarShield). */
+  --text-lead: 18px;
+  --text-lead--line-height: 24px;
+  --text-lead--letter-spacing: -0.01em;
+  --text-lead--font-weight: 400;
 
   /* feature: tamanho derivado p/ os destaques do hero — escolhido pra
      caber os 4 textos em exatamente 2 linhas dentro da coluna (~252px). */
   --text-feature: 17px;
   --text-feature--line-height: 22px;
-  --text-feature--letter-spacing: -0.03em;
+  --text-feature--letter-spacing: -0.01em;
   --text-feature--font-weight: 400;
 
   --text-footer: 14px;
   --text-footer--line-height: 14px;
-  --text-footer--letter-spacing: -0.03em;
+  --text-footer--letter-spacing: -0.01em;
   --text-footer--font-weight: 400;
 
   --text-header: 12px;
   --text-header--line-height: 12px;
-  --text-header--letter-spacing: -0.03em;
+  --text-header--letter-spacing: -0.01em;
   --text-header--font-weight: 700;      /* Arboria Bold */
 
   /* ---------------- CORNER RADIUS ----------------
@@ -140,26 +153,62 @@
    ------------------------------------------------------------ */
 @layer components {
   .btn {
+    position: relative;                    /* p/ ancorar o .btn-icon à esquerda */
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     border-radius: 9999px;                 /* pill */
-    background: var(--color-azul-capri);
+    background: var(--color-azul-capri-dark);
     color: var(--color-white);
     font-weight: 700;
-    letter-spacing: -0.03em;
-    padding: 1rem 1.75rem;
+    letter-spacing: -0.01em;
+    /* esq. maior p/ afastar o texto do ícone (gap ~2rem); dir. menor */
+    padding: 1rem 2.5rem 1rem 4.75rem;
     font-size: 18px;                       /* inferido */
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      background-color 0.35s ease, box-shadow 0.35s ease;
   }
-  .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+  /* hover suave: cresce a partir do centro + clareia p/ azul-capri + glow leve.
+     Texto/ícone seguem brancos 100% (sem mudar opacidade). */
+  .btn:hover {
+    transform: scale(1.05);
+    background: var(--color-azul-capri);
+    /* sombra leve azul-clara, centralizada (igual em todos os lados) */
+    box-shadow: 0 0 18px rgb(57 182 255 / 0.5);
+  }
 
   /* variante menor */
   .btn-sm {
-    padding: 0.5rem 1.25rem;
+    /* esq. afasta o texto do ícone; dir. menor */
+    padding: 0.5rem 1.75rem 0.5rem 3.25rem;
     font-size: 14px;
   }
+
+  /* ícone (WhatsApp) num círculo branco, colado à lateral esquerda do pill,
+     com padding ao redor (gap p/ a borda). SVG na cor azul do botão. */
+  .btn-icon {
+    /* inset IGUAL em cima/baixo/esquerda; aspect-ratio mantém o círculo */
+    position: absolute;
+    left: 0.28rem;
+    top: 0.28rem;
+    bottom: 0.28rem;
+    aspect-ratio: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: var(--color-white);
+    color: var(--color-azul-capri-dark);   /* tinge o glyph (currentColor) */
+  }
+  .btn-icon svg { width: 1.3rem; height: 1.3rem; }
+
+  .btn-sm .btn-icon {
+    left: 0.25rem;
+    top: 0.25rem;
+    bottom: 0.25rem;
+  }
+  .btn-sm .btn-icon svg { width: 0.95rem; height: 0.95rem; }
 
   /* link de ação — "Comprar ↗" */
   .btn-link {
@@ -168,7 +217,7 @@
     gap: 0.375rem;
     color: var(--color-azul-capri);
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.01em;
   }
 }
 

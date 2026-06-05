@@ -7,6 +7,8 @@ import { Support } from "@/components/Support";
 import { StarShield } from "@/components/StarShield";
 import { StarcareLoyalty } from "@/components/StarcareLoyalty";
 import { Acessorios } from "@/components/Acessorios";
+import { VisitStartech } from "@/components/VisitStartech";
+import { FinalCta } from "@/components/FinalCta";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -21,6 +23,8 @@ export default function Home() {
       <StarShield />
       <StarcareLoyalty />
       <Acessorios />
+      <VisitStartech />
+      <FinalCta />
       <Footer />
     </main>
   );

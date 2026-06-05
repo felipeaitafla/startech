@@ -50,7 +50,7 @@ export function StarcareLoyalty() {
                 <span className="text-azul-capri">
                   <Icon className="size-10" strokeWidth={1.75} />
                 </span>
-                <p className="text-body2 text-white/60">{b.text}</p>
+                <p className="text-body2 text-white/63">{b.text}</p>
               </div>
             );
           })}

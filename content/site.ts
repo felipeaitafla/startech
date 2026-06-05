@@ -27,26 +27,32 @@ export const hero = {
   title: "iPhones seminovos e lacrados, com até 2 anos de garantia",
   subtitle:
     "Loja referência em Chapecó e região: iPhones direto do canal oficial Apple, com acessórios e assistência técnica especializada.",
+  // trechos do subtítulo que vão para branco 100%
+  subtitleHighlights: ["Loja referência em Chapecó e região"],
   cta: { label: "Falar com consultor", message: "Olá, Startech!" },
   features: [
     {
       icon: "warranty" as FeatureIcon,
       text: "Até 2 anos de garantia em todos os iPhones seminovos",
-      textWidth: 200, // px — ajustar para forçar quebra de linha desejada
+      highlights: ["Até 2 anos de garantia"], // trecho em branco 100%
+      textWidth: 180, // px — ajustar para forçar quebra de linha desejada
     },
     {
       icon: "loan" as FeatureIcon,
       text: "Emprestamos outro aparelho enquanto o seu está na garantia",
-      textWidth: 230,
+      highlights: ["Emprestamos outro aparelho"],
+      textWidth: 210,
     },
     {
       icon: "installments" as FeatureIcon,
       text: "Parcelamento em até 12x sem juros",
-      textWidth: 130,
+      highlights: ["12x sem juros"],
+      textWidth: 120,
     },
     {
       icon: "support" as FeatureIcon,
       text: "Assistência técnica com especialistas",
+      highlights: ["Assistência", "especialistas"],
       textWidth: 130,
     },
   ],
@@ -93,7 +99,10 @@ export const support = {
   title: "Assistência Técnica",
   subtitle:
     "10 anos de experiência na assistência técnica de celulares e computadores",
-  cta: { label: "Entrar em contato", href: "#" },
+  cta: {
+    label: "Entrar em contato",
+    message: "Olá, Startech! Vim do site e gostaria de assistência técnica",
+  },
   services: [
     {
       title: "Troca de Tela",
@@ -200,6 +209,31 @@ export const acessorios = {
     { src: "/images/IMG_7437.webp", alt: "Acessório Startech 3" },
     { src: "/images/IMG_7501.webp", alt: "Acessório Startech 4" },
   ],
+} as const;
+
+/* Seção "Vem conhecer" — card 2 colunas (texto + foto) antes da CTA final.
+   ⚠️ Imagem placeholder até termos a foto real da loja. */
+export const visit = {
+  title: "Vem conhecer a Startech.",
+  items: [
+    { icon: "star" as const, text: "Avaliação 5 estrelas" },
+    {
+      icon: "location" as const,
+      text: "Av. Fernando Machado, 30e — Centro, Chapecó – SC",
+    },
+  ],
+  image: { src: "/images/IMG_7475.webp", alt: "Loja Startech em Chapecó" },
+} as const;
+
+/* CTA final — título grande centralizado + botão, com bastante respiro. */
+export const finalCta = {
+  title: "Faça uma escolha inteligente. iPhone seminovo é na Startech",
+  subtitle: "Te ajudamos a escolher o iPhone perfeito para você.",
+  subtitleHighlights: ["iPhone perfeito para você"], // trecho em branco 100%
+  cta: {
+    label: "Falar com consultor",
+    message: "Olá, Startech!",
+  },
 } as const;
 
 /* Rodapé — contato, redes sociais e copyright. */

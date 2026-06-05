@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { support } from "@/content/site";
+import { WhatsAppButton } from "./WhatsAppButton";
 
 /* perView responsivo: mobile 1 · tablet 2 · desktop 3 */
 function usePerView() {
@@ -67,7 +68,7 @@ export function Support() {
         {/* cabeçalho */}
         <header className="text-center">
           <h2 className="text-h3 md:text-h2 font-bold text-white">{support.title}</h2>
-          <p className="text-body2 mt-4 text-white/70">{support.subtitle}</p>
+          <p className="text-body2 mt-4 text-white/63">{support.subtitle}</p>
         </header>
 
         {/* carrossel: [seta] [viewport] [seta] */}
@@ -102,7 +103,7 @@ export function Support() {
                     <h3 className="text-body font-normal text-white">
                       {service.title}
                     </h3>
-                    <p className="text-body2 mt-2 text-white/65">
+                    <p className="text-body2 mt-2 text-white/63">
                       {service.description}
                     </p>
                     <div className="mt-8 flex flex-1 items-end justify-center">
@@ -132,9 +133,10 @@ export function Support() {
 
         {/* CTA */}
         <div className="mt-16 flex justify-center">
-          <a href={support.cta.href} className="btn">
-            {support.cta.label}
-          </a>
+          <WhatsAppButton
+            message={support.cta.message}
+            label={support.cta.label}
+          />
         </div>
       </div>
     </section>

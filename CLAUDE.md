@@ -51,30 +51,55 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, metadata.
   Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>` e o
   `<WhatsAppFloat/>` (botão flutuante de WhatsApp, fixo no canto inf. direito) como último filho.
-- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>` + `<Partners/>` + `<Support/>` + `<StarShield/>` + `<StarcareLoyalty/>` + `<Acessorios/>` + `<Footer/>`.
+- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>` + `<Partners/>` + `<Support/>` + `<StarShield/>` + `<StarcareLoyalty/>` + `<Acessorios/>` + `<VisitStartech/>` + `<FinalCta/>` + `<Footer/>`.
 - `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.site-bg` (fundo global).
-- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `StarShield.tsx`, `StarcareLoyalty.tsx`, `Acessorios.tsx`, `Footer.tsx`, `WhatsAppFloat.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `StarShield.tsx`, `StarcareLoyalty.tsx`, `Acessorios.tsx`, `VisitStartech.tsx`, `FinalCta.tsx`, `Footer.tsx`, `WhatsAppFloat.tsx`, `WhatsAppButton.tsx`, `WhatsAppGlyph.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+  - `WhatsAppGlyph` é a **fonte única** do ícone do WhatsApp (o lucide não tem): SVG inline
+    `fill="currentColor"`. Consumido por `Header`/`WhatsAppFloat`/`Footer`/`WhatsAppButton`.
+    **(2026-06-05) Glyph deixou de ser duplicado** — antes estava copiado em 3 lugares.
+  - `WhatsAppButton` é o **CTA de WhatsApp** padrão: pill (`.btn`, ou `.btn .btn-sm` via `size="sm"`)
+    com o `WhatsAppGlyph` num **círculo branco colado à esquerda** (`.btn-icon`) + rótulo. Abre o
+    `wa.me` com a `message`. Props: `message`, `label`, `size`, `className`, `labelClassName`
+    (ex.: `hidden sm:inline` no Header). Usado em Header (sm), Hero, Support, StarShield e FinalCta.
+  - `VisitStartech` é a seção **"Vem conhecer a Startech"** (antes da FinalCta): **card
+    arredondado** no estilo do Footer (`rounded-big` + `border-white-8` + `bg-azul-escuro/40`,
+    `overflow-hidden`) com **2 colunas de largura igual** (`md:grid-cols-2`) dentro do grid 1200px.
+    **Esquerda** (padding lateral maior: `px-10 py-8 md:px-16 md:py-12`): título
+    `text-h3 md:text-h2 font-bold` + **lista** de 2 itens (ícone `lucide` solto em `azul-capri`,
+    `size-6`, sem caixa + texto `text-lead` `text-white/73`) — `Star`/`MapPin` mapeados por chave
+    `star`/`location`. **Direita**: foto `next/image` `fill` + `object-cover` num wrapper
+    `rounded-medium overflow-hidden` com `p-4` de inset (cantos arredondados), `min-h-[280px]
+    md:min-h-[420px]`.
+    Server component. Copy em `content/site.ts` (`visit`). ⚠️ **Imagem placeholder**
+    (`images/IMG_7475.webp`) — trocar pela foto real da loja.
+  - `FinalCta` é a **CTA final** (antes do Footer): **título grande centralizado**
+    (`text-h2 md:text-h1 font-bold` + `text-balance` + `max-w-[28ch]` — largura folgada pra cair
+    em **2 linhas**) + **lead** (`text-lead` `text-white/78`, agrupado ao título com `gap-5`) e
+    **botão `.btn`** (link WhatsApp, msg "Olá, Startech!"), com **bastante respiro** — padding
+    vertical `py-[calc(var(--layout-padding-y)*1.15)]` (1,15× o padrão) + `gap-12 md:gap-16` entre
+    o bloco título/lead e o botão. Server component, dentro do grid 1200px. Copy em
+    `content/site.ts` (`finalCta`).
   - `Footer` é a seção **final**: um **card**
     (`rounded-big` + `border-white-8` + `bg-azul-escuro/40` — fundo levemente diferente da página +
-    padding `p-8 md:p-12`). Dentro, 3 colunas alinhadas ao centro vertical (`md:flex-row md:items-center
+    padding `p-8 md:p-12`). O `<footer>` tem padding inferior **fixo `pb-12` (48px)** — menor que o
+    `--layout-padding-y` padrão (decisão de aproximar o rodapé da base da página). Dentro, 3 colunas alinhadas ao centro vertical (`md:flex-row md:items-center
     md:justify-between`), que **empilham e centralizam no mobile** (`flex-col items-center`): **(1)** logo
     (`/startech-logo.png`, `h-12 md:h-14`); **(2)** contato — 3 itens com ícone `lucide`
     (`MapPin`/`Mail`/`Phone`, tint `azul-capri`) + texto `text-footer` `text-white/60` (email/telefone
     são links `mailto:`/`tel:`); **(3)** redes (WhatsApp glyph inline + Instagram/YouTube via `<img>`
     dos SVGs brancos, `size-6`) + copyright em 2 linhas `text-footer text-white/50`. Server component.
     ⚠️ O cliente pediu "4 colunas" mas só descreveu 3 — implementado com **3 colunas**.
-    ⚠️ O glyph WhatsApp inline agora está **duplicado em 3 lugares** (Header/WhatsAppFloat/Footer) —
-    forte candidato a extrair p/ um componente compartilhado.
+    O glyph WhatsApp usa o `WhatsAppGlyph` compartilhado (não mais inline/duplicado).
   - `WhatsAppFloat` é o **botão flutuante de WhatsApp** (server component): `<a>` fixo
-    `bottom-6 right-6 z-50`, círculo `size-14` verde `#25D366`, glyph WhatsApp inline (mesmo do
-    Header — ⚠️ glyph **duplicado** nos dois; extrair p/ ícone compartilhado se mexer de novo),
+    `bottom-6 right-6 z-50`, círculo `size-14` verde `#25D366`, `WhatsAppGlyph` compartilhado,
     `hover:scale-110`. Mensagem fixa "Olá, Startech!". Montado no `layout.tsx`.
   - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
     Layout: **redes sociais à esquerda** (Instagram + YouTube via `<img>` dos SVGs `/insta.svg` e
     `/youtueb.svg`, **já em branco** — insta com `fill` branco, youtube branco com o "play" vazado
     por `fill-rule="evenodd"`), **logo no centro** (absoluto), **botão WhatsApp à direita**. **Sem
     menu de navegação** — links e hambúrguer foram **removidos em definitivo** (não voltam); `nav`
-    em `content/site.ts` tem só `social` + `cta`.
+    em `content/site.ts` tem só `social` + `cta`. O botão da direita é o `WhatsAppButton` (`size="sm"`,
+    rótulo `hidden sm:inline` → só ícone no mobile).
   - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
     via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
   - `FanCards` é a seção logo **abaixo da Hero**: leque 3D de imagens **parado** com hover expand
@@ -99,15 +124,17 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     (clones nas pontas), índice começa no bloco do meio e ao fim da transição numa ponta
     "teleporta" sem animação pro item equivalente do centro → as **setas nunca desabilitam**,
     sem bolinhas. Cada card tem **fundo escuro** (`bg-azul-escuro/40` + `border-white-8` +
-    `rounded-big`, igual StarShield), `p-6` (24px), texto full-width centralizado. CTA `.btn`
-    "Entrar em contato".
+    `rounded-big`, igual StarShield), `p-6` (24px), texto full-width centralizado. CTA
+    `WhatsAppButton` "Entrar em contato" (abre WhatsApp c/ msg de assistência técnica).
   - `StarShield` é a seção **abaixo do Support**: linha de proteções. Server component,
     Tailwind, dentro do grid 1200px. Cada card herda o **estilo do painel da `StarcareLoyalty`**
     (`bg-azul-escuro/40` + `border-white-8` + `rounded-big`), com **texto branco** (`text-white`
     / `text-white/60`). Layout = pilha de cards (`flex-col gap-6`): card **hero**
     full-width 2 colunas (texto + imagem) → linha **duo** (2 cards, texto em
     cima + imagem preenchendo a base) → cards **wide** (Matte, Limpa telas: texto à esquerda +
-    imagem à direita) → CTA `.btn` centralizado. Imagens via `next/image` `fill` + `object-cover`.
+    imagem à direita) → CTA `.btn` centralizado. Imagens via `next/image` `fill` + `object-cover`
+    num **wrapper `rounded-medium overflow-hidden` com inset (`p-4` no hero/wide; `px-4 pb-4` no
+    duo, topo já espaçado pelo texto)** — mesma moldura da `VisitStartech`.
     ⚠️ **Tudo placeholder:** imagens todas em `/images/IMG_7475.webp` e copy provisória.
   - `Acessorios` é a seção **abaixo da StarcareLoyalty** (última): **bento grid** de 4 imagens
     (só imagens, sem texto/overlay/badge). Cabeçalho **centralizado** (título `text-h3 md:text-h2
@@ -132,10 +159,17 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
   (`whatsapp.number` = `5549998353002` / +55 49 99835-3002) e o helper `whatsappLink(message)`
   que monta o link `wa.me` com a mensagem já codificada. **CTAs que abrem WhatsApp** (cada um com
   sua `cta.message`, link via `whatsappLink` + `target="_blank"`): Header (`nav.cta` "Olá, Startech!"),
-  Hero (`hero.cta` "Olá, Startech!"), cards da Categories (novos/seminovos), StarShield
-  ("...proteger meu celular com Starshield."), Starcare ("...saber mais sobre o Startech Care") e o
-  botão flutuante `WhatsAppFloat` ("Olá, Startech!"). ⚠️ `support.cta` **ainda aponta pra `#`**.
+  Hero (`hero.cta` "Olá, Startech!"), cards da Categories (novos/seminovos), Support
+  (`support.cta` "...gostaria de assistência técnica"), StarShield ("...proteger meu celular com
+  Starshield."), Starcare ("...saber mais sobre o Startech Care"), FinalCta ("Olá, Startech!") e o
+  botão flutuante `WhatsAppFloat` ("Olá, Startech!").
 - `lib/anim.ts` — variantes de animação.
+- `lib/highlight.tsx` — helper `highlight(text, phrases?)`: envolve as substrings listadas em
+  `phrases` num `<span className="text-white">` (branco 100%), sobrepondo a opacidade herdada do
+  parágrafo. Os trechos de destaque ficam na copy (`content/site.ts`): `hero.subtitleHighlights`,
+  `hero.features[].highlights`, `finalCta.subtitleHighlights`. Usado no subtítulo + bullets da Hero
+  e no lead da FinalCta. **Para destacar trecho de uma frase, listar a substring aqui — não chumbar
+  `<span>` no JSX.**
 - `font/` — `.ttf` da Arboria.
 - `public/images/` — fotos dos aparelhos (12 `.webp`), consumidas pelo `FanCards`
   (lista **hardcoded** no componente, em ordem crescente de nome).
@@ -152,12 +186,13 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 
 **Cores:** `white` #ffffff · `black` #000000 · `bg` #030B0F (fundo base do site, preto
 levemente azulado) · `azul-capri` #39B6FF (primária; cards-padrão em `/15`, hover do StarShield) ·
+`azul-capri-dark` #008EE0 (mesma matiz, mais escuro — **fundo do `.btn`**, p/ contrastar com o texto branco) ·
 `azul-escuro` #0A2540 (fundo dos cards do StarShield/Support e do painel da StarcareLoyalty, em
 `/40`) · `realme-yellow` #F9DD60 · `cinza` #EEF0F2 (superfície clara — **token existe mas hoje
 sem uso**, StarShield migrou pro tema escuro) · neutros translúcidos `white-32/16/8` e `black-32/16/8`.
 
-**Tipografia** (Arboria; `letter-spacing` embutido nos tokens `text-*`: **títulos `h1/h2/h3`
-= −0.01em**, demais = −0.03em — ver Decisões 2026-06-05):
+**Tipografia** (Arboria; `letter-spacing` embutido nos tokens `text-*`: **−0.01em uniforme em
+todos os estilos** — títulos e corpo; `.btn`/`.btn-link` também — ver Decisões 2026-06-05):
 
 | Estilo | Tamanho | Line-height | Peso |
 |---|---|---|---|
@@ -166,6 +201,8 @@ sem uso**, StarShield migrou pro tema escuro) · neutros translúcidos `white-32
 | `text-h3` | 28 | 34 | Book |
 | `text-body` | 24 | 32 | Book |
 | `text-body2` | 15 | 20 | Book |
+| `text-body3` | 13 | 18 | Book | *(bullets/features da Hero)* |
+| `text-lead` | 18 | 24 | Book | *(subtítulo Hero + descrições StarShield + lead da FinalCta; branco @73%)* |
 | `text-feature` | 17 | 22 | Book | *(derivado — destaques do hero; ver Decisões)* |
 | `text-footer` | 14 | 14 | Book |
 | `text-header` | 12 | 12 | Bold (700) |
@@ -187,8 +224,17 @@ conteúdo, pra alinhar as seções na mesma grade na página inteira. Uso: conta
 Uso: `px-[var(--layout-margin)] py-[var(--layout-padding-y)]` no container da seção;
 `gap-[var(--layout-gap)]` no grid/flex interno.
 
-**Botões:** formato pill (`border-radius: 9999px`). `.btn` (primário, fundo `azul-capri`,
-texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link azul).
+**Botões:** formato pill (`border-radius: 9999px`). `.btn` (primário, fundo **`azul-capri-dark`**
+#008EE0 — escurecido p/ contrastar com o texto branco bold; **hover** = `scale(1.05)` central +
+fundo clareia p/ `azul-capri` + **sombra leve azul-clara centralizada** (`box-shadow: 0 0 18px
+rgb(57 182 255 / 0.5)` — igual em todos os lados), `transition 0.35s` suave, texto/ícone **sempre
+branco 100%**, sem mudar opacidade), `.btn-sm` (variante menor),
+`.btn-link` ("Comprar ↗", link **`azul-capri`** #39B6FF — mantém o azul claro). **`.btn-icon`**:
+ícone (WhatsApp) num **círculo branco** `position:absolute` colado à esquerda do pill, com **inset
+igual** em cima/baixo/esquerda (`top`/`bottom`/`left` + `aspect-ratio:1` mantém o círculo),
+SVG tingido de `azul-capri-dark`. Na
+prática quem monta o pill+ícone é o componente **`WhatsAppButton`** (não usar `<a class="btn">`
+solto p/ CTA de WhatsApp — usar o componente).
 ⚠️ Padding e font-size dos botões foram **inferidos** (não estavam no design system) — ajustar quando tivermos o layout real.
 
 ## Convenções de trabalho
@@ -322,7 +368,14 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
 - **(2026-06-05) Letter-spacing dos títulos afrouxado.** Tokens `text-h1/h2/h3` foram de
   `-0.03em` → **`-0.01em`** (pedido do cliente: "aumentar levemente o espaço entre letras em
   todos os títulos"). Aplica-se a todas as seções automaticamente; corpo (`text-body`,
-  `text-body2`, `text-feature`, etc.) **mantém −0.03em**.
+  `text-body2`, `text-feature`, etc.) **mantinha −0.03em**. ⚠️ **Substituído (2026-06-05) — ver abaixo.**
+- **(2026-06-05) Letter-spacing UNIFORME em −0.01em + descrições padronizadas em Book.**
+  - Pedido do cliente: **todo o letter-spacing em −0.01em**. Os tokens que ainda estavam em
+    `-0.03em` (`text-body`, `text-body2`, `text-feature`, `text-footer`, `text-header`) e os
+    botões (`.btn`, `.btn-link`) foram para **`-0.01em`**. Agora **toda** a escala usa −0.01em.
+  - **Descrições padronizadas em Book (400):** os bullets/features da Hero usavam `font-light`
+    (300) — removido. Agora todas as descrições do site (`text-body2` em Hero/Categories/Support/
+    StarShield/StarcareLoyalty) usam o **peso padrão Book (400)** do token, sem override de peso.
 - **(2026-06-05) `StarShield` v2 — tema escuro + hover.** O tema claro (cards brancos/`cinza`,
   texto escuro) foi **abandonado**: agora **cada card herda o estilo do painel da `StarcareLoyalty`**
   — `bg-azul-escuro/40` + `border-white-8` + `rounded-big`, texto **branco** (`text-white` /

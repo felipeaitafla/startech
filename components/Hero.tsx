@@ -8,7 +8,9 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import { hero, whatsappLink } from "@/content/site";
+import { hero } from "@/content/site";
+import { highlight } from "@/lib/highlight";
+import { WhatsAppButton } from "./WhatsAppButton";
 import { stagger, floatUp } from "@/lib/anim";
 import type { FeatureIcon } from "@/content/site";
 
@@ -37,20 +39,13 @@ export function Hero() {
 
         <motion.p
           variants={floatUp}
-          className="text-body2 mt-6 max-w-[64ch] text-white/65"
+          className="text-lead mt-6 max-w-[64ch] text-white/73"
         >
-          {hero.subtitle}
+          {highlight(hero.subtitle, hero.subtitleHighlights)}
         </motion.p>
 
         <motion.div variants={floatUp} className="mt-8">
-          <a
-            href={whatsappLink(hero.cta.message)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn"
-          >
-            {hero.cta.label}
-          </a>
+          <WhatsAppButton message={hero.cta.message} label={hero.cta.label} />
         </motion.div>
 
         <motion.ul
@@ -67,10 +62,10 @@ export function Hero() {
                   <Icon className="size-6" strokeWidth={1.75} />
                 </span>
                 <p
-                  className="text-body2 font-light text-white/80"
+                  className="text-body3 text-white/63"
                   style={{ maxWidth: feature.textWidth }}
                 >
-                  {feature.text}
+                  {highlight(feature.text, feature.highlights)}
                 </p>
               </div>
             </motion.li>

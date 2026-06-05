@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { starshield, whatsappLink } from "@/content/site";
+import { starshield } from "@/content/site";
+import { WhatsAppButton } from "./WhatsAppButton";
 
 /* Seção StarShield — grade vertical de cards de tema CLARO (fundo branco/cinza,
    texto escuro = token `bg`), sobre o site escuro. Server component, sem JS.
@@ -22,14 +23,16 @@ export function StarShield() {
               <ArrowUpRight className="size-4" strokeWidth={2.25} />
             </a>
           </div>
-          <div className="relative min-h-[220px]">
-            <Image
-              src={hero.image.src}
-              alt={hero.image.alt}
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="rounded-medium object-cover"
-            />
+          <div className="p-4">
+            <div className="relative h-full min-h-[220px] overflow-hidden rounded-medium">
+              <Image
+                src={hero.image.src}
+                alt={hero.image.alt}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
 
@@ -42,19 +45,21 @@ export function StarShield() {
             >
               <div className="p-8">
                 <h3 className="text-h3 font-medium text-white">{card.title}</h3>
-                <p className="text-body2 mt-2 max-w-[44ch] text-white/60">
+                <p className="text-lead mt-2 max-w-[44ch] text-white/73">
                   {card.description}
                 </p>
               </div>
-              {/* imagem preenche toda a área inferior do card */}
-              <div className="relative mt-auto w-full flex-1">
-                <Image
-                  src={card.image.src}
-                  alt={card.image.alt}
-                  fill
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                  className="rounded-medium object-cover"
-                />
+              {/* imagem preenche toda a área inferior do card (com inset p-4) */}
+              <div className="mt-auto w-full flex-1 px-4 pb-4">
+                <div className="relative h-full overflow-hidden rounded-medium">
+                  <Image
+                    src={card.image.src}
+                    alt={card.image.alt}
+                    fill
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
               </div>
             </article>
           ))}
@@ -68,32 +73,27 @@ export function StarShield() {
           >
             <div className="flex flex-col justify-center gap-2 p-8 md:p-12">
               <h3 className="text-h3 font-medium text-white">{card.title}</h3>
-              <p className="text-body2 max-w-[48ch] text-white/60">
+              <p className="text-lead max-w-[48ch] text-white/73">
                 {card.description}
               </p>
             </div>
-            <div className="relative min-h-[240px]">
-              <Image
-                src={card.image.src}
-                alt={card.image.alt}
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="rounded-medium object-cover"
-              />
+            <div className="p-4">
+              <div className="relative h-full min-h-[240px] overflow-hidden rounded-medium">
+                <Image
+                  src={card.image.src}
+                  alt={card.image.alt}
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
             </div>
           </div>
         ))}
 
         {/* ---------- CTA ---------- */}
         <div className="mt-10 flex justify-center">
-          <a
-            href={whatsappLink(cta.message)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn"
-          >
-            {cta.label}
-          </a>
+          <WhatsAppButton message={cta.message} label={cta.label} />
         </div>
       </div>
     </section>
