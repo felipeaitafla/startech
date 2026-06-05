@@ -43,8 +43,8 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
   "reduzir movimento" do SO.
 - **Ícones: `lucide-react`** (+ glyph WhatsApp inline no Header, que o lucide não tem).
 - **Deploy: Netlify** — `netlify.toml` configurado (plugin `@netlify/plugin-nextjs`).
-  Git **já inicializado** (branch `main`, primeiro commit feito). Falta conectar o repo
-  remoto (GitHub) e linkar na Netlify.
+  Git no GitHub: `felipeaitafla/startech` (`origin`, branch `main`). **Falta linkar na Netlify**
+  — será feito na entrega do projeto.
 
 ## Estrutura de arquivos
 
@@ -337,7 +337,8 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
 - [ ] **Menu mobile:** o botão hambúrguer do Header existe mas ainda não abre nada.
 - [ ] **Validar contra o Figma:** o Hero foi feito a partir do screenshot; conferir medidas/cores
       exatas quando o frame do Figma estiver à mão.
-- [ ] **Conectar Git remoto + Netlify** (repo GitHub e link de deploy automático).
+- [x] **~~Conectar Git remoto.~~** Repo no GitHub: `felipeaitafla/startech` (`origin`, branch `main`).
+- [ ] **Conectar Netlify** (link de deploy automático) — **será feito na entrega do projeto.**
 - [ ] **StarShield/Starcare — conteúdo definitivo:** copy provisória e todas as imagens são
       placeholder (`images/IMG_7475.webp` no StarShield; `startech-care.webp` no Starcare).
 - [ ] **Padronizar título de seção:** StarShield/Starcare usam Medium (500); as demais, Bold (700).
