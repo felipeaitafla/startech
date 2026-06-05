@@ -1,15 +1,18 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { categories } from "@/content/site";
+import { categories, whatsappLink } from "@/content/site";
 
 export function Categories() {
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
       <div className="mx-auto grid w-full max-w-[var(--layout-max)] grid-cols-1 gap-6 md:grid-cols-2">
         {categories.panels.map((panel) => (
-        <article
+        <a
           key={panel.title}
-          className="flex flex-col overflow-hidden rounded-big border border-white-8 bg-azul-capri/15"
+          href={whatsappLink(panel.cta.message)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative flex flex-col overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15"
         >
           {/* texto — parte superior, centralizado */}
           <div className="flex flex-col items-center px-8 pt-10 text-center md:px-10 md:pt-12">
@@ -17,10 +20,10 @@ export function Categories() {
             <p className="text-body2 mt-4 max-w-[42ch] text-white/70">
               {panel.description}
             </p>
-            <a href={panel.cta.href} className="btn-link mt-6">
+            <span className="btn-link mt-6">
               {panel.cta.label}
               <ArrowUpRight className="size-4" strokeWidth={2.25} />
-            </a>
+            </span>
           </div>
 
           {/* imagem — metade inferior, centralizada, sem crop nem radius */}
@@ -33,7 +36,7 @@ export function Categories() {
               className="h-[400px] w-auto object-contain"
             />
           </div>
-        </article>
+        </a>
         ))}
       </div>
     </section>

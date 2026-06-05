@@ -5,6 +5,16 @@
 
 export type FeatureIcon = "warranty" | "loan" | "installments" | "support";
 
+/* WhatsApp de contato — formato wa.me (só dígitos, com DDI 55).
+   Helper monta o link já com a mensagem pré-definida codificada. */
+export const whatsapp = {
+  number: "5549998353002", // +55 49 99835-3002
+} as const;
+
+export function whatsappLink(message: string) {
+  return `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`;
+}
+
 export const nav = {
   links: [
     { label: "iPhone", href: "#" },
@@ -57,14 +67,22 @@ export const categories = {
       title: "iPhones seminovos",
       description:
         "Nossos aparelhos são 100% originais e revisados, não trabalhamos com nada que não seja no padrão Startech de qualidade.",
-      cta: { label: "Comprar", href: "#" },
+      cta: {
+        label: "Comprar",
+        message:
+          "Olá, Startech! Venho do site e desejo saber mais sobre iPhones seminovos.",
+      },
       image: { src: "/seminovos.webp", alt: "iPhone seminovo Startech" },
     },
     {
       title: "iPhones novos",
       description:
         "Só trabalhamos com a versão EUA ou Anatel. Únicas a ativarem garantia de fábrica no Brasil, e caso seja necessário, nós te ajudamos.",
-      cta: { label: "Comprar", href: "#" },
+      cta: {
+        label: "Comprar",
+        message:
+          "Olá, Startech! Venho do site e desejo saber mais sobre iPhones novos.",
+      },
       image: { src: "/novos.webp", alt: "iPhone novo lacrado" },
     },
   ],

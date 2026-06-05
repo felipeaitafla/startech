@@ -61,9 +61,13 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     **CSS Module** (`FanCards.module.css`) em vez de Tailwind, porque é animação 3D pesada — ver Decisões.
   - `Categories` é a seção logo **abaixo do FanCards**: 2 painéis lado a lado
     (iPhones seminovos | iPhones novos) dentro do **grid central de 1200px** (`--layout-max`).
-    Server component, Tailwind. Painéis `bg-azul-capri/15` + `rounded-big` + `border-white-8`;
-    texto centralizado no topo (título `text-h3` **28px fixo** `font-bold`), imagem
-    (`/public/*.webp`, `object-contain`, `h-[400px]`) na base.
+    Server component, Tailwind. **Cada painel é um link de WhatsApp** (o `<article>` virou `<a>`
+    `target="_blank"`): fundo escuro padrão `bg-azul-escuro/40` + `border-white-8` + `rounded-big`,
+    **hover** `bg-azul-capri/15` + `scale-[1.03]` (`duration-500`, `relative hover:z-10`) — mesmo
+    padrão do StarShield. Texto centralizado no topo (título `text-h3` **28px fixo** `font-bold`),
+    imagem (`/public/*.webp`, `object-contain`, `h-[400px]`) na base; "Comprar ↗" é um `<span>`
+    (não `<a>` aninhado). Link via `whatsappLink(panel.cta.message)` — **mensagem pré-definida por
+    card** (".../iPhones seminovos." vs ".../iPhones novos.").
   - `Partners` é a seção **abaixo da Categories**: faixa "Trabalhamos com as melhores marcas".
     Server component, dentro do grid 1200px. **Logos ainda placeholder** (logo Startech repetida
     4x). Título em `text-body2` (15px) bold. ⚠️ Trocar pelos logos reais das marcas.
@@ -94,7 +98,10 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     mapeados por chave `recycle`/`support` no `.tsx`. ⚠️ Logo `public/startech-care.webp`
     (intrínseco 320×120 — ampliado além do nativo no desktop; trocar por maior se borrar).
 - `content/site.ts` — **toda a copy** (nav, hero, features, categories, partners, support,
-  starshield, starcare). Editar texto só aqui.
+  starshield, starcare). Editar texto só aqui. Exporta também o **WhatsApp de contato**
+  (`whatsapp.number` = `5549998353002` / +55 49 99835-3002) e o helper `whatsappLink(message)`
+  que monta o link `wa.me` com a mensagem já codificada. Cada painel da `Categories` tem sua
+  `cta.message` pré-definida.
 - `lib/anim.ts` — variantes de animação.
 - `font/` — `.ttf` da Arboria.
 - `public/images/` — fotos dos aparelhos (12 `.webp`), consumidas pelo `FanCards`
