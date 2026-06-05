@@ -57,7 +57,10 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, **metadata/SEO**
   (title + description + Open Graph + Twitter card + keywords; consts `SITE_TITLE`/`SITE_DESCRIPTION`).
-  ⚠️ Falta `metadataBase` + imagem OG (definir quando tiver o domínio final da Netlify).
+  **Favicon** `public/icon.webp` (via `metadata.icons`) e **imagem OG/social** `public/social.png`
+  (1200×630). `metadataBase` = `NEXT_PUBLIC_SITE_URL` ou fallback `https://startechcelulares.com`.
+  ⚠️ **Confirmar o domínio final** e setar `NEXT_PUBLIC_SITE_URL` na Netlify (a URL absoluta da
+  imagem OG depende disso).
   Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>`, o
   `<SmoothScroll/>` (Lenis, smooth scroll global — não renderiza nada), o `<WhatsAppFloat/>`
   (botão flutuante de WhatsApp, fixo no canto inf. direito) e o `<CursorGlow/>` (cursor de luz
@@ -509,8 +512,9 @@ solto p/ CTA de WhatsApp — usar o componente).
 - **(2026-06-05) SEO/metadata atualizados.** O `metadata` do `layout.tsx` estava com a copy antiga
   ("Smartphones... 1 ano"). Novo **title** "StarTech | iPhones Seminovos e Novos em Chapecó – SC" e
   **description** (até 2 anos de garantia, canal oficial Apple, assistência em Chapecó, 12x sem juros),
-  + **Open Graph** + **Twitter card** + keywords. ⚠️ Falta `metadataBase` e imagem OG (quando houver
-  domínio final).
+  + **Open Graph** + **Twitter card** + keywords. **Favicon** `public/icon.webp` e **imagem OG**
+  `public/social.png` (1200×630) ligados. `metadataBase` via `NEXT_PUBLIC_SITE_URL` (fallback
+  `startechcelulares.com`). ⚠️ Confirmar domínio final e setar a env na Netlify.
 - **(2026-06-05) `CursorGlow` — cursor de luz laranja com rastro.** Pedido do cliente. Implementado
   com **canvas** (não DOM/divs) p/ o efeito de "luz": pontos que decaem desenhados com
   `globalCompositeOperation="lighter"` (soma de luz = bloom). Canvas fixo `z-[100]` `pointer-events-none`,
