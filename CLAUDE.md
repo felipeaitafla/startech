@@ -61,9 +61,9 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
   - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
     Layout: **redes sociais à esquerda** (Instagram + YouTube via `<img>` dos SVGs `/insta.svg` e
     `/youtueb.svg`, **já em branco** — insta com `fill` branco, youtube branco com o "play" vazado
-    por `fill-rule="evenodd"`), **logo no centro** (absoluto), **botão WhatsApp à direita**. ⚠️ O
-    **menu de navegação** (links iPhone/Android/... ) e o **hambúrguer mobile foram removidos** — os
-    `nav.links` em `content/site.ts` ficaram **sem uso** (mantidos p/ quando voltar o menu).
+    por `fill-rule="evenodd"`), **logo no centro** (absoluto), **botão WhatsApp à direita**. **Sem
+    menu de navegação** — links e hambúrguer foram **removidos em definitivo** (não voltam); `nav`
+    em `content/site.ts` tem só `social` + `cta`.
   - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
     via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
   - `FanCards` é a seção logo **abaixo da Hero**: leque 3D de imagens **parado** com hover expand
@@ -354,9 +354,8 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
 - [ ] **Ajustar dimensões reais dos botões** (padding/font-size hoje são inferidos).
 - [x] **~~Logo real.~~** Usando `public/startech-logo.png` (oficial) via `next/image`.
       (Opcional futuro: versão SVG pra nitidez perfeita em qualquer tamanho.)
-- [ ] **Menu de navegação:** o hambúrguer e os links de nav foram **removidos** do Header
-      (2026-06-05) — sobrou só social + logo + botão. Os `nav.links` continuam em `content/site.ts`
-      sem uso. Decidir se/como o menu volta (desktop e mobile) e religar.
+- [x] **~~Menu de navegação.~~** Hambúrguer + links de nav **removidos em definitivo** do Header
+      (2026-06-05); `nav.links` apagado do `content/site.ts`. Header = social + logo + botão. Não volta.
 - [ ] **Validar contra o Figma:** o Hero foi feito a partir do screenshot; conferir medidas/cores
       exatas quando o frame do Figma estiver à mão.
 - [x] **~~Conectar Git remoto.~~** Repo no GitHub: `felipeaitafla/startech` (`origin`, branch `main`).

@@ -16,14 +16,6 @@ export function whatsappLink(message: string) {
 }
 
 export const nav = {
-  links: [
-    { label: "iPhone", href: "#" },
-    { label: "Android", href: "#" },
-    { label: "Assistência", href: "#" },
-    { label: "StarShield", href: "#" },
-    { label: "StartechCare", href: "#" },
-    { label: "Acessórios", href: "#" },
-  ],
   social: [
     { label: "Instagram", href: "#", icon: "instagram" as const },
     { label: "YouTube", href: "#", icon: "youtube" as const },
