@@ -19,7 +19,11 @@
   --color-black: #000000;
   --color-bg: #030b0f;             /* fundo base do site (preto levemente azulado) */
   --color-azul-capri: #39b6ff;     /* azul de marca / primário */
+  --color-azul-escuro: #0a2540;    /* azul escuro (painéis claros / StarShield) */
   --color-realme-yellow: #f9dd60;
+
+  /* superfícies CLARAS (seção StarShield e afins, tema claro sobre o site escuro) */
+  --color-cinza: #eef0f2;          /* cinza muito claro p/ fundo de card */
 
   /* neutros translúcidos (overlays, bordas, estados) */
   --color-white-32: rgb(255 255 255 / 0.32);
@@ -40,17 +44,17 @@
 
   --text-h1: 64px;
   --text-h1--line-height: 60px;
-  --text-h1--letter-spacing: -0.03em;
+  --text-h1--letter-spacing: -0.01em;
   --text-h1--font-weight: 700;          /* Arboria Bold */
 
   --text-h2: 48px;
   --text-h2--line-height: 50px;
-  --text-h2--letter-spacing: -0.03em;
+  --text-h2--letter-spacing: -0.01em;
   --text-h2--font-weight: 400;          /* Arboria Book */
 
   --text-h3: 28px;
   --text-h3--line-height: 34px;
-  --text-h3--letter-spacing: -0.03em;
+  --text-h3--letter-spacing: -0.01em;
   --text-h3--font-weight: 400;
 
   --text-body: 24px;

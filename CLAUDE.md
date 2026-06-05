@@ -50,9 +50,9 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, metadata.
   Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>`.
-- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>` + `<Partners/>` + `<Support/>`.
+- `app/page.tsx` — monta `<Header/>` + `<Hero/>` + `<FanCards/>` + `<Categories/>` + `<Partners/>` + `<Support/>` + `<StarShield/>` + `<StarcareLoyalty/>`.
 - `app/globals.css` — **fonte de verdade dos tokens** + base + `.btn*` + `.site-bg` (fundo global).
-- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
+- `components/` — `Header.tsx`, `Hero.tsx`, `FanCards.tsx` (+ `FanCards.module.css`), `Categories.tsx`, `Partners.tsx`, `Support.tsx`, `StarShield.tsx`, `StarcareLoyalty.tsx`, `Logo.tsx`, `MotionProvider.tsx`.
   - `Header` é **`fixed` no topo** com `bg-black/30 backdrop-blur-lg` + borda inferior `border-white-8`.
   - `Logo` usa o **logo oficial** `public/startech-logo.png` (PNG branco, transparente, 1249×600)
     via `next/image` (import estático). **Usar esse arquivo daqui pra frente.**
@@ -60,24 +60,44 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     (no mobile o `:hover` dispara no toque → tap pra expandir). **Server component** (zero JS),
     **CSS Module** (`FanCards.module.css`) em vez de Tailwind, porque é animação 3D pesada — ver Decisões.
   - `Categories` é a seção logo **abaixo do FanCards**: 2 painéis lado a lado
-    (Seminovos | iPhones novos) dentro do **grid central de 1200px** (`--layout-max`).
+    (iPhones seminovos | iPhones novos) dentro do **grid central de 1200px** (`--layout-max`).
     Server component, Tailwind. Painéis `bg-azul-capri/15` + `rounded-big` + `border-white-8`;
-    texto centralizado no topo, imagem (`/public/*.webp`, `object-contain`, `h-[400px]`) na base.
+    texto centralizado no topo (título `text-h3` **28px fixo** `font-bold`), imagem
+    (`/public/*.webp`, `object-contain`, `h-[400px]`) na base.
   - `Partners` é a seção **abaixo da Categories**: faixa "Trabalhamos com as melhores marcas".
     Server component, dentro do grid 1200px. **Logos ainda placeholder** (logo Startech repetida
     4x). Título em `text-body2` (15px) bold. ⚠️ Trocar pelos logos reais das marcas.
   - `Support` é a seção **abaixo da Partners**: "Assistência Técnica" com **carrossel de
     serviços**. **Client component** (`"use client"`, tem estado/navegação) — único carrossel
     com JS. Mostra 1/2/4 cards por view (mobile/tablet/desktop) via `matchMedia`; setas laterais
-    + bolinhas, navegação por página com wrap-around. CTA `.btn` "Entrar em contato" no fim.
-- `content/site.ts` — **toda a copy** (nav, hero, features, categories, partners, support).
-  Editar texto só aqui.
+    com navegação **de 1 em 1 item** (desliza a fila; índice clampado em `total − perView`,
+    setas desabilitam nos extremos, sem wrap). **Sem bolinhas.** CTA `.btn` "Entrar em contato".
+  - `StarShield` é a seção **abaixo do Support**: linha de proteções de **tema CLARO**
+    (cards de fundo branco/`cinza`, texto escuro `bg`) sobre o site escuro. Server component,
+    Tailwind, dentro do grid 1200px. Layout = pilha de cards (`flex-col gap-6`): card **hero**
+    full-width 2 colunas (texto branco + imagem) → linha **duo** (2 cards `bg-cinza`, texto em
+    cima + imagem preenchendo a base) → cards **wide** (Matte, Limpa telas: texto à esquerda +
+    imagem à direita) → CTA `.btn` centralizado. Imagens via `next/image` `fill` + `object-cover`.
+    ⚠️ **Tudo placeholder:** imagens todas em `/images/IMG_7475.webp` e copy provisória.
+  - `StarcareLoyalty` é a seção **abaixo do StarShield**: programa de fidelidade "Startech Care"
+    num **card central de largura média** (`max-w-[840px]`, não full-width) — fundo
+    **`bg-azul-escuro/40`** (escurecido, recua), `rounded-big` + `border-white-8`. Server
+    component, Tailwind. Topo: **logo grande** (`h-28 md:h-36`, esq) + título `text-h3 font-medium`
+    + `.btn-link` (dir); base: 2 cards de benefício **no mesmo estilo dos painéis da Categories**
+    (`bg-azul-capri/15` + `rounded-big` + `border-white-8`) + **sombra leve**
+    `shadow-[0_14px_36px_rgba(0,0,0,0.2)]`; ícones `lucide` `Recycle`/`Headset` em `azul-capri`,
+    mapeados por chave `recycle`/`support` no `.tsx`. ⚠️ Logo `public/startech-care.webp`
+    (intrínseco 320×120 — ampliado além do nativo no desktop; trocar por maior se borrar).
+- `content/site.ts` — **toda a copy** (nav, hero, features, categories, partners, support,
+  starshield, starcare). Editar texto só aqui.
 - `lib/anim.ts` — variantes de animação.
 - `font/` — `.ttf` da Arboria.
 - `public/images/` — fotos dos aparelhos (12 `.webp`), consumidas pelo `FanCards`
   (lista **hardcoded** no componente, em ordem crescente de nome).
 - `public/` (raiz) — `seminovos.webp`/`novos.webp` (transparentes) p/ `Categories`;
-  `broken.webp` (placeholder dos 4 serviços) p/ `Support`. ⚠️ Trocar pelas imagens reais.
+  `broken.webp` (placeholder dos 4 serviços) p/ `Support`; `startech-care.webp` (logo) p/
+  `StarcareLoyalty`. ⚠️ Trocar pelas imagens reais. `StarShield` reusa `images/IMG_7475.webp`
+  como placeholder em todos os cards.
 
 ## Design System
 
@@ -86,10 +106,12 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 > não existe, adicione como token no `@theme` e registre aqui.
 
 **Cores:** `white` #ffffff · `black` #000000 · `bg` #030B0F (fundo base do site, preto
-levemente azulado) · `azul-capri` #39B6FF (primária) · `realme-yellow` #F9DD60 ·
-neutros translúcidos `white-32/16/8` e `black-32/16/8`.
+levemente azulado) · `azul-capri` #39B6FF (primária) · `azul-escuro` #0A2540 (painéis
+do StarShield) · `realme-yellow` #F9DD60 · `cinza` #EEF0F2 (superfície clara p/ cards de
+tema claro, ex. StarShield) · neutros translúcidos `white-32/16/8` e `black-32/16/8`.
 
-**Tipografia** (Arboria, `letter-spacing: -0.03em` em todos — já embutido nos tokens `text-*`):
+**Tipografia** (Arboria; `letter-spacing` embutido nos tokens `text-*`: **títulos `h1/h2/h3`
+= −0.01em**, demais = −0.03em — ver Decisões 2026-06-05):
 
 | Estilo | Tamanho | Line-height | Peso |
 |---|---|---|---|
@@ -203,13 +225,13 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
     repetida 4x, `count` no `content/site.ts`). Dentro do grid 1200px. ⚠️ Espaçamento: a Partners
     tem `pt-[128px]` próprio **e** a Categories já tem `padding-bottom` (128 desktop) → no desktop
     o respiro somado é ~256px (decisão de não mexer na Categories; revisitar se incomodar).
-  - `Support`: **client component** (estado de página + `matchMedia`), único carrossel com JS.
-    1/2/4 cards por view (mobile/tablet/desktop); track `translateX(-página*100%)` com transição
-    `cubic-bezier(...)`; **setas** fora da área dos cards (layout `[seta][viewport][seta]`) com
-    wrap-around; **bolinhas** (ativa em `azul-capri`); CTA `.btn` no fim. Card: título reserva
+  - `Support`: **client component** (índice de item + `matchMedia`), único carrossel com JS.
+    1/2/4 cards por view (mobile/tablet/desktop); navegação **de 1 em 1 item** —
+    `translateX(-current*(100/perView)%)` com transição `cubic-bezier(...)`; **setas** fora da
+    área dos cards (layout `[seta][viewport][seta]`), índice clampado em `total − perView` (setas
+    desabilitam nos extremos, **sem wrap, sem bolinhas**); CTA `.btn` no fim. Card: título reserva
     **2 linhas** (`min-h-[64px]`) pra alinhar descrição/imagem entre cards; imagem `object-contain
-    h-[180px]`; sem fundo/borda no card (texto até a borda). ⚠️ Com 4 serviços e 4-por-view, o
-    desktop tem **1 página só** (setas/bolinhas sem destino) — consequência de 4×4.
+    h-[180px]`; sem fundo/borda no card (texto até a borda). Hoje são **5 serviços**.
 - **(2026-06-04) Títulos de seção em Bold.** Arboria **não tem Semibold (600)** — pesos: Thin/Light/
   Book(400)/Medium(500)/Bold(700)/Black. Pedido era semibold; como não existe, o cliente optou por
   **Bold**. Aplicado em Categories/Support/Partners (`font-bold`). ⚠️ **Não há classe/componente
@@ -232,6 +254,29 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
   - Glow **aumentado** (elipses ~160%/110%, stops empurrados pra 78%/70%) pra ocupar mais área.
   - **Token novo `--color-bg` (#030B0F)** — preto levemente azulado; substituiu `black` puro como
     base do `.site-bg` e do `body`.
+
+- **(2026-06-05) `StarShield` (tema claro) + `StarcareLoyalty` (fidelidade), abaixo do Support.**
+  - **`StarShield`** introduz o **primeiro tema CLARO** do site (cards de fundo branco/`cinza`
+    com texto escuro `bg`) sobre o fundo global escuro. Pilha de cards no grid 1200px: hero
+    full-width 2-col → duo (2 cards) → wide (Matte / Limpa telas) → CTA. **Tokens de cor novos:**
+    `--color-azul-escuro` #0A2540 e `--color-cinza` #EEF0F2 (superfícies claras). Imagens via
+    `next/image` `fill`+`object-cover`. Server component, Tailwind.
+  - **`StarcareLoyalty`**: card central `max-w-[840px]` (não full-width). **Fundo do card de
+    trás escurecido** (`bg-azul-escuro/40`) pra recuar e dar profundidade; os 2 cards de benefício
+    embaixo seguem o **estilo dos painéis da Categories** (`bg-azul-capri/15` + `rounded-big` +
+    `border-white-8`, mais claros = saltam à frente) com **sombra leve e espalhada**
+    (`shadow-[0_14px_36px_rgba(0,0,0,0.2)]`). **Logo aumentado** pra `h-28 md:h-36` (112/144px).
+    Ícones `lucide` (`Recycle`/`Headset`) mapeados por chave (`recycle`/`support`) — manter o mapa
+    em sincronia com a copy se adicionar benefícios.
+  - **Títulos destas seções em Medium (500), não Bold** — diferente das seções anteriores
+    (Categories/Support/Partners usam `font-bold`). ⚠️ Inconsistência consciente/provisória;
+    uniformizar quando definir o padrão de título de seção.
+  - ⚠️ **Conteúdo todo placeholder:** copy provisória e imagens (`images/IMG_7475.webp` em todo
+    o StarShield; `startech-care.webp` no Starcare). Trocar pelas definitivas.
+- **(2026-06-05) Letter-spacing dos títulos afrouxado.** Tokens `text-h1/h2/h3` foram de
+  `-0.03em` → **`-0.01em`** (pedido do cliente: "aumentar levemente o espaço entre letras em
+  todos os títulos"). Aplica-se a todas as seções automaticamente; corpo (`text-body`,
+  `text-body2`, `text-feature`, etc.) **mantém −0.03em**.
 
 ## Hurdles & Correções (log)
 
@@ -264,3 +309,7 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
 - [ ] **Validar contra o Figma:** o Hero foi feito a partir do screenshot; conferir medidas/cores
       exatas quando o frame do Figma estiver à mão.
 - [ ] **Conectar Git remoto + Netlify** (repo GitHub e link de deploy automático).
+- [ ] **StarShield/Starcare — conteúdo definitivo:** copy provisória e todas as imagens são
+      placeholder (`images/IMG_7475.webp` no StarShield; `startech-care.webp` no Starcare).
+- [ ] **Padronizar título de seção:** StarShield/Starcare usam Medium (500); as demais, Bold (700).
+      Definir o padrão e uniformizar (possível `<SectionTitle>`).

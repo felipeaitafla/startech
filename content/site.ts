@@ -54,7 +54,7 @@ export const hero = {
 export const categories = {
   panels: [
     {
-      title: "Seminovos",
+      title: "iPhones seminovos",
       description:
         "Nossos aparelhos são 100% originais e revisados, não trabalhamos com nada que não seja no padrão Startech de qualidade.",
       cta: { label: "Comprar", href: "#" },
@@ -105,6 +105,66 @@ export const support = {
       title: "Transferência de Dados",
       description: "Tudo feito de forma segura e transparente.",
       image: { src: "/broken.webp", alt: "iPhone com ícone de transferência" },
+    },
+    {
+      title: "Assistência para PC",
+      description: "Notebook ou desktop, estará em boas mãos.",
+      image: { src: "/broken.webp", alt: "Computador" },
+    },
+  ],
+} as const;
+
+/* Seção "StarShield" — linha de proteções (tema claro).
+   Imagens placeholder (IMG_7475.webp) e descrições provisórias de Basic/Lens/Matte
+   até virem as definitivas. */
+const SS_IMG = "/images/IMG_7475.webp";
+
+export const starshield = {
+  hero: {
+    title: "Proteja o seu aparelho com StarShield",
+    cta: { label: "Saiba mais", href: "#" },
+    image: { src: SS_IMG, alt: "StarShield" },
+  },
+  duo: [
+    {
+      title: "Basic",
+      description: "Proteção essencial para o dia a dia.",
+      image: { src: SS_IMG, alt: "StarShield Basic" },
+    },
+    {
+      title: "Lens",
+      description: "Proteção extra para a câmera do seu iPhone.",
+      image: { src: SS_IMG, alt: "StarShield Lens" },
+    },
+  ],
+  wide: [
+    {
+      title: "Matte",
+      description: "Acabamento fosco, antirreflexo e antimarcas.",
+      image: { src: SS_IMG, alt: "StarShield Matte" },
+    },
+    {
+      title: "Limpa telas",
+      description: "A tela do seu celular sempre limpa",
+      image: { src: SS_IMG, alt: "Limpa telas StarShield" },
+    },
+  ],
+  cta: { label: "Proteger meu iPhone", href: "#" },
+} as const;
+
+/* Seção "Startech Care" — programa de fidelidade (card central). */
+export const starcare = {
+  logo: { src: "/startech-care.webp", alt: "Startech Care" },
+  title: "Programa de Fidelidade",
+  cta: { label: "Fazer parte", href: "#" },
+  benefits: [
+    {
+      icon: "recycle" as const,
+      text: "Recompra garantida do celular comprado conosco com uma tabela exclusiva de valorização! Desde que esteja nas mesmas condições.",
+    },
+    {
+      icon: "support" as const,
+      text: "Suporte Vitalício para dúvidas e Auxílio em nossas redes sociais, assim você tem alguém sempre disponível para te ajudar.",
     },
   ],
 } as const;

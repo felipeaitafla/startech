@@ -4,6 +4,8 @@ import { FanCards } from "@/components/FanCards";
 import { Categories } from "@/components/Categories";
 import { Partners } from "@/components/Partners";
 import { Support } from "@/components/Support";
+import { StarShield } from "@/components/StarShield";
+import { StarcareLoyalty } from "@/components/StarcareLoyalty";
 
 export default function Home() {
   return (
@@ -14,6 +16,8 @@ export default function Home() {
       <Categories />
       <Partners />
       <Support />
+      <StarShield />
+      <StarcareLoyalty />
     </main>
   );
 }

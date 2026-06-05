@@ -27,14 +27,15 @@ function usePerView() {
 
 export function Support() {
   const perView = usePerView();
-  const [page, setPage] = useState(0);
+  const [index, setIndex] = useState(0);
 
-  const pages = Math.ceil(support.services.length / perView);
-  // clampa a página atual se perView mudar (resize) e reduzir o nº de páginas
-  const current = Math.min(page, pages - 1);
+  // navega de 1 em 1 item; para quando os últimos `perView` cards estão visíveis
+  const maxIndex = Math.max(0, support.services.length - perView);
+  // clampa se perView mudar (resize) e reduzir o limite
+  const current = Math.min(index, maxIndex);
 
   const go = (dir: number) =>
-    setPage((p) => (Math.min(p, pages - 1) + dir + pages) % pages);
+    setIndex((i) => Math.min(Math.max(0, i + dir), maxIndex));
 
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
@@ -50,8 +51,9 @@ export function Support() {
           <button
             type="button"
             onClick={() => go(-1)}
+            disabled={current === 0}
             aria-label="Anterior"
-            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white"
+            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-white/60"
           >
             <ChevronLeft className="size-5" />
           </button>
@@ -59,7 +61,7 @@ export function Support() {
           <div className="overflow-hidden">
             <ul
               className="flex transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
-              style={{ transform: `translateX(-${current * 100}%)` }}
+              style={{ transform: `translateX(-${current * (100 / perView)}%)` }}
             >
               {support.services.map((service) => (
                 <li
@@ -92,26 +94,12 @@ export function Support() {
           <button
             type="button"
             onClick={() => go(1)}
+            disabled={current === maxIndex}
             aria-label="Próximo"
-            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white"
+            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-white/60"
           >
             <ChevronRight className="size-5" />
           </button>
-        </div>
-
-        {/* indicadores (bolinhas) */}
-        <div className="mt-8 flex justify-center gap-2">
-          {Array.from({ length: pages }).map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setPage(i)}
-              aria-label={`Ir para página ${i + 1}`}
-              className={`size-2 rounded-full transition ${
-                i === current ? "bg-azul-capri" : "bg-white/20 hover:bg-white/40"
-              }`}
-            />
-          ))}
         </div>
 
         {/* CTA */}
