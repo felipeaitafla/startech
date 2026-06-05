@@ -5,14 +5,14 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { support } from "@/content/site";
 
-/* perView responsivo: mobile 1 · tablet 2 · desktop 4 */
+/* perView responsivo: mobile 1 · tablet 2 · desktop 3 */
 function usePerView() {
-  const [perView, setPerView] = useState(4);
+  const [perView, setPerView] = useState(3);
 
   useEffect(() => {
     const tablet = window.matchMedia("(min-width: 768px)");
     const desktop = window.matchMedia("(min-width: 1024px)");
-    const update = () => setPerView(desktop.matches ? 4 : tablet.matches ? 2 : 1);
+    const update = () => setPerView(desktop.matches ? 3 : tablet.matches ? 2 : 1);
     update();
     tablet.addEventListener("change", update);
     desktop.addEventListener("change", update);
@@ -27,15 +27,39 @@ function usePerView() {
 
 export function Support() {
   const perView = usePerView();
-  const [index, setIndex] = useState(0);
+  const services = support.services;
+  const n = services.length;
 
-  // navega de 1 em 1 item; para quando os últimos `perView` cards estão visíveis
-  const maxIndex = Math.max(0, support.services.length - perView);
-  // clampa se perView mudar (resize) e reduzir o limite
-  const current = Math.min(index, maxIndex);
+  // lista triplicada -> loop infinito de verdade (clones nas pontas).
+  // começa no bloco do meio para poder ir pros dois lados sem ponta visível.
+  const items = [...services, ...services, ...services];
+  const [index, setIndex] = useState(n);
+  const [animate, setAnimate] = useState(true);
 
-  const go = (dir: number) =>
-    setIndex((i) => Math.min(Math.max(0, i + dir), maxIndex));
+  const go = (dir: number) => {
+    setAnimate(true);
+    setIndex((i) => i + dir);
+  };
+
+  // ao fim da transição, se saímos do bloco do meio, "teleporta" sem animação
+  // para o item equivalente do meio -> loop contínuo, setas nunca desligam.
+  const handleTransitionEnd = () => {
+    if (index >= 2 * n) {
+      setAnimate(false);
+      setIndex((i) => i - n);
+    } else if (index < n) {
+      setAnimate(false);
+      setIndex((i) => i + n);
+    }
+  };
+
+  // reabilita a animação no frame seguinte ao teleporte
+  useEffect(() => {
+    if (!animate) {
+      const id = requestAnimationFrame(() => setAnimate(true));
+      return () => cancelAnimationFrame(id);
+    }
+  }, [animate]);
 
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
@@ -47,33 +71,38 @@ export function Support() {
         </header>
 
         {/* carrossel: [seta] [viewport] [seta] */}
-        <div className="mt-8 flex items-center gap-2 md:gap-4">
+        <div className="mt-16 flex items-center gap-2 md:gap-4">
           <button
             type="button"
             onClick={() => go(-1)}
-            disabled={current === 0}
             aria-label="Anterior"
-            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-white/60"
+            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white"
           >
             <ChevronLeft className="size-5" />
           </button>
 
           <div className="overflow-hidden">
             <ul
-              className="flex transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
-              style={{ transform: `translateX(-${current * (100 / perView)}%)` }}
+              className="flex items-stretch"
+              style={{
+                transform: `translateX(-${index * (100 / perView)}%)`,
+                transition: animate
+                  ? "transform 500ms cubic-bezier(0.25,0.46,0.45,0.94)"
+                  : "none",
+              }}
+              onTransitionEnd={handleTransitionEnd}
             >
-              {support.services.map((service) => (
+              {items.map((service, i) => (
                 <li
-                  key={service.title}
+                  key={`${service.title}-${i}`}
                   className="shrink-0 px-[calc(var(--layout-gap)/2)]"
                   style={{ width: `${100 / perView}%` }}
                 >
-                  <article className="flex h-full flex-col items-center pt-10 pb-8 text-center">
-                    <h3 className="text-body flex min-h-[64px] items-center font-normal text-white">
+                  <article className="flex h-full flex-col rounded-big border border-white-8 bg-azul-escuro/40 p-6 text-center">
+                    <h3 className="text-body font-normal text-white">
                       {service.title}
                     </h3>
-                    <p className="text-body2 mt-3 max-w-[28ch] text-white/65">
+                    <p className="text-body2 mt-2 text-white/65">
                       {service.description}
                     </p>
                     <div className="mt-8 flex flex-1 items-end justify-center">
@@ -94,9 +123,8 @@ export function Support() {
           <button
             type="button"
             onClick={() => go(1)}
-            disabled={current === maxIndex}
             aria-label="Próximo"
-            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-white/60"
+            className="shrink-0 rounded-full border border-white-8 p-2 text-white/60 transition hover:bg-white/5 hover:text-white"
           >
             <ChevronRight className="size-5" />
           </button>

@@ -12,9 +12,9 @@ export function StarShield() {
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
       <div className="mx-auto flex w-full max-w-[var(--layout-max)] flex-col gap-6">
         {/* ---------- Card hero (full width, 2 lados, altura menor) ---------- */}
-        <div className="grid grid-cols-1 overflow-hidden rounded-big md:grid-cols-2">
-          <div className="flex flex-col justify-center gap-4 bg-white p-8 md:p-12">
-            <h3 className="text-h3 md:text-h2 max-w-[16ch] font-medium text-bg">
+        <div className="group relative grid grid-cols-1 overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15 md:grid-cols-2">
+          <div className="flex flex-col justify-center gap-4 p-8 md:p-12">
+            <h3 className="text-h3 md:text-h2 max-w-[16ch] font-medium text-white">
               {hero.title}
             </h3>
             <a href={hero.cta.href} className="btn-link">
@@ -22,13 +22,13 @@ export function StarShield() {
               <ArrowUpRight className="size-4" strokeWidth={2.25} />
             </a>
           </div>
-          <div className="relative min-h-[220px] bg-azul-escuro">
+          <div className="relative min-h-[220px]">
             <Image
               src={hero.image.src}
               alt={hero.image.alt}
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
+              className="rounded-medium object-cover"
             />
           </div>
         </div>
@@ -38,11 +38,11 @@ export function StarShield() {
           {duo.map((card) => (
             <article
               key={card.title}
-              className="flex h-[420px] flex-col overflow-hidden rounded-big bg-cinza"
+              className="relative flex h-[420px] flex-col overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15"
             >
               <div className="p-8">
-                <h3 className="text-h3 font-medium text-bg">{card.title}</h3>
-                <p className="text-body2 mt-2 max-w-[44ch] text-bg/60">
+                <h3 className="text-h3 font-medium text-white">{card.title}</h3>
+                <p className="text-body2 mt-2 max-w-[44ch] text-white/60">
                   {card.description}
                 </p>
               </div>
@@ -53,7 +53,7 @@ export function StarShield() {
                   alt={card.image.alt}
                   fill
                   sizes="(min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
+                  className="rounded-medium object-cover"
                 />
               </div>
             </article>
@@ -64,21 +64,21 @@ export function StarShield() {
         {wide.map((card) => (
           <div
             key={card.title}
-            className="grid grid-cols-1 overflow-hidden rounded-big md:grid-cols-2"
+            className="relative grid grid-cols-1 overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15 md:grid-cols-2"
           >
-            <div className="flex flex-col justify-center gap-2 bg-white p-8 md:p-12">
-              <h3 className="text-h3 font-medium text-bg">{card.title}</h3>
-              <p className="text-body2 max-w-[48ch] text-bg/60">
+            <div className="flex flex-col justify-center gap-2 p-8 md:p-12">
+              <h3 className="text-h3 font-medium text-white">{card.title}</h3>
+              <p className="text-body2 max-w-[48ch] text-white/60">
                 {card.description}
               </p>
             </div>
-            <div className="relative min-h-[240px] bg-cinza">
+            <div className="relative min-h-[240px]">
               <Image
                 src={card.image.src}
                 alt={card.image.alt}
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover"
+                className="rounded-medium object-cover"
               />
             </div>
           </div>

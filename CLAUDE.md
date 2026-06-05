@@ -69,13 +69,18 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     4x). Título em `text-body2` (15px) bold. ⚠️ Trocar pelos logos reais das marcas.
   - `Support` é a seção **abaixo da Partners**: "Assistência Técnica" com **carrossel de
     serviços**. **Client component** (`"use client"`, tem estado/navegação) — único carrossel
-    com JS. Mostra 1/2/4 cards por view (mobile/tablet/desktop) via `matchMedia`; setas laterais
-    com navegação **de 1 em 1 item** (desliza a fila; índice clampado em `total − perView`,
-    setas desabilitam nos extremos, sem wrap). **Sem bolinhas.** CTA `.btn` "Entrar em contato".
-  - `StarShield` é a seção **abaixo do Support**: linha de proteções de **tema CLARO**
-    (cards de fundo branco/`cinza`, texto escuro `bg`) sobre o site escuro. Server component,
-    Tailwind, dentro do grid 1200px. Layout = pilha de cards (`flex-col gap-6`): card **hero**
-    full-width 2 colunas (texto branco + imagem) → linha **duo** (2 cards `bg-cinza`, texto em
+    com JS. Mostra 1/2/3 cards por view (mobile/tablet/desktop) via `matchMedia`; setas laterais
+    com navegação **de 1 em 1 item**. **Loop infinito de verdade:** lista **triplicada**
+    (clones nas pontas), índice começa no bloco do meio e ao fim da transição numa ponta
+    "teleporta" sem animação pro item equivalente do centro → as **setas nunca desabilitam**,
+    sem bolinhas. Cada card tem **fundo escuro** (`bg-azul-escuro/40` + `border-white-8` +
+    `rounded-big`, igual StarShield), `p-6` (24px), texto full-width centralizado. CTA `.btn`
+    "Entrar em contato".
+  - `StarShield` é a seção **abaixo do Support**: linha de proteções. Server component,
+    Tailwind, dentro do grid 1200px. Cada card herda o **estilo do painel da `StarcareLoyalty`**
+    (`bg-azul-escuro/40` + `border-white-8` + `rounded-big`), com **texto branco** (`text-white`
+    / `text-white/60`). Layout = pilha de cards (`flex-col gap-6`): card **hero**
+    full-width 2 colunas (texto + imagem) → linha **duo** (2 cards, texto em
     cima + imagem preenchendo a base) → cards **wide** (Matte, Limpa telas: texto à esquerda +
     imagem à direita) → CTA `.btn` centralizado. Imagens via `next/image` `fill` + `object-cover`.
     ⚠️ **Tudo placeholder:** imagens todas em `/images/IMG_7475.webp` e copy provisória.
@@ -106,9 +111,10 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 > não existe, adicione como token no `@theme` e registre aqui.
 
 **Cores:** `white` #ffffff · `black` #000000 · `bg` #030B0F (fundo base do site, preto
-levemente azulado) · `azul-capri` #39B6FF (primária) · `azul-escuro` #0A2540 (painéis
-do StarShield) · `realme-yellow` #F9DD60 · `cinza` #EEF0F2 (superfície clara p/ cards de
-tema claro, ex. StarShield) · neutros translúcidos `white-32/16/8` e `black-32/16/8`.
+levemente azulado) · `azul-capri` #39B6FF (primária; cards-padrão em `/15`, hover do StarShield) ·
+`azul-escuro` #0A2540 (fundo dos cards do StarShield/Support e do painel da StarcareLoyalty, em
+`/40`) · `realme-yellow` #F9DD60 · `cinza` #EEF0F2 (superfície clara — **token existe mas hoje
+sem uso**, StarShield migrou pro tema escuro) · neutros translúcidos `white-32/16/8` e `black-32/16/8`.
 
 **Tipografia** (Arboria; `letter-spacing` embutido nos tokens `text-*`: **títulos `h1/h2/h3`
 = −0.01em**, demais = −0.03em — ver Decisões 2026-06-05):
@@ -226,12 +232,11 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
     tem `pt-[128px]` próprio **e** a Categories já tem `padding-bottom` (128 desktop) → no desktop
     o respiro somado é ~256px (decisão de não mexer na Categories; revisitar se incomodar).
   - `Support`: **client component** (índice de item + `matchMedia`), único carrossel com JS.
-    1/2/4 cards por view (mobile/tablet/desktop); navegação **de 1 em 1 item** —
-    `translateX(-current*(100/perView)%)` com transição `cubic-bezier(...)`; **setas** fora da
-    área dos cards (layout `[seta][viewport][seta]`), índice clampado em `total − perView` (setas
-    desabilitam nos extremos, **sem wrap, sem bolinhas**); CTA `.btn` no fim. Card: título reserva
-    **2 linhas** (`min-h-[64px]`) pra alinhar descrição/imagem entre cards; imagem `object-contain
-    h-[180px]`; sem fundo/borda no card (texto até a borda). Hoje são **5 serviços**.
+    1/2/3 cards por view (mobile/tablet/desktop); navegação **de 1 em 1 item** —
+    `translateX(-index*(100/perView)%)` com transição `cubic-bezier(...)`; **setas** fora da
+    área dos cards (layout `[seta][viewport][seta]`). CTA `.btn` no fim. Hoje são **5 serviços**.
+    ⚠️ **Atualizado (2026-06-05):** virou **loop infinito** (não clampa mais) e os cards ganharam
+    **fundo** — ver decisão "Support v2" abaixo.
 - **(2026-06-04) Títulos de seção em Bold.** Arboria **não tem Semibold (600)** — pesos: Thin/Light/
   Book(400)/Medium(500)/Bold(700)/Black. Pedido era semibold; como não existe, o cliente optou por
   **Bold**. Aplicado em Categories/Support/Partners (`font-bold`). ⚠️ **Não há classe/componente
@@ -256,11 +261,12 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
     base do `.site-bg` e do `body`.
 
 - **(2026-06-05) `StarShield` (tema claro) + `StarcareLoyalty` (fidelidade), abaixo do Support.**
-  - **`StarShield`** introduz o **primeiro tema CLARO** do site (cards de fundo branco/`cinza`
+  - **`StarShield`** introduzia o **primeiro tema CLARO** do site (cards de fundo branco/`cinza`
     com texto escuro `bg`) sobre o fundo global escuro. Pilha de cards no grid 1200px: hero
     full-width 2-col → duo (2 cards) → wide (Matte / Limpa telas) → CTA. **Tokens de cor novos:**
     `--color-azul-escuro` #0A2540 e `--color-cinza` #EEF0F2 (superfícies claras). Imagens via
-    `next/image` `fill`+`object-cover`. Server component, Tailwind.
+    `next/image` `fill`+`object-cover`. Server component, Tailwind. ⚠️ **Revertido (2026-06-05):**
+    o tema claro foi abandonado — ver decisão "StarShield v2 (tema escuro + hover)" abaixo.
   - **`StarcareLoyalty`**: card central `max-w-[840px]` (não full-width). **Fundo do card de
     trás escurecido** (`bg-azul-escuro/40`) pra recuar e dar profundidade; os 2 cards de benefício
     embaixo seguem o **estilo dos painéis da Categories** (`bg-azul-capri/15` + `rounded-big` +
@@ -277,6 +283,29 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
   `-0.03em` → **`-0.01em`** (pedido do cliente: "aumentar levemente o espaço entre letras em
   todos os títulos"). Aplica-se a todas as seções automaticamente; corpo (`text-body`,
   `text-body2`, `text-feature`, etc.) **mantém −0.03em**.
+- **(2026-06-05) `StarShield` v2 — tema escuro + hover.** O tema claro (cards brancos/`cinza`,
+  texto escuro) foi **abandonado**: agora **cada card herda o estilo do painel da `StarcareLoyalty`**
+  — `bg-azul-escuro/40` + `border-white-8` + `rounded-big`, texto **branco** (`text-white` /
+  `text-white/60`). **Sem wrapper externo** (a pilha continua solta no grid 1200px, `flex-col gap-6`).
+  **Hover** nos 3 tipos de card (hero / duo / wide): fundo `bg-azul-escuro/40` → **`bg-azul-capri/15`**
+  (o azul dos cards menores da Starcare) + **`scale-[1.03]`**, `transition duration-500`,
+  `relative hover:z-10` pra o card crescido ficar por cima dos vizinhos. ⚠️ No hero/wide a imagem
+  `object-cover` escala junto com o texto (card inteiro). Token `cinza` ficou **órfão** (sem uso).
+- **(2026-06-05) `Support` v2 — loop infinito + cards com fundo.**
+  - **Loop infinito de verdade:** a lista de serviços é **triplicada** (`[...s, ...s, ...s]`),
+    o índice começa no **bloco do meio** (`useState(n)`) e a navegação só incrementa/decrementa.
+    No `onTransitionEnd`, se o índice saiu do bloco do meio (`>= 2n` ou `< n`), faz um **teleporte
+    sem animação** (`transition: none` num render, reabilitada no `requestAnimationFrame` seguinte)
+    pro item equivalente do centro. Efeito: rola contínuo nos dois sentidos e **as setas nunca
+    desabilitam** (removido o `disabled`/clamp). Keys precisam de índice (`${title}-${i}`) porque há
+    clones. ⚠️ Em telas muito lentas o teleporte pode piscar; se acontecer, aumentar os clones.
+  - **Cards com fundo:** cada `<article>` agora usa **`bg-azul-escuro/40` + `border-white-8` +
+    `rounded-big`** (mesmo card do StarShield), `p-6` (24px todos os lados), **texto full-width**
+    centralizado (tirado o `max-w-[28ch]` e o `items-center`). O `<li>` mantém o gutter
+    (`px-[calc(var(--layout-gap)/2)]`); `items-stretch` no `<ul>` deixa todos os cards da mesma altura.
+  - **Espaçamentos:** título do card sem `min-h-[64px]` (descrição colada, `mt-2`) — ⚠️ títulos de
+    1 vs 2 linhas podem desalinhar a descrição entre cards (imagem ancora na base via `flex-1`, então
+    o card no geral fica alinhado). Padding cabeçalho↔carrossel subiu pra `mt-16` (= o do CTA, 64px).
 
 ## Hurdles & Correções (log)
 
@@ -313,3 +342,11 @@ texto branco bold), `.btn-sm` (variante menor), `.btn-link` ("Comprar ↗", link
       placeholder (`images/IMG_7475.webp` no StarShield; `startech-care.webp` no Starcare).
 - [ ] **Padronizar título de seção:** StarShield/Starcare usam Medium (500); as demais, Bold (700).
       Definir o padrão e uniformizar (possível `<SectionTitle>`).
+- [ ] **Hover do StarShield — imagem escala junto:** no hero/wide o card inteiro (texto + imagem
+      `object-cover`) faz `scale-[1.03]`. Decidir se fica assim ou se só o painel de texto muda de
+      cor/escala (imagem estática).
+- [ ] **Support — desalinhamento de descrição:** sem o `min-h` no título do card, serviços com
+      título de 1 vs 2 linhas começam a descrição em alturas diferentes. Revisitar (talvez um
+      `min-h` menor) se incomodar com a copy definitiva.
+- [ ] **Support — teleporte do loop:** validar em telas lentas se o "snap" silencioso do carrossel
+      infinito não pisca; se piscar, aumentar o nº de clones.
