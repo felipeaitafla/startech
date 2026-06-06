@@ -162,6 +162,11 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     rotateY(...)`) — **não** usa `perspective`/`preserve-3d` no pai, senão o hit-testing do `:hover`
     quebra. Lista **duplicada** (`[...images, ...images]`); a animação translada `-50% → 0` (= 1
     cópia) → loop seamless. Não pausa no hover (segue "sempre em movimento").
+    **Responsivo por LARGURA** (breakpoints): card 290/230/180 + overlap −95/−85/−72 (desktop/
+    tablet/mobile); peek `margin-top` −154/−142/0. **+ Responsivo por ALTURA:** como a Hero é
+    `h-screen`, em viewports baixos ela encolhe e os bullets descem — então o peek é reduzido por
+    `@media (min-width:768px) and (max-height:…)`: **−64px ≤820px** e **−8px ≤720px** (cobre
+    1490×670 e laptops 1366×768) p/ não sobrepor os bullets. Mobile (≤767px) já tem peek 0.
   - `Categories` é a seção logo **abaixo do FanCards**: **painel único full-width** "iPhones
     seminovos" (o card de "iPhones novos" foi **removido a pedido**), dentro do **grid central de
     1200px** (`--layout-max`). Server component, Tailwind. Card `bg-azul-escuro/40` + `border-white-8`
@@ -519,6 +524,15 @@ solto p/ CTA de WhatsApp — usar o componente).
   `public/social.png` (1200×630) ligados. `metadataBase` via `NEXT_PUBLIC_SITE_URL` (fallback
   **`startechcelulares.com.br`**, domínio de produção). Deploy de teste atual na **Vercel**
   (`startech-rho.vercel.app`).
+- **(2026-06-06) `FanCards` — peek reduzido por ALTURA de viewport (fim da sobreposição com os
+  bullets da Hero).** O problema NÃO era largura e sim **altura**: numa janela baixa (ex.: **1490×670**,
+  laptops **1366×768**) a Hero (`h-screen`) encolhe, os bullets descem e o **peek fixo** (`-154px`)
+  encostava/sobrepunha. **1ª tentativa (descartada):** deixar tudo fluido por largura (clamp/vw) —
+  mirou no eixo errado e ainda mexeu nos tamanhos calibrados (cliente pediu p/ reverter). **Correção
+  final:** mantidos os valores calibrados (290/230/180, peek −154/−142/0 por largura) **+ media
+  queries por ALTURA** `@media (min-width:768px) and (max-height:820px){ -64px }` e `max-height:720px
+  { -8px }`. Lição: peek num elemento que invade uma seção `h-screen` precisa reagir à **altura** do
+  viewport, não à largura.
 - **(2026-06-05) `CursorGlow` — cursor de luz laranja com rastro.** Pedido do cliente. Implementado
   com **canvas** (não DOM/divs) p/ o efeito de "luz": pontos que decaem desenhados com
   `globalCompositeOperation="lighter"` (soma de luz = bloom). Canvas fixo `z-[100]` `pointer-events-none`,

@@ -20,7 +20,10 @@
   overflow-x: clip;
   padding: 96px var(--layout-margin);
   background: transparent;
-  /* Puxa a seção pra cima pra ~15% dos cards invadirem a Hero (h-screen). */
+  /* Puxa a seção pra cima pra ~15% dos cards invadirem a Hero (h-screen).
+     ⚠️ Reduzido por ALTURA de viewport mais abaixo: como a Hero é h-screen, em
+     telas baixas (ex.: 1490×670, laptops 1366×768) ela encolhe, os bullets descem
+     e este peek encostaria neles — então o peek diminui conforme a altura cai. */
   margin-top: -154px;
   position: relative;
   z-index: 1;
@@ -93,7 +96,7 @@
   transform: perspective(2000px) rotateY(28deg) translateX(120px);
 }
 
-/* ---------------- responsivo ---------------- */
+/* ---------------- responsivo: LARGURA ---------------- */
 @media (max-width: 1023px) {
   .fan {
     margin-top: -142px;
@@ -122,6 +125,21 @@
   }
   .card:hover ~ .card {
     transform: perspective(2000px) rotateY(28deg) translateX(80px);
+  }
+}
+
+/* ---------------- responsivo: ALTURA (≥768px de largura) ----------------
+   A Hero é h-screen; em viewports baixos ela encolhe e os bullets descem. Reduz
+   o peek p/ manter distância mínima e não sobrepor os bullets. (No mobile o peek
+   já é 0, por isso só aplica a partir de 768px.) */
+@media (min-width: 768px) and (max-height: 820px) {
+  .fan {
+    margin-top: -64px;
+  }
+}
+@media (min-width: 768px) and (max-height: 720px) {
+  .fan {
+    margin-top: -8px;
   }
 }
 
