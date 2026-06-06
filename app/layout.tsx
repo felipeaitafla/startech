@@ -23,9 +23,10 @@ const SITE_TITLE = "StarTech | iPhones Seminovos e Novos em Chapecó – SC";
 const SITE_DESCRIPTION =
   "iPhones seminovos e lacrados com até 2 anos de garantia, direto do canal oficial Apple. Assistência técnica especializada em Chapecó – SC. Parcele em até 12x sem juros.";
 
-// Domínio base p/ URLs absolutas (imagem OG). Padrão = domínio do e-mail da loja;
-// sobrescrevível por env (definir NEXT_PUBLIC_SITE_URL na Netlify com o domínio final).
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://startechcelulares.com";
+// Domínio base p/ URLs absolutas (imagem OG). Padrão = domínio de produção;
+// sobrescrevível por env (definir NEXT_PUBLIC_SITE_URL no host — ex.: a URL da Vercel
+// em previews: https://startech-rho.vercel.app).
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://startechcelulares.com.br";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

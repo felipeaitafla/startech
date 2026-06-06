@@ -49,18 +49,19 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
   A instância é exposta via `lib/lenis.ts` (`setLenis`/`scrollToTop`) p/ outros componentes
   scrollarem pelo mesmo motor — ex.: o **logo do Header volta ao topo** com `scrollToTop()`.
 - **Ícones: `lucide-react`** (+ glyph WhatsApp inline no Header, que o lucide não tem).
-- **Deploy: Netlify** — `netlify.toml` configurado (plugin `@netlify/plugin-nextjs`).
-  Git no GitHub: `felipeaitafla/startech` (`origin`, branch `main`). **Falta linkar na Netlify**
-  — será feito na entrega do projeto.
+- **Deploy:** em **teste na Vercel** (`startech-rho.vercel.app`); produção pretendida
+  `startechcelulares.com.br`. Existe `netlify.toml` (plugin `@netlify/plugin-nextjs`) de quando o
+  alvo era Netlify — ⚠️ decidir o host final. Git no GitHub: `felipeaitafla/startech` (`origin`,
+  `main`). ⚠️ **Env vars no host:** `FEEDFRAMER_API_KEY` (feed Instagram) e `NEXT_PUBLIC_SITE_URL`.
 
 ## Estrutura de arquivos
 
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, **metadata/SEO**
   (title + description + Open Graph + Twitter card + keywords; consts `SITE_TITLE`/`SITE_DESCRIPTION`).
   **Favicon** `public/icon.webp` (via `metadata.icons`) e **imagem OG/social** `public/social.png`
-  (1200×630). `metadataBase` = `NEXT_PUBLIC_SITE_URL` ou fallback `https://startechcelulares.com`.
-  ⚠️ **Confirmar o domínio final** e setar `NEXT_PUBLIC_SITE_URL` na Netlify (a URL absoluta da
-  imagem OG depende disso).
+  (1200×630). `metadataBase` = `NEXT_PUBLIC_SITE_URL` ou fallback **`https://startechcelulares.com.br`**
+  (domínio de produção). Em teste na **Vercel** (`https://startech-rho.vercel.app`) — setar
+  `NEXT_PUBLIC_SITE_URL` lá se quiser a OG correta no preview.
   Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>`, o
   `<SmoothScroll/>` (Lenis, smooth scroll global — não renderiza nada), o `<WhatsAppFloat/>`
   (botão flutuante de WhatsApp, fixo no canto inf. direito) e o `<CursorGlow/>` (cursor de luz
@@ -95,14 +96,16 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
   - `InstagramFeed` é a seção **"Confira nosso Instagram"** (antes da VisitStartech): 2 lados no
     grid 1200px, centralizados vertical (`items-center`), **esquerda ~35% / direita o resto**
     (`md:grid-cols-[35fr_65fr]`); no **mobile empilha** (`grid-cols-1`). **Esquerda**: handle
-    `@startechcelulares` (`text-body2 text-white/60`), título `text-h3 md:text-h2 font-bold`, e
-    **2 linhas de pills** (sem clique: `rounded-full border border-white-8 bg-azul-escuro/40`).
-    **Direita**: grade **4×2** (`grid-cols-2 md:grid-cols-4 gap-3`) de imagens **quadradas**
-    (`aspect-square`, `rounded-medium`), cada uma um `<a target="_blank">` p/ o post (hover
-    `scale-105`). **Server component.** Copy (handle/título/tags) em `content/site.ts` (`instagram`);
-    os **posts ficam hardcoded** no array `instagramPosts` no topo do componente — placeholders
-    `picsum.photos`, com `// TODO: substituir por fetch ao endpoint do Behold`. ⚠️ `<img>` puro
-    (feed externo) — quando vier a API, trocar `imageUrl`/`postUrl` mantendo a forma `{id,imageUrl,postUrl}`.
+    `@startechcelulares` (link pro perfil), título `text-h3 md:text-h2 font-bold`, e **2 linhas de
+    pills** (sem clique: `rounded-full border border-white-8 bg-azul-escuro/40`). **Direita**: grade
+    **3×2 desktop / 2×3 mobile** (`grid-cols-2 md:grid-cols-3 gap-3`) das **fotos reais do feed**
+    (`aspect-square`, `rounded-medium`), cada uma um `<a target="_blank">` pro post (hover `scale-105`).
+    **Server component ASYNC**: busca os **6 posts no Feedframer** (proxy da API do Instagram) em
+    `getPosts()` — `fetch` server-side com a key **`FEEDFRAMER_API_KEY`** (env, **nunca no client**)
+    + cache **ISR `revalidate: 3600`** (1h). Endpoint `feedframer.com/api/v1/me?api_key=…&page[size]=6`;
+    campos usados: `id`/`permalink`/`mediaUrl`/`thumbnailUrl` (poster de vídeo)/`altText`/`caption`.
+    **Fallback gracioso** se sem key/API fora: card "Ver no Instagram" pro perfil. `<img>` puro (CDN
+    do Instagram — evita `remotePatterns`). Copy (handle/título/tags) em `content/site.ts` (`instagram`).
   - `VisitStartech` é a seção **"Vem conhecer a Startech"** (antes da FinalCta): **card
     arredondado** no estilo do Footer (`rounded-big` + `border-white-8` + `bg-azul-escuro/40`,
     `overflow-hidden`) com **2 colunas de largura igual** (`md:grid-cols-2`) dentro do grid 1200px.
@@ -159,15 +162,15 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     rotateY(...)`) — **não** usa `perspective`/`preserve-3d` no pai, senão o hit-testing do `:hover`
     quebra. Lista **duplicada** (`[...images, ...images]`); a animação translada `-50% → 0` (= 1
     cópia) → loop seamless. Não pausa no hover (segue "sempre em movimento").
-  - `Categories` é a seção logo **abaixo do FanCards**: 2 painéis lado a lado
-    (iPhones seminovos | iPhones novos) dentro do **grid central de 1200px** (`--layout-max`).
-    Server component, Tailwind. **Cada painel é um link de WhatsApp** (o `<article>` virou `<a>`
-    `target="_blank"`): fundo escuro padrão `bg-azul-escuro/40` + `border-white-8` + `rounded-big`,
-    **hover** `bg-azul-capri/15` + `scale-[1.03]` (`duration-500`, `relative hover:z-10`) — mesmo
-    padrão do StarShield. Texto centralizado no topo (título `text-h3` **28px fixo** `font-bold`),
-    imagem (`/public/*.webp`, `object-contain`, `h-[400px]`) na base; "Comprar ↗" é um `<span>`
-    (não `<a>` aninhado). Link via `whatsappLink(panel.cta.message)` — **mensagem pré-definida por
-    card** (".../iPhones seminovos." vs ".../iPhones novos.").
+  - `Categories` é a seção logo **abaixo do FanCards**: **painel único full-width** "iPhones
+    seminovos" (o card de "iPhones novos" foi **removido a pedido**), dentro do **grid central de
+    1200px** (`--layout-max`). Server component, Tailwind. Card `bg-azul-escuro/40` + `border-white-8`
+    + `rounded-big` com **2 colunas** (`md:grid-cols-2`, `items-center`): **texto à esquerda**
+    (título `text-h3 md:text-h2 font-bold` + descrição `text-body2` + **`WhatsAppButton`** "Comprar"
+    — botão pill padrão, não mais o `.btn-link`) e **imagem à direita** (`object-contain`,
+    `h-[340px] md:h-[440px]`). No mobile empilha (texto/imagem). **Hover no card**
+    (`hover:scale-[1.02]` + `hover:bg-azul-capri/15`, `transition duration-500`) — visual, mas o
+    clicável é o botão (o card não é mais link). Copy: `categories.panels[0]` em `content/site.ts`.
   - `Partners` ⚠️ **OCULTA** (comentada no `page.tsx` a pedido do cliente; componente mantido).
     É a seção **abaixo da Categories**: faixa "Trabalhamos com as melhores marcas".
     Server component, dentro do grid 1200px. **Logos ainda placeholder** (logo Startech repetida
@@ -514,7 +517,8 @@ solto p/ CTA de WhatsApp — usar o componente).
   **description** (até 2 anos de garantia, canal oficial Apple, assistência em Chapecó, 12x sem juros),
   + **Open Graph** + **Twitter card** + keywords. **Favicon** `public/icon.webp` e **imagem OG**
   `public/social.png` (1200×630) ligados. `metadataBase` via `NEXT_PUBLIC_SITE_URL` (fallback
-  `startechcelulares.com`). ⚠️ Confirmar domínio final e setar a env na Netlify.
+  **`startechcelulares.com.br`**, domínio de produção). Deploy de teste atual na **Vercel**
+  (`startech-rho.vercel.app`).
 - **(2026-06-05) `CursorGlow` — cursor de luz laranja com rastro.** Pedido do cliente. Implementado
   com **canvas** (não DOM/divs) p/ o efeito de "luz": pontos que decaem desenhados com
   `globalCompositeOperation="lighter"` (soma de luz = bloom). Canvas fixo `z-[100]` `pointer-events-none`,
@@ -530,13 +534,16 @@ solto p/ CTA de WhatsApp — usar o componente).
     Valores atuais: raio do rastro **`24*life + 5`** e núcleo (`coreR`) **`10`** (passou por
     `11`/`2` → `15`/`3` → `24`/`5`; núcleo `5`→`7`→`10`). Alpha mantido em `0.22` p/ crescer sem
     voltar a amarelar. Ajustar esses dois números p/ recalibrar tamanho.
-- **(2026-06-05) Seção `InstagramFeed` (antes da VisitStartech).** Feed do Instagram com **dados
-  hardcoded** prontos p/ API: array `instagramPosts` (`{id,imageUrl,postUrl}`, 8 posts placeholder
-  `picsum.photos`) no topo do componente, com `// TODO: substituir por fetch ao endpoint do Behold`.
-  Layout 2 lados (esq ~35% chamada+pills / dir grade 4×2 de quadrados clicáveis), empilha no mobile
-  (grade vira 2 col). Copy (handle/título/tags) em `content/site.ts` (`instagram`) — convenção de
-  separar copy; só os **posts** ficam no componente (são "dados" da futura API). `<img>` puro
-  (feed externo, evita configurar `remotePatterns` do next/image). Envolvida por `<Reveal>` no `page.tsx`.
+- **(2026-06-05) Seção `InstagramFeed` (antes da VisitStartech).** v1 nasceu com **8 posts
+  hardcoded** (`picsum.photos`) num grid 4×2 — placeholder p/ API. **v2 (mesmo dia):** trocada pela
+  integração real com o **Feedframer** (proxy da API do Instagram), **6 posts**, grade 3×2.
+  Componente virou **server component async** que faz `fetch` em `getPosts()` com a key
+  **`FEEDFRAMER_API_KEY`** (env, **server-side** — nunca exposta no client) + **ISR `revalidate 3600`**.
+  Endpoint `feedframer.com/api/v1/me?api_key=…&page[size]=6`; mapeia `id`/`permalink`/`mediaUrl`/
+  `thumbnailUrl`. **Fallback** "Ver no Instagram" se sem key/API fora. Validado: build prerenderiza
+  `/` como estático com revalidate 1h; API testada (HTTP 200, 6 posts de `startechcelulares`).
+  ⚠️ **Netlify:** setar `FEEDFRAMER_API_KEY` nas env vars do site. (Async server component passa
+  como children do `<Reveal>` client normalmente.) Por que não Behold: o cliente escolheu Feedframer.
 - **(2026-06-05) Header mobile + logo como "voltar ao topo" + logo maior.** Pedido do cliente:
   (1) **logo um pouco maior** — `Logo` default `h-9/md:h-10` → **`h-10/md:h-12`**; (2) **mobile só
   com o logo** — redes sociais e CTA viram `hidden md:flex`; (3) **logo = botão p/ subir ao
@@ -625,6 +632,8 @@ solto p/ CTA de WhatsApp — usar o componente).
       exatas quando o frame do Figma estiver à mão.
 - [x] **~~Conectar Git remoto.~~** Repo no GitHub: `felipeaitafla/startech` (`origin`, branch `main`).
 - [ ] **Conectar Netlify** (link de deploy automático) — **será feito na entrega do projeto.**
+      ⚠️ Ao linkar, setar as **env vars**: `FEEDFRAMER_API_KEY` (feed do Instagram) e
+      `NEXT_PUBLIC_SITE_URL` (domínio final, p/ a imagem OG). Ver `.env.example`.
 - [ ] **StarShield/Starcare — conteúdo definitivo:** imagens do StarShield **já são reais**
       (`/public/starshield`); falta a **copy definitiva** (Basic/Lens/Matte). Starcare ainda usa
       `startech-care.webp` (logo) — ok.

@@ -24,9 +24,9 @@ export const nav = {
 } as const;
 
 export const hero = {
-  title: "iPhones seminovos e lacrados, com até 2 anos de garantia",
+  title: "iPhones seminovos com até 2 anos de garantia",
   subtitle:
-    "Loja referência em Chapecó e região: iPhones direto do canal oficial Apple, com acessórios e assistência técnica especializada.",
+    "Loja referência em Chapecó e região : iPhones direto do canal oficial Apple, Acessórios e assistência técnica especializada.",
   // trechos do subtítulo que vão para branco 100%
   subtitleHighlights: ["Loja referência em Chapecó e região"],
   cta: { label: "Falar com consultor", message: "Olá, Startech!" },
@@ -58,7 +58,8 @@ export const hero = {
   ],
 } as const;
 
-/* Seção de 2 painéis (Seminovos | iPhones novos) logo abaixo do FanCards. */
+/* Seção Categories — painel único full-width "iPhones seminovos" (texto + imagem).
+   ⚠️ O card de "iPhones novos" foi removido a pedido (ver git se precisar voltar). */
 export const categories = {
   panels: [
     {
@@ -71,17 +72,6 @@ export const categories = {
           "Olá, Startech! Venho do site e desejo saber mais sobre iPhones seminovos.",
       },
       image: { src: "/iphones/seminovos.webp", alt: "iPhone seminovo Startech" },
-    },
-    {
-      title: "iPhones novos",
-      description:
-        "Só trabalhamos com a versão EUA ou Anatel. Únicas a ativarem garantia de fábrica no Brasil, e caso seja necessário, nós te ajudamos.",
-      cta: {
-        label: "Comprar",
-        message:
-          "Olá, Startech! Venho do site e desejo saber mais sobre iPhones novos.",
-      },
-      image: { src: "/iphones/novos.webp", alt: "iPhone novo lacrado" },
     },
   ],
 } as const;
@@ -211,8 +201,8 @@ export const acessorios = {
 } as const;
 
 /* Seção "Instagram" — chamada (esquerda) + grade de posts (direita).
-   ⚠️ Só a COPY mora aqui; os POSTS ficam hardcoded no componente
-   (`instagramPosts`), destinados à futura integração com a API (Behold). */
+   Só a COPY mora aqui; os POSTS vêm do Feedframer (API), buscados no servidor
+   dentro do componente (`FEEDFRAMER_API_KEY`). */
 export const instagram = {
   handle: "@startechcelulares",
   title: "Confira nosso Instagram",

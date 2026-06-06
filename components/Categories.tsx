@@ -1,43 +1,45 @@
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
-import { categories, whatsappLink } from "@/content/site";
+import { categories } from "@/content/site";
+import { WhatsAppButton } from "./WhatsAppButton";
 
+/* Seção Categories — painel único full-width "iPhones seminovos": 2 colunas
+   (texto à esquerda, imagem à direita), centralizadas vertical. CTA = botão pill
+   (WhatsAppButton). No mobile empilha (texto em cima, imagem embaixo).
+   Server component, dentro do grid 1200px. Copy em `content/site.ts`. */
 export function Categories() {
+  const panel = categories.panels[0]; // iPhones seminovos (card de novos removido)
+
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
-      <div className="mx-auto grid w-full max-w-[var(--layout-max)] grid-cols-1 gap-6 md:grid-cols-2">
-        {categories.panels.map((panel) => (
-        <a
-          key={panel.title}
-          href={whatsappLink(panel.cta.message)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative flex flex-col overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 ease-in-out hover:z-10 hover:scale-[1.03] hover:bg-azul-capri/15"
-        >
-          {/* texto — parte superior, centralizado */}
-          <div className="flex flex-col items-center px-8 pt-10 text-center md:px-10 md:pt-12">
-            <h2 className="text-h3 font-bold text-white">{panel.title}</h2>
-            <p className="text-body2 mt-4 max-w-[56ch] text-white/63">
+      <div className="mx-auto w-full max-w-[var(--layout-max)]">
+        <div className="group grid grid-cols-1 items-center gap-8 overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 px-8 py-10 pl-10 transition duration-500 ease-in-out hover:scale-[1.02] hover:bg-azul-capri/15 md:grid-cols-2 md:gap-10 md:px-12 md:py-14 md:pl-20">
+          {/* texto — esquerda */}
+          <div className="flex flex-col items-start text-left">
+            <h2 className="text-h3 md:text-h2 font-bold text-white">
+              {panel.title}
+            </h2>
+            <p className="text-body2 mt-4 max-w-[52ch] text-white/63">
               {panel.description}
             </p>
-            <span className="btn-link mt-6">
-              {panel.cta.label}
-              <ArrowUpRight className="size-4" strokeWidth={2.25} />
-            </span>
+            <div className="mt-8">
+              <WhatsAppButton
+                message={panel.cta.message}
+                label={panel.cta.label}
+              />
+            </div>
           </div>
 
-          {/* imagem — metade inferior, centralizada, sem crop nem radius */}
-          <div className="mt-8 flex flex-1 items-end justify-center px-8 pb-10 md:px-10 md:pb-12">
+          {/* imagem — direita */}
+          <div className="flex items-center justify-center">
             <Image
               src={panel.image.src}
               alt={panel.image.alt}
-              width={520}
-              height={520}
-              className="h-[400px] w-auto object-contain"
+              width={560}
+              height={560}
+              className="h-[340px] w-auto object-contain md:h-[440px]"
             />
           </div>
-        </a>
-        ))}
+        </div>
       </div>
     </section>
   );

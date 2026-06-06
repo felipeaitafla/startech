@@ -29,3 +29,6 @@ next-env.d.ts
 
 # netlify
 .netlify
+
+# log temporário do dev server (uso local)
+devlog.txt

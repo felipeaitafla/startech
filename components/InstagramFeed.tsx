@@ -1,58 +1,44 @@
+import { Instagram } from "lucide-react";
 import { instagram } from "@/content/site";
 
-/* Posts hardcoded (placeholder) — preparado p/ futura integração com API.
-   Cada item tem a forma que o endpoint deve devolver: { id, imageUrl, postUrl }. */
-// TODO: substituir por fetch ao endpoint do Behold
-const instagramPosts = [
-  {
-    id: 1,
-    imageUrl: "https://picsum.photos/300/300?random=1",
-    postUrl: "https://instagram.com/startechcelulares",
-  },
-  {
-    id: 2,
-    imageUrl: "https://picsum.photos/300/300?random=2",
-    postUrl: "https://instagram.com/startechcelulares",
-  },
-  {
-    id: 3,
-    imageUrl: "https://picsum.photos/300/300?random=3",
-    postUrl: "https://instagram.com/startechcelulares",
-  },
-  {
-    id: 4,
-    imageUrl: "https://picsum.photos/300/300?random=4",
-    postUrl: "https://instagram.com/startechcelulares",
-  },
-  {
-    id: 5,
-    imageUrl: "https://picsum.photos/300/300?random=5",
-    postUrl: "https://instagram.com/startechcelulares",
-  },
-  {
-    id: 6,
-    imageUrl: "https://picsum.photos/300/300?random=6",
-    postUrl: "https://instagram.com/startechcelulares",
-  },
-  {
-    id: 7,
-    imageUrl: "https://picsum.photos/300/300?random=7",
-    postUrl: "https://instagram.com/startechcelulares",
-  },
-  {
-    id: 8,
-    imageUrl: "https://picsum.photos/300/300?random=8",
-    postUrl: "https://instagram.com/startechcelulares",
-  },
-];
+/* Posts vindos do Feedframer (proxy da API do Instagram). Busca SERVER-SIDE
+   (a API key é secreta, fica em FEEDFRAMER_API_KEY — nunca exposta no client),
+   com cache ISR de 1h. Doc: https://feedframer.com/docs/rest-api */
+type FeedframerPost = {
+  id: string;
+  permalink: string;
+  mediaUrl: string;
+  thumbnailUrl: string | null;
+  mediaType: string;
+  altText: string | null;
+  caption: string | null;
+};
+
+const POST_COUNT = 6;
+
+async function getPosts(): Promise<FeedframerPost[]> {
+  const key = process.env.FEEDFRAMER_API_KEY;
+  if (!key) return []; // sem key (ex.: env não setada) -> fallback gracioso
+  try {
+    const res = await fetch(
+      `https://feedframer.com/api/v1/me?api_key=${key}&page[size]=${POST_COUNT}`,
+      { next: { revalidate: 3600 } }, // revalida 1x/h; não bate na API a cada request
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as { posts?: FeedframerPost[] };
+    return (data.posts ?? []).slice(0, POST_COUNT);
+  } catch {
+    return []; // rede/API fora do ar -> não quebra a página
+  }
+}
 
 /* Seção Instagram — 2 lados centralizados verticalmente (esquerda ~35%, direita o
    resto). Esquerda: handle + título + 2 linhas de pills (sem clique). Direita: grade
-   4×2 de imagens quadradas clicáveis (abrem o post em nova aba). Mobile: empilha e a
-   grade vira 2 colunas. Server component (só links). Copy em `content/site.ts`;
-   posts no array `instagramPosts` acima. */
-export function InstagramFeed() {
-  const { handle, title, tags } = instagram;
+   3×2 (desktop) / 2×3 (mobile) das fotos reais do feed (clicáveis, abrem o post em
+   nova aba). Server component async. Copy em `content/site.ts` (`instagram`). */
+export async function InstagramFeed() {
+  const { handle, title, tags, profileUrl } = instagram;
+  const posts = await getPosts();
 
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
@@ -60,7 +46,14 @@ export function InstagramFeed() {
         {/* ---------- Lado esquerdo: chamada + tags ---------- */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <span className="text-body2 text-white/60">{handle}</span>
+            <a
+              href={profileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-body2 text-white/60 transition-colors ease-in-out hover:text-white"
+            >
+              {handle}
+            </a>
             <h2 className="text-h3 md:text-h2 font-bold text-white">{title}</h2>
           </div>
 
@@ -82,26 +75,39 @@ export function InstagramFeed() {
         </div>
 
         {/* ---------- Lado direito: grade de posts ---------- */}
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {instagramPosts.map((post) => (
-            <a
-              key={post.id}
-              href={post.postUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Abrir post ${post.id} no Instagram`}
-              className="group relative aspect-square overflow-hidden rounded-medium border border-white-8"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element -- feed externo (placeholder p/ API) */}
-              <img
-                src={post.imageUrl}
-                alt={`Post do Instagram da Startech ${post.id}`}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-              />
-            </a>
-          ))}
-        </div>
+        {posts.length > 0 ? (
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            {posts.map((post) => (
+              <a
+                key={post.id}
+                href={post.permalink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={post.caption?.slice(0, 80) || "Abrir post no Instagram"}
+                className="group relative aspect-square overflow-hidden rounded-medium border border-white-8"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- feed externo (CDN do Instagram) */}
+                <img
+                  src={post.thumbnailUrl ?? post.mediaUrl}
+                  alt={post.altText ?? "Publicação da Startech no Instagram"}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                />
+              </a>
+            ))}
+          </div>
+        ) : (
+          /* fallback gracioso (sem key / API fora): link pro perfil */
+          <a
+            href={profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex aspect-[2/1] items-center justify-center gap-3 rounded-big border border-white-8 bg-azul-escuro/40 text-white/73 transition-colors ease-in-out hover:text-white md:aspect-auto md:min-h-[280px]"
+          >
+            <Instagram className="size-6 text-azul-capri" />
+            <span className="text-lead">Ver no Instagram</span>
+          </a>
+        )}
       </div>
     </section>
   );
