@@ -206,7 +206,7 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     suave; por isso os cards **não usam** a utility `transition` do Tailwind (a transição de transform
     + cores vive no próprio `.ss-card`). P/ ajustar, editar `.ss-card`. Layout = pilha de cards (`flex-col gap-6`): card **hero**
     full-width 2 colunas (texto + imagem) → linha **duo** (2 cards, texto em
-    cima + imagem preenchendo a base) → cards **wide** (Matte, Limpa telas: texto à esquerda +
+    cima + imagem preenchendo a base) → cards **wide** (Matte, Capinhas: texto à esquerda +
     imagem à direita) → CTA `.btn` centralizado. Imagens via `next/image` `fill` + `object-cover`
     **todas na proporção original** (`width`/`height` intrínsecos vindos da copy, `w-full h-auto`,
     **sem `fill`/crop**), com inset `p-4` + `rounded-medium` (no duo: `px-4 pb-4`, topo já espaçado
@@ -214,7 +214,7 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
     (`h-[420px]` removido) — como as imagens têm proporções diferentes, o `grid` (`items-stretch`)
     iguala as alturas e o `mt-auto` cola a imagem na base.
     **Imagens reais** em `/public/starshield` (`intro` → hero; `pelicula` → Basic; `lens` → Lens;
-    `matte` → Matte; `limpa-telas` → Limpa telas). ⚠️ **Copy ainda provisória** (Basic/Lens/Matte).
+    `matte` → Matte; `capinhas` → Capinhas). ⚠️ **Copy ainda provisória** (Basic/Lens/Matte).
     No **card hero** o título é "Proteja o seu aparelho com" + a **logo `starshield-logo.webp`**
     (em vez da palavra "StarShield"; `<Image>` `h-7 md:h-9 w-auto self-start` — o `self-start` evita
     o stretch horizontal no flex-col; alt="StarShield").
@@ -263,7 +263,7 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
   `public/assistencia/` — **fotos reais** dos 5 serviços do `Support` (`tela`/`placa`/`bateria`/
   `transfere`/`pc`). `public/` (raiz) — `startech-care.webp` (logo) p/ `StarcareLoyalty`.
   `public/starshield/` — **fotos reais** do `StarShield` (`intro`/`pelicula`/`lens`/`matte`/
-  `limpa-telas`). `public/loja/` — fotos da loja (`loja`/`close-up`/`fotos-clientes`), p/ a
+  `capinhas`). `public/loja/` — fotos da loja (`loja`/`close-up`/`fotos-clientes`), p/ a
   `VisitStartech`. `public/acessorios/` — **fotos reais** (`1-capinha`/`2-capinha-kit`/
   `3-carregador`/`4-fone`) p/ `Acessorios`. ⚠️ `broken.webp` e os logos de marca
   (`apple-white-logo`/`iwill-logo`/`rockspace-logo`) foram **deletados** (não mais usados).
@@ -456,7 +456,7 @@ solto p/ CTA de WhatsApp — usar o componente).
 - **(2026-06-05) `StarShield` (tema claro) + `StarcareLoyalty` (fidelidade), abaixo do Support.**
   - **`StarShield`** introduzia o **primeiro tema CLARO** do site (cards de fundo branco/`cinza`
     com texto escuro `bg`) sobre o fundo global escuro. Pilha de cards no grid 1200px: hero
-    full-width 2-col → duo (2 cards) → wide (Matte / Limpa telas) → CTA. **Tokens de cor novos:**
+    full-width 2-col → duo (2 cards) → wide (Matte / Capinhas) → CTA. **Tokens de cor novos:**
     `--color-azul-escuro` #0A2540 e `--color-cinza` #EEF0F2 (superfícies claras). Imagens via
     `next/image` `fill`+`object-cover`. Server component, Tailwind. ⚠️ **Revertido (2026-06-05):**
     o tema claro foi abandonado — ver decisão "StarShield v2 (tema escuro + hover)" abaixo.

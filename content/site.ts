@@ -152,9 +152,9 @@ export const starshield = {
       image: { src: "/starshield/matte.webp", alt: "StarShield Matte", width: 789, height: 600 },
     },
     {
-      title: "Limpa telas",
-      description: "A tela do seu celular sempre limpa",
-      image: { src: "/starshield/limpa-telas.webp", alt: "Limpa telas StarShield", width: 1067, height: 600 },
+      title: "Capinhas",
+      description: "Estilo e proteção que combinam com o seu iPhone.",
+      image: { src: "/starshield/capinhas.webp", alt: "Capinhas StarShield", width: 810, height: 512 },
     },
   ],
   cta: {
