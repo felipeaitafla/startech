@@ -519,7 +519,7 @@ solto p/ CTA de WhatsApp — usar o componente).
     (17px) ficou ÓRFÃO** (sem uso; calibração antiga descartada).
 - **(2026-06-05) SEO/metadata atualizados.** O `metadata` do `layout.tsx` estava com a copy antiga
   ("Smartphones... 1 ano"). Novo **title** "StarTech | iPhones Seminovos e Novos em Chapecó – SC" e
-  **description** (até 2 anos de garantia, canal oficial Apple, assistência em Chapecó, 12x sem juros),
+  **description** (até 2 anos de garantia, canal oficial Apple, assistência em Chapecó, 18x sem juros),
   + **Open Graph** + **Twitter card** + keywords. **Favicon** `public/icon.webp` e **imagem OG**
   `public/social.png` (1200×630) ligados. `metadataBase` via `NEXT_PUBLIC_SITE_URL` (fallback
   **`startechcelulares.com.br`**, domínio de produção). Deploy de teste atual na **Vercel**

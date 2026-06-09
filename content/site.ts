@@ -45,8 +45,8 @@ export const hero = {
     },
     {
       icon: "installments" as FeatureIcon,
-      text: "Parcelamento em até 12x sem juros",
-      highlights: ["12x sem juros"],
+      text: "Parcelamento em até 18x sem juros",
+      highlights: ["18x sem juros"],
       textWidth: 120,
     },
     {

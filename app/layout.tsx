@@ -21,7 +21,7 @@ const arboria = localFont({
 
 const SITE_TITLE = "StarTech | iPhones Seminovos e Novos em Chapecó – SC";
 const SITE_DESCRIPTION =
-  "iPhones seminovos e lacrados com até 2 anos de garantia, direto do canal oficial Apple. Assistência técnica especializada em Chapecó – SC. Parcele em até 12x sem juros.";
+  "iPhones seminovos e lacrados com até 2 anos de garantia, direto do canal oficial Apple. Assistência técnica especializada em Chapecó – SC. Parcele em até 18x sem juros.";
 
 // Domínio base p/ URLs absolutas (imagem OG). Padrão = domínio de produção;
 // sobrescrevível por env (definir NEXT_PUBLIC_SITE_URL no host — ex.: a URL da Vercel
