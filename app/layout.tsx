@@ -43,8 +43,8 @@ export const metadata: Metadata = {
     "celulares Chapecó",
   ],
   icons: {
-    icon: "/icon.webp",
-    apple: "/icon.webp",
+    icon: "/icon.webp", // favicon (webp: leve, suportado por browsers modernos)
+    apple: "/icon.png", // apple-touch-icon: PNG (iOS não renderiza webp p/ home screen)
   },
   openGraph: {
     title: SITE_TITLE,

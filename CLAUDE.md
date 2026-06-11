@@ -58,8 +58,11 @@ ser um código React/Next limpo, que a gente controla e edita à vontade — sem
 
 - `app/layout.tsx` — html lang pt-BR, Arboria via next/font/local, MotionProvider, **metadata/SEO**
   (title + description + Open Graph + Twitter card + keywords; consts `SITE_TITLE`/`SITE_DESCRIPTION`).
-  **Favicon** `public/icon.webp` (via `metadata.icons`) e **imagem OG/social** `public/social.png`
-  (1200×630). `metadataBase` = `NEXT_PUBLIC_SITE_URL` ou fallback **`https://startechcelulares.com.br`**
+  **Favicon** `public/icon.webp` (627×627; via `metadata.icons.icon`) + **apple-touch-icon**
+  `public/icon.png` (`metadata.icons.apple` — PNG porque o iOS não renderiza webp p/ home screen)
+  e **imagem OG/social** `public/social.png`
+  (1200×630; **PNG de propósito** — webp em OG não é renderizado por vários crawlers, ex.: WhatsApp/Facebook).
+  `metadataBase` = `NEXT_PUBLIC_SITE_URL` ou fallback **`https://startechcelulares.com.br`**
   (domínio de produção). Em teste na **Vercel** (`https://startech-rho.vercel.app`) — setar
   `NEXT_PUBLIC_SITE_URL` lá se quiser a OG correta no preview.
   Monta também `<div className="site-bg">` (fundo global fixo) como 1º filho do `<body>`, o
@@ -612,6 +615,24 @@ solto p/ CTA de WhatsApp — usar o componente).
 - **(2026-06-05) `Support` — imagens reais ligadas.** Os 5 serviços apontavam pra `/broken.webp`
   (placeholder **deletado** → imagem 404). Trocado pelas **fotos reais** em `/public/assistencia`
   (`tela`/`placa`/`bateria`/`transfere`/`pc`), casadas 1:1 com os serviços na copy.
+- **(2026-06-11) `Categories` — foto real + `StarShield` reorganizado.**
+  - **Categories (seminovos):** trocada a imagem por **foto real** (`/images/IMG_7507.webp`, 810×1080
+    retrato — antes era recorte transparente). **Restilizada no padrão das fotos do StarShield:**
+    o padding saiu do card inteiro e foi pro lado do texto (`p-8 md:p-12`); a imagem ganhou wrapper
+    só com `p-4` + `rounded-medium` + **`object-cover`** (`h-[340px] md:h-[440px]`), ficando a 16px
+    da borda igual às imagens do StarShield.
+  - **StarShield:** removido o botão **"Saiba mais"** do card hero (e o import `ArrowUpRight`); o
+    `hero.cta` continua na copy mas **não é mais renderizado**. **Card "Basic" removido**; **"Lens"
+    virou card horizontal** (movido pro array `wide`) — bloco `duo`/stagger aninhado **deletado** do
+    componente. **"Matte" renomeado p/ "Película"** (`/starshield/peliculas-tela.webp`). Imagens novas:
+    `capa.webp` (Capinhas) e `peliculas-tela.webp`; arquivos órfãos `matte.webp`/`capinhas.webp`/
+    `pelicula.webp` apagados. Cards finais: **hero → Lens → Película → Capinhas**.
+- **(2026-06-11) Favicon/OG — formatos por compatibilidade.** Cliente subiu `icon`/`social` como PNG.
+  Decisão de formato (não é "tudo webp"): **favicon `public/icon.webp`** (convertido do PNG via
+  `sharp`, 627×627, ~15KB — webp é ideal p/ favicon) + **apple-touch-icon `public/icon.png`**
+  (`metadata.icons.apple` — **PNG porque o iOS não renderiza webp** p/ ícone de home screen) +
+  **imagem OG `public/social.png`** (1200×630, **mantida PNG de propósito** — webp em Open Graph não
+  é renderizado por vários crawlers, ex.: WhatsApp/Facebook). Lição: **OG/apple-icon ≠ webp**.
 
 ## Hurdles & Correções (log)
 
@@ -644,13 +665,16 @@ solto p/ CTA de WhatsApp — usar o componente).
       (2026-06-05); `nav.links` apagado do `content/site.ts`. Header = social + logo + botão. Não volta.
 - [ ] **Validar contra o Figma:** o Hero foi feito a partir do screenshot; conferir medidas/cores
       exatas quando o frame do Figma estiver à mão.
+- [x] **~~Favicon + imagem OG.~~** (2026-06-11) Ligados com formatos por compatibilidade:
+      `icon.webp` (favicon, convertido do PNG via `sharp`), `icon.png` (apple-touch-icon, PNG p/ iOS)
+      e `social.png` (OG 1200×630, mantido PNG — webp não funciona em OG). Ver decisão de 2026-06-11.
 - [x] **~~Conectar Git remoto.~~** Repo no GitHub: `felipeaitafla/startech` (`origin`, branch `main`).
 - [ ] **Conectar Netlify** (link de deploy automático) — **será feito na entrega do projeto.**
       ⚠️ Ao linkar, setar as **env vars**: `FEEDFRAMER_API_KEY` (feed do Instagram) e
       `NEXT_PUBLIC_SITE_URL` (domínio final, p/ a imagem OG). Ver `.env.example`.
-- [ ] **StarShield/Starcare — conteúdo definitivo:** imagens do StarShield **já são reais**
-      (`/public/starshield`); falta a **copy definitiva** (Basic/Lens/Matte). Starcare ainda usa
-      `startech-care.webp` (logo) — ok.
+- [ ] **StarShield/Starcare — copy definitiva:** imagens do StarShield **já são reais**
+      (`/public/starshield`; cards atuais Lens/Película/Capinhas); falta a **copy definitiva** dos
+      cards (descrições ainda provisórias). Starcare ainda usa `startech-care.webp` (logo) — ok.
 - [x] **~~Acessórios — imagens definitivas.~~** Fotos reais em `/public/acessorios`
       (1-capinha/2-capinha-kit/3-carregador/4-fone).
 - [x] **~~Support — imagens dos serviços.~~** Fotos reais em `/public/assistencia`
