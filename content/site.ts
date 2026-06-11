@@ -71,7 +71,7 @@ export const categories = {
         message:
           "Olá, Startech! Venho do site e desejo saber mais sobre iPhones seminovos.",
       },
-      image: { src: "/iphones/seminovos.webp", alt: "iPhone seminovo Startech" },
+      image: { src: "/images/IMG_7507.webp", alt: "iPhone seminovo Startech" },
     },
   ],
 } as const;
@@ -133,28 +133,21 @@ export const starshield = {
     cta: { label: "Saiba mais", href: "#" },
     image: { src: "/starshield/intro.webp", alt: "StarShield", width: 1089, height: 598 },
   },
-  duo: [
-    {
-      title: "Basic",
-      description: "Proteção essencial para o dia a dia.",
-      image: { src: "/starshield/pelicula.webp", alt: "StarShield Basic (película)", width: 810, height: 600 },
-    },
+  wide: [
     {
       title: "Lens",
       description: "Proteção extra para a câmera do seu iPhone.",
       image: { src: "/starshield/lens.webp", alt: "StarShield Lens", width: 810, height: 600 },
     },
-  ],
-  wide: [
     {
-      title: "Matte",
-      description: "Acabamento fosco, antirreflexo e antimarcas.",
-      image: { src: "/starshield/matte.webp", alt: "StarShield Matte", width: 789, height: 600 },
+      title: "Película",
+      description: "Proteção de tela resistente e ultratransparente.",
+      image: { src: "/starshield/peliculas-tela.webp", alt: "Película StarShield", width: 810, height: 512 },
     },
     {
       title: "Capinhas",
       description: "Estilo e proteção que combinam com o seu iPhone.",
-      image: { src: "/starshield/capinhas.webp", alt: "Capinhas StarShield", width: 810, height: 512 },
+      image: { src: "/starshield/capa.webp", alt: "Capinhas StarShield", width: 810, height: 512 },
     },
   ],
   cta: {
@@ -268,7 +261,7 @@ export const footer = {
     { label: "YouTube", icon: "youtube" as const, href: "#" },
   ],
   copyright: [
-    "© 2024 StarTech. Todos os direitos reservados.",
+    "© 2026 Startech Celulares LTDA. Todos os direitos reservados.",
     "CNPJ 33.137.998/0001-20",
   ],
 } as const;

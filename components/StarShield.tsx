@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import { starshield } from "@/content/site";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { stagger, floatUp } from "@/lib/anim";
@@ -15,7 +14,7 @@ import { stagger, floatUp } from "@/lib/anim";
    **proporção original** (w-full h-auto, sem crop), com inset p-4.
    ⚠️ Self-reveal: NÃO envolver em <Reveal> no page.tsx (animaria 2×). */
 export function StarShield() {
-  const { hero, duo, wide, cta } = starshield;
+  const { hero, wide, cta } = starshield;
 
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
@@ -42,10 +41,6 @@ export function StarShield() {
               height={hero.logo.height}
               className="h-7 w-auto self-start md:h-9"
             />
-            <a href={hero.cta.href} className="btn-link">
-              {hero.cta.label}
-              <ArrowUpRight className="size-4" strokeWidth={2.25} />
-            </a>
           </div>
           <div className="flex items-center p-4">
             <Image
@@ -59,39 +54,7 @@ export function StarShield() {
           </div>
         </motion.div>
 
-        {/* ---------- Segunda linha: 2 cards lado a lado (stagger aninhado) ---------- */}
-        <motion.div
-          variants={stagger}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2"
-        >
-          {duo.map((card) => (
-            <motion.article
-              key={card.title}
-              variants={floatUp}
-              className="relative flex flex-col overflow-hidden rounded-big border border-white-8 ss-card hover:z-10 hover:scale-[1.02]"
-            >
-              <div className="p-8">
-                <h3 className="text-h3 font-medium text-white">{card.title}</h3>
-                <p className="text-lead mt-2 max-w-[44ch] text-white/73">
-                  {card.description}
-                </p>
-              </div>
-              {/* imagem na base, na proporção original (sem crop) */}
-              <div className="mt-auto px-4 pb-4">
-                <Image
-                  src={card.image.src}
-                  alt={card.image.alt}
-                  width={card.image.width}
-                  height={card.image.height}
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                  className="h-auto w-full rounded-medium"
-                />
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
-
-        {/* ---------- Cards largos (Matte, Limpa telas) ---------- */}
+        {/* ---------- Cards largos (Lens, Matte, Capinhas) ---------- */}
         {wide.map((card) => (
           <motion.div
             key={card.title}

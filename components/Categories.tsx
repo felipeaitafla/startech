@@ -12,9 +12,9 @@ export function Categories() {
   return (
     <section className="px-[var(--layout-margin)] py-[var(--layout-padding-y)]">
       <div className="mx-auto w-full max-w-[var(--layout-max)]">
-        <div className="group grid grid-cols-1 items-center gap-8 overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 px-8 py-10 pl-10 transition duration-500 ease-in-out hover:scale-[1.02] hover:bg-azul-capri/15 md:grid-cols-2 md:gap-10 md:px-12 md:py-14 md:pl-20">
+        <div className="group grid grid-cols-1 items-center overflow-hidden rounded-big border border-white-8 bg-azul-escuro/40 transition duration-500 ease-in-out hover:scale-[1.02] hover:bg-azul-capri/15 md:grid-cols-2">
           {/* texto — esquerda */}
-          <div className="flex flex-col items-start text-left">
+          <div className="flex flex-col items-start p-8 text-left md:p-12">
             <h2 className="text-h3 md:text-h2 font-bold text-white">
               {panel.title}
             </h2>
@@ -29,14 +29,16 @@ export function Categories() {
             </div>
           </div>
 
-          {/* imagem — direita */}
-          <div className="flex items-center justify-center">
+          {/* imagem — direita (mesmo design das fotos da StarShield: inset p-4 +
+              rounded-medium + object-cover) */}
+          <div className="p-4">
             <Image
               src={panel.image.src}
               alt={panel.image.alt}
               width={560}
-              height={560}
-              className="h-[340px] w-auto object-contain md:h-[440px]"
+              height={440}
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="h-[340px] w-full rounded-medium object-cover md:h-[440px]"
             />
           </div>
         </div>
