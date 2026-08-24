@@ -650,6 +650,17 @@ solto p/ CTA de WhatsApp — usar o componente).
   rodar `dev` e `build`/`start` se atropelando e matar processos no meio da escrita deixa
   chunks órfãos. · Correção: parar todos os servers, **apagar `.next`** (`Remove-Item -Recurse
   -Force .next`) e buildar de novo. Evitar rodar `dev` e `build` ao mesmo tempo.
+- **(2026-08-24) Feed do Instagram só mostrava o fallback "Ver no Instagram" em produção.** ·
+  Problema: a grade de 6 posts funcionava em dev mas o site publicado renderizava o fallback. ·
+  Causa (dupla): **(1)** a env var `FEEDFRAMER_API_KEY` nunca foi setada no host → `getPosts()`
+  caía no `if (!key) return []`. A key em si estava válida (API testada: HTTP 200, 6 posts). ·
+  **(2)** Agravante: como esse `return []` acontece **antes de qualquer `fetch`**, nenhum fetch com
+  `revalidate` era registrado e o Next prerenderizava `/` como **estática permanente** — a página
+  congelava no fallback até o próximo deploy, mesmo depois de setar a env var. · Correção:
+  env vars setadas na Netlify + **`export const revalidate = 3600` no `app/page.tsx`** (a home vira
+  ISR de verdade e se auto-recupera em 1h se a API falhar num build) + `console.error` nos três
+  `return []` silenciosos do `getPosts()` (diagnóstico pelos logs do host). · **Lição: fallback
+  gracioso que retorna antes do `fetch` mata o ISR da rota — sempre declarar o `revalidate` na page.**
 
 ## Pendências
 
@@ -669,9 +680,11 @@ solto p/ CTA de WhatsApp — usar o componente).
       `icon.webp` (favicon, convertido do PNG via `sharp`), `icon.png` (apple-touch-icon, PNG p/ iOS)
       e `social.png` (OG 1200×630, mantido PNG — webp não funciona em OG). Ver decisão de 2026-06-11.
 - [x] **~~Conectar Git remoto.~~** Repo no GitHub: `felipeaitafla/startech` (`origin`, branch `main`).
-- [ ] **Conectar Netlify** (link de deploy automático) — **será feito na entrega do projeto.**
-      ⚠️ Ao linkar, setar as **env vars**: `FEEDFRAMER_API_KEY` (feed do Instagram) e
-      `NEXT_PUBLIC_SITE_URL` (domínio final, p/ a imagem OG). Ver `.env.example`.
+- [x] **~~Conectar Netlify + env vars.~~** (2026-08-24) Site final rodando na **Netlify do cliente**,
+      com `FEEDFRAMER_API_KEY` e `NEXT_PUBLIC_SITE_URL` setadas no painel (All deploy contexts).
+      ⚠️ Se mudar a key, é preciso **novo deploy** — env var nova não reescreve HTML já buildado
+      (usar "Clear cache and deploy site"). ⚠️ Existe também um preview antigo na **Vercel**
+      (`startech-rho.vercel.app`) **sem nenhuma env var** — decidir se mantém ou apaga.
 - [ ] **StarShield/Starcare — copy definitiva:** imagens do StarShield **já são reais**
       (`/public/starshield`; cards atuais Lens/Película/Capinhas); falta a **copy definitiva** dos
       cards (descrições ainda provisórias). Starcare ainda usa `startech-care.webp` (logo) — ok.

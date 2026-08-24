@@ -18,16 +18,24 @@ const POST_COUNT = 6;
 
 async function getPosts(): Promise<FeedframerPost[]> {
   const key = process.env.FEEDFRAMER_API_KEY;
-  if (!key) return []; // sem key (ex.: env não setada) -> fallback gracioso
+  if (!key) {
+    // sem key (ex.: env não setada no host) -> fallback gracioso
+    console.error("[InstagramFeed] FEEDFRAMER_API_KEY ausente — renderizando fallback.");
+    return [];
+  }
   try {
     const res = await fetch(
       `https://feedframer.com/api/v1/me?api_key=${key}&page[size]=${POST_COUNT}`,
       { next: { revalidate: 3600 } }, // revalida 1x/h; não bate na API a cada request
     );
-    if (!res.ok) return [];
+    if (!res.ok) {
+      console.error(`[InstagramFeed] Feedframer respondeu ${res.status} — fallback.`);
+      return [];
+    }
     const data = (await res.json()) as { posts?: FeedframerPost[] };
     return (data.posts ?? []).slice(0, POST_COUNT);
-  } catch {
+  } catch (err) {
+    console.error("[InstagramFeed] falha ao buscar o feed:", err);
     return []; // rede/API fora do ar -> não quebra a página
   }
 }

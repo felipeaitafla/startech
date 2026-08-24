@@ -13,6 +13,11 @@ import { FinalCta } from "@/components/FinalCta";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
 
+/* ISR da home: sem isto, se o feed do Instagram falhar (ou a env
+   FEEDFRAMER_API_KEY faltar) o getPosts() retorna antes de qualquer fetch,
+   a rota vira estática PERMANENTE e o fallback congela até o próximo deploy. */
+export const revalidate = 3600;
+
 export default function Home() {
   return (
     <main className="relative">
